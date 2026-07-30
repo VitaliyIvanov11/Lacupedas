@@ -7,57 +7,9 @@ function uid() {
   return "id-" + Date.now() + "-" + Math.random().toString(16).slice(2);
 }
 
-function demoSightings() {
-  return [
-    {
-      id: uid(),
-      lat: 57.245,
-      lng: 25.02,
-      date: "2026-05-14",
-      type: "sighting",
-      count: 1,
-      description:
-        "Šis ir piemēra ieraksts — dzēsiet vai aizstājiet ar reāliem novērojumiem. / This is example data — delete it or replace it with real sightings.",
-      reporter: "Piemērs / Example",
-      isDemo: true,
-      createdAt: "2026-05-14T08:00:00.000Z",
-    },
-    {
-      id: uid(),
-      lat: 56.65,
-      lng: 27.55,
-      date: "2026-06-02",
-      type: "tracks",
-      count: 2,
-      description:
-        "Šis ir piemēra ieraksts — dzēsiet vai aizstājiet ar reāliem novērojumiem. / This is example data — delete it or replace it with real sightings.",
-      reporter: "Piemērs / Example",
-      isDemo: true,
-      createdAt: "2026-06-02T08:00:00.000Z",
-    },
-    {
-      id: uid(),
-      lat: 57.05,
-      lng: 25.9,
-      date: "2026-07-10",
-      type: "damage",
-      count: 1,
-      description:
-        "Šis ir piemēra ieraksts — dzēsiet vai aizstājiet ar reāliem novērojumiem. / This is example data — delete it or replace it with real sightings.",
-      reporter: "Piemērs / Example",
-      isDemo: true,
-      createdAt: "2026-07-10T08:00:00.000Z",
-    },
-  ];
-}
-
 function loadSightings() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    const seed = demoSightings();
-    saveSightings(seed);
-    return seed;
-  }
+  if (!raw) return [];
   try {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) throw new Error("not an array");
@@ -90,7 +42,7 @@ function clearAllSightings() {
 
 function importSightings(newOnes) {
   const existing = loadSightings();
-  const withFreshIds = newOnes.map((s) => ({ ...s, id: uid(), isDemo: false }));
+  const withFreshIds = newOnes.map((s) => ({ ...s, id: uid() }));
   const merged = existing.concat(withFreshIds);
   saveSightings(merged);
   return merged;

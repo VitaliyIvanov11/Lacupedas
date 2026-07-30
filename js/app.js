@@ -103,12 +103,6 @@
       typeSpan.textContent = typeLabel(s.type) + " · 🐻×" + (s.count || 1);
       top.appendChild(dateSpan);
       top.appendChild(typeSpan);
-      if (s.isDemo) {
-        const badge = document.createElement("span");
-        badge.className = "demo-badge";
-        badge.textContent = t("demoLabel");
-        top.appendChild(badge);
-      }
       body.appendChild(top);
 
       if (s.description) {
@@ -228,7 +222,6 @@
       count,
       description,
       reporter,
-      isDemo: false,
       createdAt: new Date().toISOString(),
     };
 

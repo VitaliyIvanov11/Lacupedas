@@ -9,8 +9,8 @@ interactive map.
 - Data is stored **only in the visitor's own browser** (`localStorage`) — nothing
   is sent to a server. Use **Export (JSON)** to back up or share a dataset, and
   **Import** to load one back in.
-- Ships with 3 clearly-labeled example entries so the map isn't empty on first
-  load; delete them or `Clear all data` to start fresh.
+- The map starts empty for every new visitor (no seeded demo data) — real
+  entries only, straight from `localStorage`.
 - A scheduled GitHub Action also collects bear-related mentions from public
   Latvian news RSS feeds and shows them on the map as a separate "News
   mentions" layer — see [News auto-collection](#news-auto-collection) below.
@@ -87,7 +87,7 @@ To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 
 ## Project structure
 
-```
+```text
 index.html                     Page markup
 css/style.css                   Styling (light + dark mode via prefers-color-scheme)
 js/i18n.js                       LV/EN translation strings + language switching

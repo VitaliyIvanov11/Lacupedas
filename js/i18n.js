@@ -40,8 +40,6 @@ const translations = {
     emptyList: "Nav neviena novērojuma. Pievienojiet pirmo!",
     deleteBtn: "Dzēst",
     deleteConfirm: "Vai tiešām dzēst šo novērojumu?",
-    demoLabel: "PIEMĒRS",
-    demoNote: "Šis ir piemēra ieraksts — dzēsiet vai aizstājiet ar reāliem novērojumiem.",
 
     exportBtn: "Eksportēt (JSON)",
     importBtn: "Importēt",
@@ -102,8 +100,6 @@ const translations = {
     emptyList: "No sightings yet. Add the first one!",
     deleteBtn: "Delete",
     deleteConfirm: "Really delete this sighting?",
-    demoLabel: "EXAMPLE",
-    demoNote: "This is example data — delete it or replace it with real sightings.",
 
     exportBtn: "Export (JSON)",
     importBtn: "Import",
