@@ -14,6 +14,7 @@ const TYPE_COLORS = {
 
 let map;
 let markersLayer;
+let heatLayer = null;
 let pickingMode = false;
 let onMapPick = null;
 
@@ -104,4 +105,21 @@ function renderMarkers(sightings, onMarkerClick) {
 
 function flyToSighting(s) {
   map.flyTo([s.lat, s.lng], Math.max(map.getZoom(), 11), { duration: 0.6 });
+}
+
+// Density overlay across all confirmed sightings + news mentions (not
+// affected by the sidebar list filters — this is meant to read as the
+// overall picture, not "current filter view").
+function setHeatmap(active, points) {
+  if (heatLayer) {
+    map.removeLayer(heatLayer);
+    heatLayer = null;
+  }
+  if (active && points.length > 0) {
+    heatLayer = L.heatLayer(
+      points.map((p) => [p.lat, p.lng, p.weight || 1]),
+      { radius: 26, blur: 20, maxZoom: 13, minOpacity: 0.35 }
+    );
+    heatLayer.addTo(map);
+  }
 }

@@ -11,6 +11,7 @@
     langBtns: document.querySelectorAll("[data-lang-btn]"),
     reportBtn: document.getElementById("report-btn"),
     useLocationBtn: document.getElementById("use-location-btn"),
+    heatmapToggle: document.getElementById("heatmap-toggle"),
     cancelPickingBtn: document.getElementById("cancel-picking-btn"),
     pickingBanner: document.getElementById("picking-banner"),
     modalOverlay: document.getElementById("modal-overlay"),
@@ -61,6 +62,19 @@
     voteCounts = freshVoteCounts;
     renderFilteredSightings();
     renderStatsAndChart();
+    refreshHeatmap();
+  }
+
+  function getHeatmapPoints() {
+    const sightingPoints = sightings.map((s) => ({ lat: s.lat, lng: s.lng, weight: s.count || 1 }));
+    const newsPoints = latestNewsItems
+      .filter((n) => n.lat != null && n.lng != null)
+      .map((n) => ({ lat: n.lat, lng: n.lng, weight: 1 }));
+    return sightingPoints.concat(newsPoints);
+  }
+
+  function refreshHeatmap() {
+    setHeatmap(el.heatmapToggle.checked, getHeatmapPoints());
   }
 
   function matchesTimeFilter(dateStr, filterValue) {
@@ -385,6 +399,7 @@
       initNews(leafletMap, (newsItems) => {
         latestNewsItems = newsItems;
         renderStatsAndChart();
+        refreshHeatmap();
       });
     }
 
@@ -403,6 +418,7 @@
     el.photoInput.addEventListener("change", onPhotoSelected);
     el.typeFilter.addEventListener("change", renderFilteredSightings);
     el.timeFilter.addEventListener("change", renderFilteredSightings);
+    el.heatmapToggle.addEventListener("change", refreshHeatmap);
 
     refreshAll();
     setInterval(refreshAll, SIGHTINGS_POLL_MS);

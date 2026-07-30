@@ -30,6 +30,10 @@
       <div class="map-toolbar">
         <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
         <button type="button" id="use-location-btn" class="btn btn-secondary" data-i18n="useLocationBtn">Izmantot manu atrašanās vietu</button>
+        <label class="heatmap-toggle">
+          <input type="checkbox" id="heatmap-toggle" />
+          <span data-i18n="heatmapToggleLabel">🔥 Blīvuma karte</span>
+        </label>
       </div>
       <p class="map-hint" data-i18n="mapHint">Noklikšķiniet uz kartes, lai pievienotu novērojumu</p>
       <div id="picking-banner" class="picking-banner" hidden>
@@ -163,6 +167,7 @@
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/photo.js"></script>

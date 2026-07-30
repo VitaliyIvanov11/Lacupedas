@@ -30,6 +30,12 @@ interactive map.
   rather than a hardcoded list. Filters are purely client-side (re-filter
   already-loaded data, no re-fetch) and don't affect the stats panel/chart,
   which stay totals-over-everything.
+- A "🔥 density map" toggle in the map toolbar overlays a
+  [Leaflet.heat](https://github.com/Leaflet/Leaflet.heat) heatmap built from
+  every community sighting + news mention's coordinates (weighted by bear
+  count for sightings). It's additive over the pins, not a replacement, and
+  always reflects the full dataset regardless of the list filters — it
+  answers "where overall," not "where in my current filter view."
 
 ## Run locally
 
