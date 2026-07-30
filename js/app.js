@@ -22,6 +22,8 @@
     photoPreview: document.getElementById("photo-preview"),
     photoError: document.getElementById("photo-error"),
     list: document.getElementById("sightings-list"),
+    typeFilter: document.getElementById("sightings-type-filter"),
+    timeFilter: document.getElementById("sightings-time-filter"),
     statTotal: document.getElementById("stat-total"),
     statYear: document.getElementById("stat-year"),
     statLast: document.getElementById("stat-last"),
@@ -57,9 +59,30 @@
     const [freshSightings, freshVoteCounts] = await Promise.all([loadSightings(), loadVoteCounts()]);
     sightings = freshSightings;
     voteCounts = freshVoteCounts;
-    renderMarkers(sightings, (s) => openDetailsFromMarker(s));
-    renderList();
+    renderFilteredSightings();
     renderStatsAndChart();
+  }
+
+  function matchesTimeFilter(dateStr, filterValue) {
+    if (filterValue === "all") return true;
+    const d = new Date(dateStr);
+    if (filterValue === "year") return d.getFullYear() === new Date().getFullYear();
+    if (filterValue === "30d") return Date.now() - d.getTime() <= 30 * 24 * 60 * 60 * 1000;
+    return true;
+  }
+
+  function getFilteredSightings() {
+    const type = el.typeFilter.value;
+    const time = el.timeFilter.value;
+    return sightings.filter(
+      (s) => (type === "all" || s.type === type) && matchesTimeFilter(s.date, time)
+    );
+  }
+
+  function renderFilteredSightings() {
+    const filtered = getFilteredSightings();
+    renderMarkers(filtered, (s) => openDetailsFromMarker(s));
+    renderList(filtered);
   }
 
   // Stats/chart reflect both community reports and news-collected mentions
@@ -85,17 +108,17 @@
     renderMonthlyChart(el.chartContainer, combined);
   }
 
-  function renderList() {
+  function renderList(filtered) {
     el.list.innerHTML = "";
-    if (sightings.length === 0) {
+    if (filtered.length === 0) {
       const empty = document.createElement("li");
       empty.className = "list-empty";
-      empty.textContent = t("emptyList");
+      empty.textContent = sightings.length === 0 ? t("emptyList") : t("filterNoMatch");
       el.list.appendChild(empty);
       return;
     }
 
-    const sorted = [...sightings].sort((a, b) => (a.date < b.date ? 1 : -1));
+    const sorted = [...filtered].sort((a, b) => (a.date < b.date ? 1 : -1));
     sorted.forEach((s) => {
       const li = document.createElement("li");
       li.className = "sighting-item";
@@ -199,7 +222,7 @@
           return;
         }
         voteCounts = await loadVoteCounts();
-        renderList();
+        renderList(getFilteredSightings());
       });
     });
 
@@ -348,7 +371,7 @@
   function switchLang(lang) {
     setLang(lang);
     applyTranslations();
-    renderList();
+    renderList(getFilteredSightings());
     renderStatsAndChart();
     if (typeof renderNewsList === "function") renderNewsList();
   }
@@ -378,6 +401,8 @@
     });
     el.form.addEventListener("submit", submitForm);
     el.photoInput.addEventListener("change", onPhotoSelected);
+    el.typeFilter.addEventListener("change", renderFilteredSightings);
+    el.timeFilter.addEventListener("change", renderFilteredSightings);
 
     refreshAll();
     setInterval(refreshAll, SIGHTINGS_POLL_MS);

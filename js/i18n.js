@@ -47,6 +47,13 @@ const translations = {
     disputeBtn: "Apšaubīt šo novērojumu",
     voteError: "Neizdevās nosūtīt balsojumu — pārbaudiet interneta savienojumu.",
 
+    filterAllTypes: "Visi veidi",
+    filterAllSources: "Visi avoti",
+    filterAllTime: "Viss laiks",
+    filterThisYear: "Šogad",
+    filterLast30d: "Pēdējās 30 dienas",
+    filterNoMatch: "Nav ierakstu, kas atbilst filtram.",
+
     disclaimer: "Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums. Dzēšana nav pieejama publiski. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
 
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
@@ -105,6 +112,13 @@ const translations = {
     confirmBtn: "Confirm this sighting",
     disputeBtn: "Dispute this sighting",
     voteError: "Couldn't send your vote — check your internet connection.",
+
+    filterAllTypes: "All types",
+    filterAllSources: "All sources",
+    filterAllTime: "All time",
+    filterThisYear: "This year",
+    filterLast30d: "Last 30 days",
+    filterNoMatch: "No entries match this filter.",
 
     disclaimer: "This is a community-built app — sightings are visible to every visitor, not just you. Public deletion isn't available. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
 

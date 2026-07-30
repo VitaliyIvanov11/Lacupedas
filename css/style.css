@@ -464,6 +464,40 @@ button {
   background: rgba(208, 59, 59, 0.1);
 }
 
+/* Filters */
+
+.list-card-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.list-card-header h2 {
+  margin-bottom: 0;
+}
+
+.filter-group {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.filter-select {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--page-plane);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  padding: 3px 6px;
+  font-family: inherit;
+  max-width: 50%;
+}
+
 /* News mentions */
 
 .news-card-header {

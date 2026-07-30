@@ -24,6 +24,12 @@ interactive map.
   their own card. Below 900px it reverts to a normal stacked, scrollable
   mobile layout, since cramming a map + four cards into one small screen
   isn't realistic.
+- Both lists have compact type/source + time filters that affect the list
+  **and** the map markers together — the news source dropdown is populated
+  dynamically from whatever sources are actually present in `data/news.json`
+  rather than a hardcoded list. Filters are purely client-side (re-filter
+  already-loaded data, no re-fetch) and don't affect the stats panel/chart,
+  which stay totals-over-everything.
 
 ## Run locally
 

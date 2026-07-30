@@ -64,7 +64,22 @@
       </section>
 
       <section class="card list-card">
-        <h2 data-i18n="listTitle">Novērojumu saraksts</h2>
+        <div class="list-card-header">
+          <h2 data-i18n="listTitle">Novērojumu saraksts</h2>
+          <div class="filter-group">
+            <select id="sightings-type-filter" class="filter-select">
+              <option value="all" data-i18n="filterAllTypes">Visi veidi</option>
+              <option value="sighting" data-i18n="typeSighting">Redzēts lācis</option>
+              <option value="tracks" data-i18n="typeTracks">Pēdas / pazīmes</option>
+              <option value="damage" data-i18n="typeDamage">Postījumi (mājlopi, bites u.c.)</option>
+            </select>
+            <select id="sightings-time-filter" class="filter-select">
+              <option value="all" data-i18n="filterAllTime">Viss laiks</option>
+              <option value="year" data-i18n="filterThisYear">Šogad</option>
+              <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
+            </select>
+          </div>
+        </div>
         <ul id="sightings-list" class="sightings-list"></ul>
       </section>
 
@@ -75,6 +90,16 @@
             <input type="checkbox" id="news-toggle" checked />
             <span data-i18n="newsToggleLabel">Rādīt kartē</span>
           </label>
+        </div>
+        <div class="filter-group">
+          <select id="news-source-filter" class="filter-select">
+            <option value="all" data-i18n="filterAllSources">Visi avoti</option>
+          </select>
+          <select id="news-time-filter" class="filter-select">
+            <option value="all" data-i18n="filterAllTime">Viss laiks</option>
+            <option value="year" data-i18n="filterThisYear">Šogad</option>
+            <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
+          </select>
         </div>
         <ul id="news-list" class="sightings-list"></ul>
         <p class="news-disclaimer" data-i18n="newsDisclaimer"></p>

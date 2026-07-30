@@ -13,6 +13,39 @@ let newsMap = null;
 let newsSeenIds = new Set();
 let newsDataChangeCallback = null;
 
+function matchesNewsTimeFilter(iso, filterValue) {
+  if (filterValue === "all") return true;
+  const d = new Date(iso);
+  if (filterValue === "year") return d.getFullYear() === new Date().getFullYear();
+  if (filterValue === "30d") return Date.now() - d.getTime() <= 30 * 24 * 60 * 60 * 1000;
+  return true;
+}
+
+function getFilteredNews() {
+  const sourceSelect = document.getElementById("news-source-filter");
+  const timeSelect = document.getElementById("news-time-filter");
+  const source = sourceSelect ? sourceSelect.value : "all";
+  const time = timeSelect ? timeSelect.value : "all";
+  return newsItems.filter(
+    (n) => (source === "all" || n.source === source) && matchesNewsTimeFilter(n.pubDate, time)
+  );
+}
+
+function updateSourceFilterOptions() {
+  const select = document.getElementById("news-source-filter");
+  if (!select) return;
+  const current = select.value;
+  const sources = [...new Set(newsItems.map((n) => n.source))].sort();
+  select.querySelectorAll('option:not([value="all"])').forEach((opt) => opt.remove());
+  sources.forEach((source) => {
+    const opt = document.createElement("option");
+    opt.value = source;
+    opt.textContent = source;
+    select.appendChild(opt);
+  });
+  if (sources.includes(current)) select.value = current;
+}
+
 function newsEscapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str == null ? "" : String(str);
@@ -44,7 +77,7 @@ function renderNewsMarkers() {
   if (!newsMap) return;
   if (!newsLayer) newsLayer = L.layerGroup();
   newsLayer.clearLayers();
-  newsItems
+  getFilteredNews()
     .filter((n) => n.lat != null && n.lng != null)
     .forEach((n) => {
       const marker = L.marker([n.lat, n.lng], { icon: newsIcon() });
@@ -77,15 +110,16 @@ function renderNewsList() {
   if (!list) return;
   list.innerHTML = "";
 
-  if (newsItems.length === 0) {
+  const filtered = getFilteredNews();
+  if (filtered.length === 0) {
     const empty = document.createElement("li");
     empty.className = "list-empty";
-    empty.textContent = t("newsEmpty");
+    empty.textContent = newsItems.length === 0 ? t("newsEmpty") : t("filterNoMatch");
     list.appendChild(empty);
     return;
   }
 
-  newsItems.forEach((n) => {
+  filtered.forEach((n) => {
     const li = document.createElement("li");
     li.className = "sighting-item news-item";
 
@@ -144,6 +178,7 @@ async function pollNews() {
   newsItems = fresh;
   newsSeenIds = freshIds;
 
+  updateSourceFilterOptions();
   renderNewsMarkers();
   renderNewsList();
   if (newCount > 0) updateNewsToast(newCount);
@@ -160,6 +195,16 @@ function initNews(map, onDataChange) {
       renderNewsMarkers();
     });
   }
+  const sourceFilter = document.getElementById("news-source-filter");
+  const timeFilter = document.getElementById("news-time-filter");
+  [sourceFilter, timeFilter].forEach((select) => {
+    if (select) {
+      select.addEventListener("change", () => {
+        renderNewsMarkers();
+        renderNewsList();
+      });
+    }
+  });
   pollNews();
   setInterval(pollNews, NEWS_POLL_MS);
 }
