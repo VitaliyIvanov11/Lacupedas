@@ -41,13 +41,6 @@ const translations = {
     deleteBtn: "Dzēst",
     deleteConfirm: "Vai tiešām dzēst šo novērojumu?",
 
-    exportBtn: "Eksportēt (JSON)",
-    importBtn: "Importēt",
-    clearAllBtn: "Dzēst visus datus",
-    clearAllConfirm: "Vai tiešām dzēst VISUS novērojumus? Šo darbību nevar atsaukt.",
-    importSuccess: "Dati veiksmīgi importēti.",
-    importError: "Neizdevās nolasīt failu. Pārbaudiet, vai tas ir derīgs eksporta fails.",
-
     disclaimer: "Šī ir sabiedrības veidota lietotne — dati tiek glabāti tikai jūsu pārlūkā (localStorage) un netiek sūtīti nevienam serverim. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
 
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
@@ -57,7 +50,7 @@ const translations = {
     newsSectionTitle: "Ziņu pieminējumi",
     newsToggleLabel: "Rādīt kartē",
     newsEmpty: "Pagaidām nav neviena ziņu pieminējuma.",
-    newsDisclaimer: "Automātiski apkopots ik pēc pāris stundām no publiskiem ziņu portāliem (LSM.lv, Apollo.lv, TVNET, gorod.lv, kā arī pierobežas ziņas no Igaunijas — ERR.ee — un Lietuvas — 15min.lt) pēc atslēgvārda \"lācis\"/\"karu\"/\"lokys\"/\"медведь\". Nav pārbaudīts cilvēka — precīza atrašanās vieta nezināma, kartē redzamā atzīme ir tikai tuvākā zināmā pilsēta/novads. Autortiesības uz rakstiem pieder to izdevējiem.",
+    newsDisclaimer: "Automātiski apkopots ik pēc pāris stundām no publiskiem ziņu portāliem (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv, kā arī pierobežas ziņas no Igaunijas — ERR.ee — un Lietuvas — 15min.lt) pēc atslēgvārda \"lācis\"/\"karu\"/\"lokys\"/\"медведь\". Papildus reizi pa reizei manuāli pārbaudīti un pievienoti vecāki (līdz 2 gadiem) apstiprināti gadījumi. Nav pārbaudīts cilvēka reāllaikā — precīza atrašanās vieta nezināma, kartē redzamā atzīme ir tikai tuvākā zināmā pilsēta/novads. Autortiesības uz rakstiem pieder to izdevējiem.",
     newsNewCount: "Jauni pieminējumi: {n}",
   },
   en: {
@@ -101,13 +94,6 @@ const translations = {
     deleteBtn: "Delete",
     deleteConfirm: "Really delete this sighting?",
 
-    exportBtn: "Export (JSON)",
-    importBtn: "Import",
-    clearAllBtn: "Clear all data",
-    clearAllConfirm: "Really delete ALL sightings? This cannot be undone.",
-    importSuccess: "Data imported successfully.",
-    importError: "Could not read the file. Check that it's a valid export file.",
-
     disclaimer: "This is a community-built app — data lives only in your browser (localStorage) and is never sent to a server. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
 
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -117,7 +103,7 @@ const translations = {
     newsSectionTitle: "News mentions",
     newsToggleLabel: "Show on map",
     newsEmpty: "No news mentions yet.",
-    newsDisclaimer: "Automatically collected every couple of hours from public news portals (LSM.lv, Apollo.lv, TVNET, gorod.lv, plus border-area news from Estonia — ERR.ee — and Lithuania — 15min.lt) by keyword match on \"bear\" in each language. Not human-verified — exact location is unknown, the map pin is only the nearest known town/municipality. Article copyright belongs to the original publishers.",
+    newsDisclaimer: "Automatically collected every couple of hours from public news portals (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv, plus border-area news from Estonia — ERR.ee — and Lithuania — 15min.lt) by keyword match on \"bear\" in each language. Older confirmed cases (up to 2 years back) are occasionally added by hand after manual verification. Not verified by a human in real time — exact location is unknown, the map pin is only the nearest known town/municipality. Article copyright belongs to the original publishers.",
     newsNewCount: "New mentions: {n}",
   },
 };

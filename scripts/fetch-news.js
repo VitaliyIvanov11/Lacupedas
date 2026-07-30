@@ -20,6 +20,8 @@ const FEEDS = [
   // Russian-language regional portal (Daugavpils/Latgale) — the only feed
   // that carried the Silene nature-park sighting; LSM/Apollo/TVNET missed it.
   { name: "gorod.lv", url: "https://www.gorod.lv/rss" },
+  // Riga-region portal — caught the Garkalne/Ropaži sighting.
+  { name: "kodols.lv", url: "https://kodols.lv/rss.xml" },
 ];
 
 // Whole-word match against every case form of "bear"/"bear cub" in each
@@ -86,6 +88,8 @@ const GAZETTEER = [
   // district wins over the generic "Rīga" fallback below it.
   ["Imanta (Rīga)", ["Imant"], 56.9575, 24.0171],
   ["Zvejniekciems", ["Zvejniekciem"], 57.319, 24.417],
+  ["Garkalne (Ropažu novads)", ["Garkaln"], 57.0449, 24.3706],
+  ["Ropaži", ["Ropaž"], 56.9718, 24.6318],
   ["Rīga", ["Rīg"], 56.9496, 24.1052],
   ["Daugavpils", ["Daugavpil"], 55.8748, 26.5361],
   ["Liepāja", ["Liepāj"], 56.5053, 21.0107],

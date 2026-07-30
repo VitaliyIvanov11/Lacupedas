@@ -54,6 +54,15 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   background: var(--page-plane);
   color: var(--text-primary);
+  /* Single-viewport app shell: header + main + footer fill the screen with
+     no page-level scroll — each scrollable list scrolls within its own
+     card instead. Reverted on small screens (see the 900px query) where
+     stacking everything into one viewport isn't realistic. */
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 h1, h2 {
@@ -67,11 +76,12 @@ button {
 /* Header */
 
 .app-header {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 20px;
+  padding: 10px 20px;
   background: var(--brand-forest-dark);
   color: #fff;
 }
@@ -123,39 +133,55 @@ button {
 /* Layout */
 
 .layout {
+  flex: 1 1 auto;
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  grid-template-rows: 1fr;
   gap: 16px;
   padding: 16px;
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 @media (max-width: 900px) {
+  body {
+    height: auto;
+    overflow: visible;
+  }
+
   .layout {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    overflow: visible;
   }
 }
 
 .map-pane {
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
 .map-toolbar {
+  flex: 0 0 auto;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
 .map-hint {
+  flex: 0 0 auto;
   margin: 0;
   font-size: 0.85rem;
   color: var(--text-secondary);
 }
 
 .picking-banner {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -168,11 +194,19 @@ button {
 }
 
 #map {
-  height: 60vh;
-  min-height: 420px;
+  flex: 1 1 auto;
+  min-height: 0;
   border-radius: 10px;
   border: 1px solid var(--border);
   cursor: default;
+}
+
+@media (max-width: 900px) {
+  #map {
+    flex: none;
+    height: 50vh;
+    min-height: 340px;
+  }
 }
 
 #map.picking {
@@ -191,20 +225,55 @@ button {
 /* Sidebar */
 
 .sidebar {
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
 }
 
+@media (max-width: 900px) {
+  .sidebar {
+    overflow: visible;
+  }
+}
+
 .card {
+  flex: 0 0 auto;
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
 }
 
+/* list-card and news-card share whatever vertical space is left after the
+   stats/chart cards take their natural height, and each scrolls its own
+   list internally instead of growing the page. News gets a bigger share —
+   it's typically the one with real content (auto-collected), while
+   community reports start empty. */
+.list-card {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card {
+  flex: 1.6 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 900px) {
+  .list-card,
+  .news-card {
+    flex: none;
+  }
+}
+
 .card h2 {
+  flex: 0 0 auto;
   font-size: 0.95rem;
   margin-bottom: 10px;
   color: var(--text-primary);
@@ -271,11 +340,19 @@ button {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 320px;
+  flex: 1 1 0;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+@media (max-width: 900px) {
+  .sightings-list {
+    flex: none;
+    max-height: 320px;
+  }
 }
 
 .list-empty {
@@ -360,6 +437,7 @@ button {
 /* News mentions */
 
 .news-card-header {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -394,10 +472,13 @@ button {
 }
 
 .news-disclaimer {
+  flex: 0 0 auto;
   margin: 10px 0 0;
   font-size: 0.7rem;
   color: var(--text-muted);
   line-height: 1.4;
+  max-height: 4.5em;
+  overflow-y: auto;
 }
 
 .news-marker-diamond {
@@ -432,14 +513,6 @@ button {
 .delete-btn:hover {
   color: var(--danger);
   background: rgba(208, 59, 59, 0.1);
-}
-
-/* Data management */
-
-.data-card {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
 }
 
 /* Buttons */
@@ -481,26 +554,22 @@ button {
   background: rgba(11, 11, 11, 0.05);
 }
 
-.btn-danger {
-  background: transparent;
-  border-color: var(--danger);
-  color: var(--danger);
-  margin-left: auto;
-}
-
-.btn-danger:hover {
-  background: rgba(208, 59, 59, 0.1);
-}
-
 /* Footer */
 
 .app-footer {
+  flex: 0 0 auto;
   text-align: center;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
-  padding: 16px 20px 28px;
+  padding: 6px 20px;
   max-width: 800px;
   margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .app-footer {
+    padding: 12px 20px 24px;
+  }
 }
 
 /* Modal */

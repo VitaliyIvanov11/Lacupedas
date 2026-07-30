@@ -6,14 +6,21 @@ interactive map.
 
 - Pure static site: HTML/CSS/vanilla JS, no build step, no backend.
 - Map powered by [Leaflet](https://leafletjs.com/) + OpenStreetMap tiles (loaded from CDN).
-- Data is stored **only in the visitor's own browser** (`localStorage`) — nothing
-  is sent to a server. Use **Export (JSON)** to back up or share a dataset, and
-  **Import** to load one back in.
-- The map starts empty for every new visitor (no seeded demo data) — real
-  entries only, straight from `localStorage`.
+- Community reports are stored **only in the visitor's own browser**
+  (`localStorage`) — nothing is sent to a server. There's no export/import or
+  bulk-delete UI by design, to keep the surface area small.
+- The map starts empty of community reports for every new visitor (no seeded
+  demo data).
 - A scheduled GitHub Action also collects bear-related mentions from public
-  Latvian news RSS feeds and shows them on the map as a separate "News
-  mentions" layer — see [News auto-collection](#news-auto-collection) below.
+  Latvian (+ border-area Estonian/Lithuanian) news sources and shows them on
+  the map as a "News mentions" layer — see
+  [News auto-collection](#news-auto-collection) below. The stats panel and
+  monthly chart reflect community reports **and** news mentions combined.
+- Single-viewport layout on desktop (≥900px): the app fills the screen with
+  no page-level scroll — the sightings list and news list each scroll inside
+  their own card. Below 900px it reverts to a normal stacked, scrollable
+  mobile layout, since cramming a map + four cards into one small screen
+  isn't realistic.
 
 ## Run locally
 
@@ -62,11 +69,12 @@ which breaks the default URL while the custom domain isn't resolving yet.
 (every 2 hours) and on manual dispatch. It:
 
 1. Fetches the RSS feeds of a few major Latvian news portals (LSM.lv,
-   Apollo.lv, TVNET), a Russian-language regional one (gorod.lv, Daugavpils/
-   Latgale — it's the only one of the bunch that carried the Silene
-   nature-park sighting), plus one Estonian (ERR.ee) and one Lithuanian
-   (15min.lt) portal for border-area coverage — bears cross borders, and a
-   sighting just over the line is still relevant context near Latvia.
+   Apollo.lv, TVNET), two regional ones (gorod.lv — Russian-language,
+   Daugavpils/Latgale; kodols.lv — Riga region) that between them caught
+   sightings the national portals missed (Silene nature park, Garkalne),
+   plus one Estonian (ERR.ee) and one Lithuanian (15min.lt) portal for
+   border-area coverage — bears cross borders, and a sighting just over the
+   line is still relevant context near Latvia.
 2. Keeps only items whose title/description contain a whole-word match for
    "bear"/"bear cub" in the feed's language — Latvian "lācis"/"lāči"/
    "lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", Russian
@@ -114,13 +122,13 @@ To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 
 ```text
 index.html                     Page markup
-css/style.css                   Styling (light + dark mode via prefers-color-scheme)
+css/style.css                   Styling (single-viewport layout, light + dark mode)
 js/i18n.js                       LV/EN translation strings + language switching
-js/storage.js                    localStorage persistence for sightings
+js/storage.js                    localStorage persistence for community reports
 js/map.js                        Leaflet map, markers, click-to-report
-js/chart.js                       Monthly sightings bar chart (inline SVG)
+js/chart.js                       Monthly chart (inline SVG) — combined data
 js/news.js                         News-mentions layer: fetch, poll, render
-js/app.js                           Wires everything together
+js/app.js                           Wires everything together; combined stats
 scripts/fetch-news.js         RSS scanner run by the GitHub Action (below)
 .github/workflows/news-scan.yml   Scheduled job that runs the scanner
 data/news.json                 Output of the scanner, served to the front end

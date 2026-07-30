@@ -11,6 +11,7 @@ let newsLayer = null;
 let newsVisible = true;
 let newsMap = null;
 let newsSeenIds = new Set();
+let newsDataChangeCallback = null;
 
 function newsEscapeHtml(str) {
   const div = document.createElement("div");
@@ -146,10 +147,12 @@ async function pollNews() {
   renderNewsMarkers();
   renderNewsList();
   if (newCount > 0) updateNewsToast(newCount);
+  if (newsDataChangeCallback) newsDataChangeCallback(newsItems);
 }
 
-function initNews(map) {
+function initNews(map, onDataChange) {
   newsMap = map;
+  newsDataChangeCallback = onDataChange || null;
   const toggle = document.getElementById("news-toggle");
   if (toggle) {
     toggle.addEventListener("change", () => {

@@ -20,11 +20,9 @@
     statYear: document.getElementById("stat-year"),
     statLast: document.getElementById("stat-last"),
     chartContainer: document.getElementById("chart-container"),
-    exportBtn: document.getElementById("export-btn"),
-    importInput: document.getElementById("import-input"),
-    importBtn: document.getElementById("import-btn"),
-    clearAllBtn: document.getElementById("clear-all-btn"),
   };
+
+  let latestNewsItems = [];
 
   function escapeHtml(str) {
     const div = document.createElement("div");
@@ -53,20 +51,30 @@
     sightings = loadSightings();
     renderMarkers(sightings, (s) => openDetailsFromMarker(s));
     renderList();
-    renderStats();
-    renderMonthlyChart(el.chartContainer, sightings);
+    renderStatsAndChart();
   }
 
-  function renderStats() {
-    el.statTotal.textContent = sightings.length;
+  // Stats/chart reflect both community reports and news-collected mentions
+  // combined — a fresh install has zero of the former, so anchoring the
+  // headline numbers to sightings alone would show "0" even when the news
+  // scanner already found a dozen real, dated cases.
+  function combinedForStats() {
+    const newsAsEntries = latestNewsItems.map((n) => ({ date: n.pubDate.slice(0, 10) }));
+    return sightings.concat(newsAsEntries);
+  }
+
+  function renderStatsAndChart() {
+    const combined = combinedForStats();
+    el.statTotal.textContent = combined.length;
     const year = new Date().getFullYear();
-    el.statYear.textContent = sightings.filter((s) => new Date(s.date).getFullYear() === year).length;
-    if (sightings.length === 0) {
+    el.statYear.textContent = combined.filter((s) => new Date(s.date).getFullYear() === year).length;
+    if (combined.length === 0) {
       el.statLast.textContent = t("noneYet");
     } else {
-      const latest = [...sightings].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
+      const latest = [...combined].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
       el.statLast.textContent = formatDate(latest.date);
     }
+    renderMonthlyChart(el.chartContainer, combined);
   }
 
   function renderList() {
@@ -230,57 +238,13 @@
     refreshAll();
   }
 
-  // --- Export / import / clear ---
-
-  function exportData() {
-    const blob = new Blob([JSON.stringify(sightings, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    const stamp = new Date().toISOString().slice(0, 10);
-    a.href = url;
-    a.download = `lacupedas-sightings-${stamp}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  function importData(file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (!Array.isArray(parsed)) throw new Error("bad shape");
-        const clean = parsed
-          .filter((s) => s && typeof s.lat === "number" && typeof s.lng === "number" && s.date)
-          .map((s) => ({
-            lat: s.lat,
-            lng: s.lng,
-            date: s.date,
-            type: ["sighting", "tracks", "damage"].includes(s.type) ? s.type : "sighting",
-            count: Number(s.count) || 1,
-            description: String(s.description || "").slice(0, 2000),
-            reporter: String(s.reporter || "").slice(0, 200),
-            createdAt: s.createdAt || new Date().toISOString(),
-          }));
-        sightings = importSightings(clean);
-        refreshAll();
-        alert(t("importSuccess"));
-      } catch (e) {
-        alert(t("importError"));
-      }
-    };
-    reader.readAsText(file);
-  }
-
   // --- Language ---
 
   function switchLang(lang) {
     setLang(lang);
     applyTranslations();
     renderList();
-    renderStats();
-    renderMonthlyChart(el.chartContainer, sightings);
+    renderStatsAndChart();
     if (typeof renderNewsList === "function") renderNewsList();
   }
 
@@ -289,7 +253,12 @@
   function init() {
     const leafletMap = initMap();
     applyTranslations();
-    if (typeof initNews === "function") initNews(leafletMap);
+    if (typeof initNews === "function") {
+      initNews(leafletMap, (newsItems) => {
+        latestNewsItems = newsItems;
+        renderStatsAndChart();
+      });
+    }
 
     el.langBtns.forEach((btn) => {
       btn.addEventListener("click", () => switchLang(btn.getAttribute("data-lang-btn")));
@@ -303,19 +272,6 @@
       if (e.target === el.modalOverlay) closeForm();
     });
     el.form.addEventListener("submit", submitForm);
-
-    el.exportBtn.addEventListener("click", exportData);
-    el.importBtn.addEventListener("click", () => el.importInput.click());
-    el.importInput.addEventListener("change", (e) => {
-      if (e.target.files[0]) importData(e.target.files[0]);
-      e.target.value = "";
-    });
-    el.clearAllBtn.addEventListener("click", () => {
-      if (confirm(t("clearAllConfirm"))) {
-        clearAllSightings();
-        refreshAll();
-      }
-    });
 
     refreshAll();
   }

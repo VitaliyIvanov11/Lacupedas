@@ -36,14 +36,3 @@ function deleteSighting(id) {
   return sightings;
 }
 
-function clearAllSightings() {
-  saveSightings([]);
-}
-
-function importSightings(newOnes) {
-  const existing = loadSightings();
-  const withFreshIds = newOnes.map((s) => ({ ...s, id: uid() }));
-  const merged = existing.concat(withFreshIds);
-  saveSightings(merged);
-  return merged;
-}
