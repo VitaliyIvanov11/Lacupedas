@@ -74,7 +74,7 @@ function mentionsBear(text) {
   return BEAR_KEYWORD_RES.some((re) => re.test(text));
 }
 
-const MAX_AGE_DAYS = 60;
+const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
 const MAX_ITEMS = 150;
 const OUTPUT_PATH = path.join(__dirname, "..", "data", "news.json");
 
@@ -133,6 +133,8 @@ const GAZETTEER = [
   ["Skrunda", ["Skrund"], 56.6789, 22.0219],
   ["Salaspils", ["Salaspil"], 56.8608, 24.3542],
   ["Saulkrasti", ["Saulkrast"], 57.2597, 24.4183],
+  ["Beļava (Gulbenes novads)", ["Beļav"], 57.2542, 26.7705],
+  ["Kaplava (Krāslavas novads)", ["Kaplav"], 55.8428, 27.1694],
   ["Vidzeme", ["Vidzem"], 57.2, 25.8],
   ["Latgale", ["Latgal"], 56.4, 27.2],
   ["Kurzeme", ["Kurzem"], 57.0, 21.9],
@@ -153,6 +155,7 @@ const GAZETTEER = [
   ["Biržai (Lietuva)", ["Birž"], 56.2, 24.75],
   ["Rokiškis (Lietuva)", ["Rokišk"], 55.9614, 25.5883],
   ["Zarasai (Lietuva)", ["Zaras"], 55.7292, 26.2453],
+  ["Turmantas (Lietuva)", ["Turmant"], 55.6944, 26.4611],
   ["Mažeikiai (Lietuva)", ["Mažeiki"], 56.3115, 22.3453],
   ["Skuodas (Lietuva)", ["Skuod"], 56.2667, 21.5333],
 ];

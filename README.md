@@ -81,7 +81,7 @@ which breaks the default URL while the custom domain isn't resolving yet.
    border) to place an approximate map pin — exact coordinates can't be
    extracted from article text, so this is a "nearest known town/region"
    pin, not the precise location.
-4. Merges the result into `data/news.json` (dedup by article link, 60-day
+4. Merges the result into `data/news.json` (dedup by article link, 2-year
    window, capped at 150 items) and commits it if it changed.
 
 Official government sources (Dabas aizsardzības pārvalde, Valsts meža
