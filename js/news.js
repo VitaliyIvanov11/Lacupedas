@@ -85,6 +85,8 @@ function renderNewsMarkers() {
         `<a href="${newsEscapeHtml(n.link)}" target="_blank" rel="noopener"><strong>${newsEscapeHtml(n.title)}</strong></a>` +
           `<br><span class="popup-meta">${newsEscapeHtml(n.source)}</span>`
       );
+      marker.on("mouseover", () => marker.openPopup());
+      marker.on("mouseout", () => marker.closePopup());
       marker.addTo(newsLayer);
     });
   if (newsVisible) {

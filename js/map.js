@@ -102,6 +102,8 @@ function renderMarkers(sightings, onMarkerClick) {
   sightings.forEach((s) => {
     const marker = L.marker([s.lat, s.lng], { icon: pawIcon(s.type) });
     marker.bindPopup(sightingPopupHtml(s));
+    marker.on("mouseover", () => marker.openPopup());
+    marker.on("mouseout", () => marker.closePopup());
     marker.on("click", () => onMarkerClick && onMarkerClick(s));
     marker.addTo(markersLayer);
   });

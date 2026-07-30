@@ -241,7 +241,7 @@ button {
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -256,7 +256,7 @@ button {
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 14px 16px;
+  padding: 10px 14px;
 }
 
 /* list-card and news-card share whatever vertical space is left after the
@@ -265,14 +265,14 @@ button {
    it's typically the one with real content (auto-collected), while
    community reports start empty. */
 .list-card {
-  flex: 1 1 0;
+  flex: 0.7 1 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
 .news-card {
-  flex: 1.6 1 0;
+  flex: 2.2 1 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
@@ -287,8 +287,8 @@ button {
 
 .card h2 {
   flex: 0 0 auto;
-  font-size: 0.95rem;
-  margin-bottom: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
   color: var(--text-primary);
 }
 
@@ -485,7 +485,7 @@ button {
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .list-card-header h2 {
@@ -496,7 +496,7 @@ button {
   flex: 0 0 auto;
   display: flex;
   gap: 6px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .filter-select {
@@ -518,7 +518,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .news-card-header h2 {

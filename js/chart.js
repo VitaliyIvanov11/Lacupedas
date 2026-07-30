@@ -14,10 +14,10 @@ function renderMonthlyChart(container, sightings) {
   const months = t("monthsShort");
 
   const width = 560;
-  const height = 120;
+  const height = 95;
   const padLeft = 28;
-  const padBottom = 20;
-  const padTop = 10;
+  const padBottom = 18;
+  const padTop = 8;
   const padRight = 8;
   const plotW = width - padLeft - padRight;
   const plotH = height - padTop - padBottom;
