@@ -38,10 +38,9 @@ const translations = {
 
     listTitle: "Novērojumu saraksts",
     emptyList: "Nav neviena novērojuma. Pievienojiet pirmo!",
-    deleteBtn: "Dzēst",
-    deleteConfirm: "Vai tiešām dzēst šo novērojumu?",
+    submitError: "Neizdevās saglabāt — pārbaudiet interneta savienojumu un mēģiniet vēlreiz.",
 
-    disclaimer: "Šī ir sabiedrības veidota lietotne — dati tiek glabāti tikai jūsu pārlūkā (localStorage) un netiek sūtīti nevienam serverim. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
+    disclaimer: "Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums. Dzēšana nav pieejama publiski. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
 
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
     bearsUnit: "lācis/-i",
@@ -91,10 +90,9 @@ const translations = {
 
     listTitle: "Sightings list",
     emptyList: "No sightings yet. Add the first one!",
-    deleteBtn: "Delete",
-    deleteConfirm: "Really delete this sighting?",
+    submitError: "Couldn't save — check your internet connection and try again.",
 
-    disclaimer: "This is a community-built app — data lives only in your browser (localStorage) and is never sent to a server. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
+    disclaimer: "This is a community-built app — sightings are visible to every visitor, not just you. Public deletion isn't available. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
 
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     bearsUnit: "bear(s)",

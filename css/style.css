@@ -422,18 +422,6 @@ button {
   color: var(--text-muted);
 }
 
-.delete-btn {
-  border: none;
-  background: transparent;
-  color: var(--text-muted);
-  font-size: 1.1rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
 /* News mentions */
 
 .news-card-header {
@@ -508,11 +496,6 @@ button {
   font-size: 0.85rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   z-index: 900;
-}
-
-.delete-btn:hover {
-  color: var(--danger);
-  background: rgba(208, 59, 59, 0.1);
 }
 
 /* Buttons */

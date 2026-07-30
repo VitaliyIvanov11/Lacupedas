@@ -1,5 +1,7 @@
 // Wires together the map, form, list, stats and chart. Vanilla JS, no build step.
 (function () {
+  const SIGHTINGS_POLL_MS = 2 * 60 * 1000; // 2 minutes
+
   let sightings = [];
   let pendingLatLng = null;
 
@@ -47,8 +49,8 @@
     return t("typeSighting");
   }
 
-  function refreshAll() {
-    sightings = loadSightings();
+  async function refreshAll() {
+    sightings = await loadSightings();
     renderMarkers(sightings, (s) => openDetailsFromMarker(s));
     renderList();
     renderStatsAndChart();
@@ -129,20 +131,6 @@
 
       li.appendChild(body);
 
-      const delBtn = document.createElement("button");
-      delBtn.className = "delete-btn";
-      delBtn.type = "button";
-      delBtn.title = t("deleteBtn");
-      delBtn.textContent = "×";
-      delBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (confirm(t("deleteConfirm"))) {
-          sightings = deleteSighting(s.id);
-          refreshAll();
-        }
-      });
-      li.appendChild(delBtn);
-
       li.addEventListener("click", () => flyToSighting(s));
 
       el.list.appendChild(li);
@@ -205,7 +193,7 @@
     pendingLatLng = null;
   }
 
-  function submitForm(e) {
+  async function submitForm(e) {
     e.preventDefault();
     if (!pendingLatLng) return;
     const fd = new FormData(el.form);
@@ -222,7 +210,6 @@
     }
 
     const sighting = {
-      id: uid(),
       lat: pendingLatLng.lat,
       lng: pendingLatLng.lng,
       date,
@@ -230,12 +217,21 @@
       count,
       description,
       reporter,
-      createdAt: new Date().toISOString(),
     };
 
-    sightings = addSighting(sighting);
-    closeForm();
-    refreshAll();
+    const submitBtn = el.form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    el.formError.hidden = true;
+    try {
+      await addSighting(sighting);
+      closeForm();
+      await refreshAll();
+    } catch (err) {
+      el.formError.hidden = false;
+      el.formError.textContent = t("submitError");
+    } finally {
+      submitBtn.disabled = false;
+    }
   }
 
   // --- Language ---
@@ -274,6 +270,7 @@
     el.form.addEventListener("submit", submitForm);
 
     refreshAll();
+    setInterval(refreshAll, SIGHTINGS_POLL_MS);
   }
 
   document.addEventListener("DOMContentLoaded", init);

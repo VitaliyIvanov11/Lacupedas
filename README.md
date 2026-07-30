@@ -4,11 +4,14 @@ A small, bilingual (Latvian / English) static web app for tracking bear
 sightings, tracks/signs, and livestock/beehive damage across Latvia on an
 interactive map.
 
-- Pure static site: HTML/CSS/vanilla JS, no build step, no backend.
+- Static frontend (HTML/CSS/vanilla JS, no build step) backed by
+  [Supabase](https://supabase.com/) (hosted Postgres + REST API) for
+  community reports — every visitor sees everyone else's reports, not just
+  their own. See [Community reports storage](#community-reports-storage)
+  below for the schema and security model.
 - Map powered by [Leaflet](https://leafletjs.com/) + OpenStreetMap tiles (loaded from CDN).
-- Community reports are stored **only in the visitor's own browser**
-  (`localStorage`) — nothing is sent to a server. There's no export/import or
-  bulk-delete UI by design, to keep the surface area small.
+- There's no export/import or delete UI by design, to keep the surface area
+  small — the reports table is shared, so public deletion isn't offered.
 - The map starts empty of community reports for every new visitor (no seeded
   demo data).
 - A scheduled GitHub Action also collects bear-related mentions from public
@@ -62,6 +65,31 @@ DNS propagation can take anywhere from a few minutes to ~24 hours. Until the
 domain resolves, keep the `CNAME` file **out** of the repo — GitHub Pages
 redirects the default `github.io` URL to whatever domain that file names,
 which breaks the default URL while the custom domain isn't resolving yet.
+
+## Community reports storage
+
+`js/storage.js` talks directly to a Supabase project's auto-generated REST
+API from the browser — no server code of ours in between. The `SUPABASE_URL`
+and `SUPABASE_ANON_KEY` constants at the top of that file are meant to be
+public: Supabase's security model is Row Level Security (RLS) policies on
+the table, not a secret key. The `sightings` table's policies allow the
+public role to `SELECT` and `INSERT` only — no `UPDATE`/`DELETE` — so:
+
+- Anyone can submit a report through the site (no login), and everyone sees
+  it (polled every 2 minutes, same pattern as the news layer).
+- Nobody can edit or delete a report through the site, including their own.
+  Moderation (removing spam/bad data) happens by hand in the Supabase Table
+  Editor.
+- Because the anon key is public by design, the table is technically
+  writable by anyone who extracts it from the page source, not only through
+  this UI. That's an accepted trade-off for a keyless, no-login community
+  tool — if spam becomes a real problem, options include adding a CAPTCHA
+  challenge before insert, or a Supabase Edge Function that validates
+  submissions server-side instead of inserting directly from the client.
+
+Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
+`date date`, `type text` (`sighting`/`tracks`/`damage`), `count int`,
+`description text`, `reporter text`, `created_at timestamptz`.
 
 ## News auto-collection
 
@@ -124,7 +152,7 @@ To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 index.html                     Page markup
 css/style.css                   Styling (single-viewport layout, light + dark mode)
 js/i18n.js                       LV/EN translation strings + language switching
-js/storage.js                    localStorage persistence for community reports
+js/storage.js                    Supabase-backed shared storage for community reports
 js/map.js                        Leaflet map, markers, click-to-report
 js/chart.js                       Monthly chart (inline SVG) — combined data
 js/news.js                         News-mentions layer: fetch, poll, render
