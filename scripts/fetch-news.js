@@ -13,24 +13,54 @@ const FEEDS = [
   { name: "LSM.lv", url: "https://www.lsm.lv/rss/" },
   { name: "Apollo.lv", url: "https://www.apollo.lv/rss" },
   { name: "TVNET", url: "https://www.tvnet.lv/rss" },
+  // Estonian and Lithuanian border-area coverage — bears cross borders, and
+  // a sighting just over the line is still relevant context near Latvia.
+  { name: "ERR.ee", url: "https://www.err.ee/rss" },
+  { name: "15min.lt", url: "https://www.15min.lt/rss/naujienos" },
 ];
 
-// Whole-word match against every case form of "lācis" (bear) and "lācēns"
-// (bear cub). A plain substring match on the lāc-/lāč- stem is too loose —
+// Whole-word match against every case form of "bear"/"bear cub" in each
+// feed's language. A plain substring match on the shared stem is too loose —
 // it also fires on unrelated compounds/proper nouns that happen to contain
-// it, e.g. "Lāčusils" (a place name) or "Lāčplēsis" (Latvia's national
-// epic hero, extremely common in street names and dates). Word-boundary
-// matching against explicit forms avoids both.
-const BEAR_WORD_FORMS = [
+// it, e.g. Latvian "Lāčusils" (a place name) or "Lāčplēsis" (Latvia's
+// national epic hero, extremely common in street names and dates), or
+// Lithuanian "lokalus" ("local", contains "lok"). Word-boundary matching
+// against explicit forms avoids both.
+const BEAR_WORD_FORMS_LV = [
   "lācis", "lāča", "lācim", "lāci", "lāči", "lāču", "lāčiem", "lāčus", "lāčos",
   "lāce", "lāces", "lācei", "lācē", "lācēm", "lācēs",
   "lācēns", "lācēna", "lācēnam", "lācēnu", "lācēnā", "lācēni", "lācēniem", "lācēnus", "lācēnos",
 ];
-const LV_LETTER = "a-zA-ZĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž";
-const BEAR_KEYWORD_RE = new RegExp(
-  `(?<![${LV_LETTER}])(?:${BEAR_WORD_FORMS.join("|")})(?![${LV_LETTER}])`,
-  "iu"
-);
+// Estonian "karu" (bear) — the noun is indeclinable-looking in nom/gen sg,
+// so most case forms are built by suffixing the stem "karu-".
+const BEAR_WORD_FORMS_ET = [
+  "karu", "karud", "karude", "karusid", "karule", "karule", "karuga", "karus",
+  "karust", "karult", "karuks", "karuni", "karuta", "karudele", "karudel",
+  "karudelt", "karudeks",
+];
+// Lithuanian "lokys" (bear) and "lokiukas" (bear cub).
+const BEAR_WORD_FORMS_LT = [
+  "lokys", "lokio", "lokiui", "lokį", "lokiu", "lokyje", "lokiai", "lokių",
+  "lokiams", "lokius", "lokiais", "lokiuose",
+  "lokė", "lokės", "lokei", "lokę", "lokja", "lokėje",
+  "lokiukas", "lokiuko", "lokiukui", "lokiuką", "lokiuku", "lokiuke",
+  "lokiukai", "lokiukų", "lokiukams", "lokiukus", "lokiukais", "lokiukuose",
+];
+
+function wordBoundaryRegex(forms, extraLetters) {
+  const letters = `a-zA-Z${extraLetters}`;
+  return new RegExp(`(?<![${letters}])(?:${forms.join("|")})(?![${letters}])`, "iu");
+}
+
+const BEAR_KEYWORD_RES = [
+  wordBoundaryRegex(BEAR_WORD_FORMS_LV, "ĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž"),
+  wordBoundaryRegex(BEAR_WORD_FORMS_ET, "ÕõÄäÖöÜüŠšŽž"),
+  wordBoundaryRegex(BEAR_WORD_FORMS_LT, "ĄąČčĘęĖėĮįŠšŲųŪūŽž"),
+];
+
+function mentionsBear(text) {
+  return BEAR_KEYWORD_RES.some((re) => re.test(text));
+}
 
 const MAX_AGE_DAYS = 60;
 const MAX_ITEMS = 150;
@@ -94,6 +124,24 @@ const GAZETTEER = [
   ["Latgale", ["Latgal"], 56.4, 27.2],
   ["Kurzeme", ["Kurzem"], 57.0, 21.9],
   ["Zemgale", ["Zemgal"], 56.55, 23.5],
+
+  // Estonian border area (south of Latvia's northern border) — only towns
+  // within roughly 50-70km of Latvia, not all of Estonia.
+  ["Valga (Igaunija)", ["Valga"], 57.7766, 26.0413],
+  ["Võru (Igaunija)", ["Võru"], 57.8375, 27.0224],
+  ["Põlva (Igaunija)", ["Põlva"], 58.0552, 27.0578],
+  ["Rõuge (Igaunija)", ["Rõuge"], 57.7452, 26.9515],
+  ["Pärnu (Igaunija)", ["Pärnu"], 58.3859, 24.4971],
+
+  // Lithuanian border area (north of Latvia's southern border) — only towns
+  // within roughly 50-70km of Latvia, not all of Lithuania.
+  ["Joniškis (Lietuva)", ["Jonišk"], 56.2378, 23.6142],
+  ["Pasvalys (Lietuva)", ["Pasval"], 56.0611, 24.3986],
+  ["Biržai (Lietuva)", ["Birž"], 56.2, 24.75],
+  ["Rokiškis (Lietuva)", ["Rokišk"], 55.9614, 25.5883],
+  ["Zarasai (Lietuva)", ["Zaras"], 55.7292, 26.2453],
+  ["Mažeikiai (Lietuva)", ["Mažeiki"], 56.3115, 22.3453],
+  ["Skuodas (Lietuva)", ["Skuod"], 56.2667, 21.5333],
 ];
 
 function decodeEntities(str) {
@@ -182,7 +230,7 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat();
 
   const matched = allItems
-    .filter((item) => BEAR_KEYWORD_RE.test(item.title) || BEAR_KEYWORD_RE.test(item.description))
+    .filter((item) => mentionsBear(item.title) || mentionsBear(item.description))
     .map((item) => {
       const place = findPlace(item.title + " " + item.description);
       const pubDate = new Date(item.pubDate);

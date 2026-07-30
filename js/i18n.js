@@ -57,7 +57,7 @@ const translations = {
     newsSectionTitle: "Ziņu pieminējumi",
     newsToggleLabel: "Rādīt kartē",
     newsEmpty: "Pagaidām nav neviena ziņu pieminējuma.",
-    newsDisclaimer: "Automātiski apkopots ik pēc pāris stundām no publiskiem ziņu portāliem (LSM.lv, Apollo.lv, TVNET) pēc atslēgvārda \"lācis\". Nav pārbaudīts cilvēka — precīza atrašanās vieta nezināma, kartē redzamā atzīme ir tikai tuvākā zināmā pilsēta/novads. Autortiesības uz rakstiem pieder to izdevējiem.",
+    newsDisclaimer: "Automātiski apkopots ik pēc pāris stundām no publiskiem ziņu portāliem (LSM.lv, Apollo.lv, TVNET, kā arī pierobežas ziņas no Igaunijas — ERR.ee — un Lietuvas — 15min.lt) pēc atslēgvārda \"lācis\"/\"karu\"/\"lokys\". Nav pārbaudīts cilvēka — precīza atrašanās vieta nezināma, kartē redzamā atzīme ir tikai tuvākā zināmā pilsēta/novads. Autortiesības uz rakstiem pieder to izdevējiem.",
     newsNewCount: "Jauni pieminējumi: {n}",
   },
   en: {
@@ -117,7 +117,7 @@ const translations = {
     newsSectionTitle: "News mentions",
     newsToggleLabel: "Show on map",
     newsEmpty: "No news mentions yet.",
-    newsDisclaimer: "Automatically collected every couple of hours from public news portals (LSM.lv, Apollo.lv, TVNET) by keyword match on \"bear\". Not human-verified — exact location is unknown, the map pin is only the nearest known town/municipality. Article copyright belongs to the original publishers.",
+    newsDisclaimer: "Automatically collected every couple of hours from public news portals (LSM.lv, Apollo.lv, TVNET, plus border-area news from Estonia — ERR.ee — and Lithuania — 15min.lt) by keyword match on \"bear\" in each language. Not human-verified — exact location is unknown, the map pin is only the nearest known town/municipality. Article copyright belongs to the original publishers.",
     newsNewCount: "New mentions: {n}",
   },
 };

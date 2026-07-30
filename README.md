@@ -62,19 +62,33 @@ which breaks the default URL while the custom domain isn't resolving yet.
 (every 2 hours) and on manual dispatch. It:
 
 1. Fetches the RSS feeds of a few major Latvian news portals (LSM.lv,
-   Apollo.lv, TVNET).
+   Apollo.lv, TVNET), plus one Estonian (ERR.ee) and one Lithuanian
+   (15min.lt) portal for border-area coverage — bears cross borders, and a
+   sighting just over the line is still relevant context near Latvia.
 2. Keeps only items whose title/description contain a whole-word match for
-   "lācis"/"lāči"/"lācēns" (bear/bear cub, all case forms) — word-boundary
-   matching, not a substring, so it doesn't fire on unrelated words that
-   happen to contain the same letters (e.g. "Lāčplēsis", Latvia's national
-   epic hero, or place names like "Lāčusils").
-3. Best-effort matches a Latvian town/region name mentioned in the text
-   against a small built-in gazetteer (`GAZETTEER` in the script) to place an
-   approximate map pin — exact coordinates can't be extracted from article
-   text, so this is a "nearest known town/region" pin, not the precise
-   location.
+   "bear"/"bear cub" in the feed's language — Latvian "lācis"/"lāči"/
+   "lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", all case forms.
+   Word-boundary matching, not a substring, so it doesn't fire on unrelated
+   words that happen to contain the same letters (e.g. Latvian "Lāčplēsis",
+   the national epic hero, or place names like "Lāčusils"; Lithuanian
+   "lokalus", meaning "local").
+3. Best-effort matches a town/region name mentioned in the text against a
+   small built-in gazetteer (`GAZETTEER` in the script — all of Latvia, plus
+   only the Estonian/Lithuanian towns within roughly 50-70km of the Latvian
+   border) to place an approximate map pin — exact coordinates can't be
+   extracted from article text, so this is a "nearest known town/region"
+   pin, not the precise location.
 4. Merges the result into `data/news.json` (dedup by article link, 60-day
    window, capped at 150 items) and commits it if it changed.
+
+Official government sources (Dabas aizsardzības pārvalde, Valsts meža
+dienests) were investigated but not wired in: neither publishes an RSS feed,
+and both are unreachable (TLS connections time out) from the environment
+this was built in, so their HTML structure couldn't be verified well enough
+to write a scraper with any confidence it'd keep working. Confirmed real
+sightings from the initial research were instead backfilled by hand into
+`data/news.json` once each, using the same id-hashing scheme the script
+uses so future runs dedupe against them correctly.
 
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
