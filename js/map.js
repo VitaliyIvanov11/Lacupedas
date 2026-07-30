@@ -1,5 +1,5 @@
 // Leaflet map setup: bounded to Latvia, click-to-report, colored markers by
-// observation type (categorical palette slots 1/2/8 — blue/orange/red).
+// observation type (categorical palette, fixed slot order).
 const LATVIA_CENTER = [56.85, 24.7];
 const LATVIA_BOUNDS = [
   [55.5, 20.5],
@@ -10,6 +10,8 @@ const TYPE_COLORS = {
   sighting: "#2a78d6", // categorical slot 1 (blue)
   tracks: "#eb6834", // categorical slot 2 (orange)
   damage: "#e34948", // categorical slot 8 (red)
+  dna_sample: "#1baf7a", // categorical slot 3 (aqua)
+  dead: "#eda100", // categorical slot 4 (yellow)
 };
 
 let map;
@@ -76,6 +78,8 @@ function mapEscapeHtml(str) {
 function mapTypeLabel(type) {
   if (type === "tracks") return t("typeTracks");
   if (type === "damage") return t("typeDamage");
+  if (type === "dead") return t("typeDead");
+  if (type === "dna_sample") return t("typeDnaSample");
   return t("typeSighting");
 }
 

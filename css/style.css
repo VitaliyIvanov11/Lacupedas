@@ -643,6 +643,42 @@ button {
   }
 }
 
+.faq-details {
+  margin-top: 6px;
+  text-align: left;
+}
+
+.faq-details summary {
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+}
+
+.faq-content {
+  max-width: 640px;
+  margin: 8px auto 0;
+  max-height: 180px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.faq-content h2 {
+  font-size: 0.8rem;
+  margin: 10px 0 2px;
+  color: var(--text-primary);
+}
+
+.faq-content h2:first-child {
+  margin-top: 0;
+}
+
+.faq-content p {
+  margin: 0 0 6px;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
 /* Modal */
 
 .modal-overlay {

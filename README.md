@@ -36,6 +36,13 @@ interactive map.
   count for sightings). It's additive over the pins, not a replacement, and
   always reflects the full dataset regardless of the list filters — it
   answers "where overall," not "where in my current filter view."
+- Basic SEO: keyword-targeted title/description, Open Graph tags, a
+  `WebSite` JSON-LD block, `robots.txt`/`sitemap.xml`, and a collapsed-by-
+  default FAQ (`<details>`, real static text, capped-height + internally
+  scrollable so it can't blow out the no-scroll desktop layout) answering
+  the exact queries this is meant to rank for ("kur dzīvo lācis", "lāča
+  pēdas"). Submitting the site to Google Search Console itself is a manual,
+  account-owner-only step — not something committed here.
 
 ## Run locally
 
@@ -100,8 +107,11 @@ public role to `SELECT` and `INSERT` only — no `UPDATE`/`DELETE` — so:
   submissions server-side instead of inserting directly from the client.
 
 Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
-`date date`, `type text` (`sighting`/`tracks`/`damage`), `count int`,
-`description text`, `reporter text`, `photo_url text`, `created_at timestamptz`.
+`date date`, `type text` (`sighting`/`tracks`/`damage`/`dead`/`dna_sample`),
+`count int`, `description text`, `reporter text`, `photo_url text`,
+`created_at timestamptz`. The `type` values are enforced by a `CHECK`
+constraint (`sightings_type_check`) — adding a new type means an `ALTER
+TABLE ... DROP/ADD CONSTRAINT` in Supabase, not just a front-end change.
 
 ### Confirm/dispute voting
 

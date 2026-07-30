@@ -18,6 +18,8 @@ const translations = {
     typeSighting: "Redzēts lācis",
     typeTracks: "Pēdas / pazīmes",
     typeDamage: "Postījumi (mājlopi, bites u.c.)",
+    typeDead: "Atrasts bojāgājis dzīvnieks",
+    typeDnaSample: "Savākts DNS paraugs",
     fieldCount: "Lāču skaits",
     fieldDescription: "Apraksts",
     descriptionPlaceholder: "Aprakstiet, ko redzējāt...",
@@ -57,6 +59,14 @@ const translations = {
 
     disclaimer: "Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums. Dzēšana nav pieejama publiski. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
 
+    faqSummary: "Bieži uzdotie jautājumi par lāčiem Latvijā",
+    faqQ1: "Kur Latvijā dzīvo lāči?",
+    faqA1: "Brūnie lāči Latvijā visbiežāk sastopami Vidzemē (īpaši pierobežā ar Igauniju) un Latgalē, taču pēdējos gados novērojumi arvien biežāk parādās arī citos reģionos, tostarp Kurzemē un Zemgalē. Pētnieki lēš, ka lāču populācija Latvijā turpina pieaugt.",
+    faqQ2: "Kā atpazīt lāča pēdas?",
+    faqA2: "Lāča pēdas mežā var atpazīt pēc to lielā izmēra un pieciem pirkstu nospiedumiem ar redzamiem nagu iespiedumiem. Ja neesi pārliecināts, vislabāk ir nofotografēt pēdu nospiedumu un pievienot to kā novērojumu šajā kartē.",
+    faqQ3: "Vai lācis ir bīstams cilvēkiem?",
+    faqA3: "Lāči parasti izvairās no cilvēkiem, un uzbrukumi ir reti. Sastopot lāci, ieteicams saglabāt mieru, nesteigties un lēnām attālināties, neskrienot.",
+
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mai", "Jūn", "Jūl", "Aug", "Sep", "Okt", "Nov", "Dec"],
     bearsUnit: "lācis/-i",
     close: "Aizvērt",
@@ -85,6 +95,8 @@ const translations = {
     typeSighting: "Bear seen",
     typeTracks: "Tracks / signs",
     typeDamage: "Damage (livestock, beehives, etc.)",
+    typeDead: "Dead animal found",
+    typeDnaSample: "DNA sample collected",
     fieldCount: "Number of bears",
     fieldDescription: "Description",
     descriptionPlaceholder: "Describe what you saw...",
@@ -123,6 +135,14 @@ const translations = {
     filterNoMatch: "No entries match this filter.",
 
     disclaimer: "This is a community-built app — sightings are visible to every visitor, not just you. Public deletion isn't available. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
+
+    faqSummary: "Frequently asked questions about bears in Latvia",
+    faqQ1: "Where do bears live in Latvia?",
+    faqA1: "Brown bears in Latvia are most common in Vidzeme (especially near the Estonian border) and Latgale, but in recent years sightings have increasingly appeared in other regions too, including Kurzeme and Zemgale. Researchers estimate the bear population in Latvia continues to grow.",
+    faqQ2: "How do you recognize bear tracks?",
+    faqA2: "Bear tracks in the forest can be recognized by their large size and five toe prints with visible claw marks. If you're not sure, it's best to photograph the print and add it as a sighting on this map.",
+    faqQ3: "Are bears dangerous to people?",
+    faqA3: "Bears generally avoid people, and attacks are rare. If you encounter a bear, it's best to stay calm, not rush, and slowly back away without running.",
 
     monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     bearsUnit: "bear(s)",

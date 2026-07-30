@@ -3,12 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lāču Novērojumi Latvijā / Bear Sightings in Latvia</title>
-  <meta name="description" content="Kopienas veidota lāču novērojumu karte Latvijā / A community-built bear sighting map for Latvia" />
+  <title>Lāči Latvijā — novērojumi, pēdas un karte | Lacupedas</title>
+  <meta name="description" content="Kur Latvijā dzīvo lāči? Interaktīva karte ar brūnā lāča novērojumiem, pēdām un jaunumiem visā Latvijā. Kopienas veidota — pievieno savu novērojumu vai izpēti citu ziņoto." />
+  <link rel="canonical" href="https://lacupedas.lv/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Lacupedas" />
+  <meta property="og:title" content="Lāči Latvijā — novērojumi, pēdas un karte" />
+  <meta property="og:description" content="Kur Latvijā dzīvo lāči? Interaktīva karte ar brūnā lāča novērojumiem, pēdām un jaunumiem visā Latvijā." />
+  <meta property="og:url" content="https://lacupedas.lv/" />
+  <meta name="twitter:card" content="summary" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BB%3C/text%3E%3C/svg%3E" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Lacupedas",
+    "alternateName": "Lāču Novērojumi Latvijā",
+    "url": "https://lacupedas.lv/",
+    "description": "Kopienas veidota interaktīva karte ar brūnā lāča novērojumiem, pēdām un ar lāčiem saistītiem jaunumiem Latvijā.",
+    "inLanguage": ["lv", "en"]
+  }
+  </script>
 </head>
 <body>
   <header class="app-header">
@@ -76,6 +95,8 @@
               <option value="sighting" data-i18n="typeSighting">Redzēts lācis</option>
               <option value="tracks" data-i18n="typeTracks">Pēdas / pazīmes</option>
               <option value="damage" data-i18n="typeDamage">Postījumi (mājlopi, bites u.c.)</option>
+              <option value="dead" data-i18n="typeDead">Atrasts bojāgājis dzīvnieks</option>
+              <option value="dna_sample" data-i18n="typeDnaSample">Savākts DNS paraugs</option>
             </select>
             <select id="sightings-time-filter" class="filter-select">
               <option value="all" data-i18n="filterAllTime">Viss laiks</option>
@@ -117,6 +138,28 @@
     <p data-i18n="disclaimer">
       Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums.
     </p>
+    <details class="faq-details">
+      <summary data-i18n="faqSummary">Bieži uzdotie jautājumi par lāčiem Latvijā</summary>
+      <div class="faq-content">
+        <h2 data-i18n="faqQ1">Kur Latvijā dzīvo lāči?</h2>
+        <p data-i18n="faqA1">
+          Brūnie lāči Latvijā visbiežāk sastopami Vidzemē (īpaši pierobežā ar Igauniju) un Latgalē, taču
+          pēdējos gados novērojumi arvien biežāk parādās arī citos reģionos, tostarp Kurzemē un Zemgalē.
+          Pētnieki lēš, ka lāču populācija Latvijā turpina pieaugt.
+        </p>
+        <h2 data-i18n="faqQ2">Kā atpazīt lāča pēdas?</h2>
+        <p data-i18n="faqA2">
+          Lāča pēdas mežā var atpazīt pēc to lielā izmēra un pieciem pirkstu nospiedumiem ar redzamiem nagu
+          iespiedumiem. Ja neesi pārliecināts, vislabāk ir nofotografēt pēdu nospiedumu un pievienot to kā
+          novērojumu šajā kartē.
+        </p>
+        <h2 data-i18n="faqQ3">Vai lācis ir bīstams cilvēkiem?</h2>
+        <p data-i18n="faqA3">
+          Lāči parasti izvairās no cilvēkiem, un uzbrukumi ir reti. Sastopot lāci, ieteicams saglabāt mieru,
+          nesteigties un lēnām attālināties, neskrienot.
+        </p>
+      </div>
+    </details>
   </footer>
 
   <div id="modal-overlay" class="modal-overlay" hidden>
@@ -137,6 +180,8 @@
             <option value="sighting" data-i18n="typeSighting">Redzēts lācis</option>
             <option value="tracks" data-i18n="typeTracks">Pēdas / pazīmes</option>
             <option value="damage" data-i18n="typeDamage">Postījumi (mājlopi, bites u.c.)</option>
+            <option value="dead" data-i18n="typeDead">Atrasts bojāgājis dzīvnieks</option>
+            <option value="dna_sample" data-i18n="typeDnaSample">Savākts DNS paraugs</option>
           </select>
         </div>
         <div class="form-row">

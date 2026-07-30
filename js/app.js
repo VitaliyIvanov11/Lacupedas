@@ -53,6 +53,8 @@
   function typeLabel(type) {
     if (type === "tracks") return t("typeTracks");
     if (type === "damage") return t("typeDamage");
+    if (type === "dead") return t("typeDead");
+    if (type === "dna_sample") return t("typeDnaSample");
     return t("typeSighting");
   }
 
