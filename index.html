@@ -86,7 +86,7 @@
 
   <footer class="app-footer">
     <p data-i18n="disclaimer">
-      Šī ir sabiedrības veidota lietotne — dati tiek glabāti tikai jūsu pārlūkā (localStorage) un netiek sūtīti nevienam serverim.
+      Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums.
     </p>
   </footer>
 
@@ -122,6 +122,12 @@
           <label for="field-reporter" data-i18n="fieldReporter">Jūsu vārds (nav obligāts)</label>
           <input type="text" id="field-reporter" name="reporter" data-i18n-placeholder="reporterPlaceholder" />
         </div>
+        <div class="form-row">
+          <label for="field-photo" data-i18n="fieldPhoto">Fotoattēls (nav obligāts)</label>
+          <input type="file" id="field-photo" name="photo" accept="image/*" />
+          <img id="photo-preview" class="photo-preview" hidden alt="" />
+          <p id="photo-error" class="form-error" hidden></p>
+        </div>
         <p id="form-error" class="form-error" hidden></p>
         <div class="form-actions">
           <button type="button" id="form-cancel-btn" class="btn btn-ghost" data-i18n="cancelBtn">Atcelt</button>
@@ -134,6 +140,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/photo.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/map.js"></script>
   <script src="js/news.js"></script>

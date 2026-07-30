@@ -89,7 +89,25 @@ public role to `SELECT` and `INSERT` only — no `UPDATE`/`DELETE` — so:
 
 Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
 `date date`, `type text` (`sighting`/`tracks`/`damage`), `count int`,
-`description text`, `reporter text`, `created_at timestamptz`.
+`description text`, `reporter text`, `photo_url text`, `created_at timestamptz`.
+
+### Photo uploads
+
+`js/photo.js` handles the optional photo attachment: it downscales the
+image client-side (canvas, max 1600px on the long edge, JPEG quality 0.82)
+before uploading straight to a public Supabase Storage bucket named
+`sighting-photos`, then stores the resulting public URL in the sighting's
+`photo_url`. Compressing client-side matters here specifically because the
+free Storage tier is capped at 1GB — a few hundred uncompressed phone
+photos would eat through that fast, compressed JPEGs get a lot more mileage.
+
+The bucket needs its own `storage.objects` RLS policies (public
+`INSERT`/`SELECT`, scoped to `bucket_id = 'sighting-photos'`) — the bucket
+name is load-bearing: it must match exactly between the Supabase dashboard,
+the SQL policies, and `PHOTO_BUCKET` in `js/photo.js`, or uploads fail with
+a generic RLS "row violates policy" error that gives no hint the actual
+cause is a bucket-name mismatch. If a photo fails to upload, the sighting
+still saves without it — a bad photo shouldn't lose the whole report.
 
 ## News auto-collection
 
@@ -153,6 +171,7 @@ index.html                     Page markup
 css/style.css                   Styling (single-viewport layout, light + dark mode)
 js/i18n.js                       LV/EN translation strings + language switching
 js/storage.js                    Supabase-backed shared storage for community reports
+js/photo.js                       Client-side photo compression + Storage upload
 js/map.js                        Leaflet map, markers, click-to-report
 js/chart.js                       Monthly chart (inline SVG) — combined data
 js/news.js                         News-mentions layer: fetch, poll, render

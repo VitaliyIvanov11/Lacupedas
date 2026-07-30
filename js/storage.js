@@ -22,6 +22,7 @@ function rowToSighting(row) {
     count: row.count,
     description: row.description || "",
     reporter: row.reporter || "",
+    photoUrl: row.photo_url || "",
     createdAt: row.created_at,
   };
 }
@@ -48,6 +49,7 @@ async function addSighting(sighting) {
     count: sighting.count,
     description: sighting.description || null,
     reporter: sighting.reporter || null,
+    photo_url: sighting.photoUrl || null,
   };
   const res = await fetch(`${SUPABASE_URL}/rest/v1/sightings`, {
     method: "POST",

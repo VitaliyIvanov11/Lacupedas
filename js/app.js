@@ -17,6 +17,9 @@
     formLocation: document.getElementById("form-location"),
     formCancelBtn: document.getElementById("form-cancel-btn"),
     formError: document.getElementById("form-error"),
+    photoInput: document.getElementById("field-photo"),
+    photoPreview: document.getElementById("photo-preview"),
+    photoError: document.getElementById("photo-error"),
     list: document.getElementById("sightings-list"),
     statTotal: document.getElementById("stat-total"),
     statYear: document.getElementById("stat-year"),
@@ -129,6 +132,19 @@
         body.appendChild(rep);
       }
 
+      if (s.photoUrl) {
+        const thumb = document.createElement("img");
+        thumb.className = "sighting-thumb";
+        thumb.src = s.photoUrl;
+        thumb.alt = "";
+        thumb.loading = "lazy";
+        thumb.addEventListener("click", (e) => {
+          e.stopPropagation();
+          window.open(s.photoUrl, "_blank", "noopener");
+        });
+        body.appendChild(thumb);
+      }
+
       li.appendChild(body);
 
       li.addEventListener("click", () => flyToSighting(s));
@@ -178,10 +194,38 @@
     );
   }
 
+  function resetPhotoField() {
+    if (el.photoPreview.src) URL.revokeObjectURL(el.photoPreview.src);
+    el.photoPreview.hidden = true;
+    el.photoPreview.removeAttribute("src");
+    el.photoError.hidden = true;
+  }
+
+  function onPhotoSelected() {
+    resetPhotoField();
+    const file = el.photoInput.files[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      el.photoError.hidden = false;
+      el.photoError.textContent = t("photoInvalidType");
+      el.photoInput.value = "";
+      return;
+    }
+    if (file.size > PHOTO_MAX_SOURCE_BYTES) {
+      el.photoError.hidden = false;
+      el.photoError.textContent = t("photoTooBig");
+      el.photoInput.value = "";
+      return;
+    }
+    el.photoPreview.src = URL.createObjectURL(file);
+    el.photoPreview.hidden = false;
+  }
+
   function openForm() {
     if (!pendingLatLng) return;
     el.form.reset();
     el.formError.hidden = true;
+    resetPhotoField();
     el.form.elements["date"].value = new Date().toISOString().slice(0, 10);
     el.form.elements["count"].value = 1;
     el.formLocation.textContent = pendingLatLng.lat.toFixed(4) + ", " + pendingLatLng.lng.toFixed(4);
@@ -190,6 +234,7 @@
 
   function closeForm() {
     el.modalOverlay.hidden = true;
+    resetPhotoField();
     pendingLatLng = null;
   }
 
@@ -223,6 +268,15 @@
     submitBtn.disabled = true;
     el.formError.hidden = true;
     try {
+      const photoFile = el.photoInput.files[0];
+      if (photoFile) {
+        try {
+          sighting.photoUrl = await processAndUploadPhoto(photoFile);
+        } catch (photoErr) {
+          // Don't lose the whole report over a photo hiccup — save without it.
+          console.error(photoErr);
+        }
+      }
       await addSighting(sighting);
       closeForm();
       await refreshAll();
@@ -268,6 +322,7 @@
       if (e.target === el.modalOverlay) closeForm();
     });
     el.form.addEventListener("submit", submitForm);
+    el.photoInput.addEventListener("change", onPhotoSelected);
 
     refreshAll();
     setInterval(refreshAll, SIGHTINGS_POLL_MS);

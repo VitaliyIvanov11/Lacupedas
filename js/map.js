@@ -66,10 +66,37 @@ function setPickingMode(active, callback) {
   mapEl.classList.toggle("picking", active);
 }
 
+function mapEscapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str == null ? "" : String(str);
+  return div.innerHTML;
+}
+
+function mapTypeLabel(type) {
+  if (type === "tracks") return t("typeTracks");
+  if (type === "damage") return t("typeDamage");
+  return t("typeSighting");
+}
+
+function sightingPopupHtml(s) {
+  const photo = s.photoUrl
+    ? `<img src="${mapEscapeHtml(s.photoUrl)}" alt="" class="popup-photo" />`
+    : "";
+  const desc = s.description
+    ? `<div class="popup-meta">${mapEscapeHtml(s.description)}</div>`
+    : "";
+  return (
+    photo +
+    `<strong>${mapEscapeHtml(mapTypeLabel(s.type))}</strong> · ${mapEscapeHtml(s.date)}` +
+    desc
+  );
+}
+
 function renderMarkers(sightings, onMarkerClick) {
   markersLayer.clearLayers();
   sightings.forEach((s) => {
     const marker = L.marker([s.lat, s.lng], { icon: pawIcon(s.type) });
+    marker.bindPopup(sightingPopupHtml(s));
     marker.on("click", () => onMarkerClick && onMarkerClick(s));
     marker.addTo(markersLayer);
   });
