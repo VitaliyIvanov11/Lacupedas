@@ -62,16 +62,19 @@ which breaks the default URL while the custom domain isn't resolving yet.
 (every 2 hours) and on manual dispatch. It:
 
 1. Fetches the RSS feeds of a few major Latvian news portals (LSM.lv,
-   Apollo.lv, TVNET), plus one Estonian (ERR.ee) and one Lithuanian
+   Apollo.lv, TVNET), a Russian-language regional one (gorod.lv, Daugavpils/
+   Latgale — it's the only one of the bunch that carried the Silene
+   nature-park sighting), plus one Estonian (ERR.ee) and one Lithuanian
    (15min.lt) portal for border-area coverage — bears cross borders, and a
    sighting just over the line is still relevant context near Latvia.
 2. Keeps only items whose title/description contain a whole-word match for
    "bear"/"bear cub" in the feed's language — Latvian "lācis"/"lāči"/
-   "lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", all case forms.
-   Word-boundary matching, not a substring, so it doesn't fire on unrelated
-   words that happen to contain the same letters (e.g. Latvian "Lāčplēsis",
-   the national epic hero, or place names like "Lāčusils"; Lithuanian
-   "lokalus", meaning "local").
+   "lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", Russian
+   "медведь"/"медвежонок", all case forms. Word-boundary matching, not a
+   substring, so it doesn't fire on unrelated words that happen to contain
+   the same letters (e.g. Latvian "Lāčplēsis", the national epic hero, or
+   place names like "Lāčusils"; Lithuanian "lokalus", meaning "local";
+   Russian surname "Медведев").
 3. Best-effort matches a town/region name mentioned in the text against a
    small built-in gazetteer (`GAZETTEER` in the script — all of Latvia, plus
    only the Estonian/Lithuanian towns within roughly 50-70km of the Latvian
@@ -89,6 +92,14 @@ to write a scraper with any confidence it'd keep working. Confirmed real
 sightings from the initial research were instead backfilled by hand into
 `data/news.json` once each, using the same id-hashing scheme the script
 uses so future runs dedupe against them correctly.
+
+When backfilling by hand, verify the specific claim (place name especially)
+actually appears in the linked article body, not just that the link resolves
+— a batch of candidate entries from an earlier pass at this included a real,
+working source URL for a general "bears are spreading into the Kurzeme
+region" piece, paired with an invented specific village name that doesn't
+appear anywhere in that article. The link being real doesn't mean the
+attached claim is.
 
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and

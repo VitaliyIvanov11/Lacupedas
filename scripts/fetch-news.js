@@ -17,6 +17,9 @@ const FEEDS = [
   // a sighting just over the line is still relevant context near Latvia.
   { name: "ERR.ee", url: "https://www.err.ee/rss" },
   { name: "15min.lt", url: "https://www.15min.lt/rss/naujienos" },
+  // Russian-language regional portal (Daugavpils/Latgale) — the only feed
+  // that carried the Silene nature-park sighting; LSM/Apollo/TVNET missed it.
+  { name: "gorod.lv", url: "https://www.gorod.lv/rss" },
 ];
 
 // Whole-word match against every case form of "bear"/"bear cub" in each
@@ -46,6 +49,14 @@ const BEAR_WORD_FORMS_LT = [
   "lokiukas", "lokiuko", "lokiukui", "lokiuką", "lokiuku", "lokiuke",
   "lokiukai", "lokiukų", "lokiukams", "lokiukus", "lokiukais", "lokiukuose",
 ];
+// Russian "медведь" (bear), "медведица" (she-bear), "медвежонок" (bear cub).
+const BEAR_WORD_FORMS_RU = [
+  "медведь", "медведя", "медведю", "медведем", "медведе",
+  "медведи", "медведей", "медведям", "медведями", "медведях",
+  "медведица", "медведицы", "медведице", "медведицу", "медведицей", "медведиц", "медведицам", "медведицами", "медведицах",
+  "медвежонок", "медвежонка", "медвежонку", "медвежонком", "медвежонке",
+  "медвежата", "медвежат", "медвежатам", "медвежатами", "медвежатах",
+];
 
 function wordBoundaryRegex(forms, extraLetters) {
   const letters = `a-zA-Z${extraLetters}`;
@@ -56,6 +67,7 @@ const BEAR_KEYWORD_RES = [
   wordBoundaryRegex(BEAR_WORD_FORMS_LV, "ĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž"),
   wordBoundaryRegex(BEAR_WORD_FORMS_ET, "ÕõÄäÖöÜüŠšŽž"),
   wordBoundaryRegex(BEAR_WORD_FORMS_LT, "ĄąČčĘęĖėĮįŠšŲųŪūŽž"),
+  wordBoundaryRegex(BEAR_WORD_FORMS_RU, "а-яА-ЯёЁ"),
 ];
 
 function mentionsBear(text) {
@@ -83,6 +95,7 @@ const GAZETTEER = [
   ["Rēzekne", ["Rēzekn"], 56.5099, 27.3328],
   ["Valmiera", ["Valmier"], 57.5377, 25.4257],
   ["Jēkabpils", ["Jēkabpil"], 56.4996, 25.8535],
+  ["Silene (daba parks)", ["Silen"], 55.7229, 26.8015],
   ["Ogre", ["Ogr"], 56.8175, 24.6091],
   ["Tukums", ["Tukum"], 56.9678, 23.1544],
   ["Cēsis", ["Cēs"], 57.3119, 25.2748],

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-30T07:49:18.558Z",
+  "generatedAt": "2026-07-30T07:59:07.714Z",
   "items": [
     {
       "id": "f4861bd22de6488b",
@@ -20,6 +20,16 @@
       "placeName": "Zvejniekciems",
       "lat": 57.319,
       "lng": 24.417
+    },
+    {
+      "id": "c04d5eab430d23e5",
+      "title": "Biologi Latgales zoodārza fiksējuši lāča klātbūtni parkā Silene",
+      "link": "https://www.gorod.lv/novosti/366860-biologi-latgalskogo-zoosada-zafiksirovali-prisutstvie-medvedya-v-parke-silene-video",
+      "source": "gorod.lv",
+      "pubDate": "2026-06-12T13:30:00.000Z",
+      "placeName": "Silene (daba parks)",
+      "lat": 55.7229,
+      "lng": 26.8015
     },
     {
       "id": "9d61a73cd7bcc2c9",
