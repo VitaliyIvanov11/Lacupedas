@@ -288,13 +288,15 @@
     renderList();
     renderStats();
     renderMonthlyChart(el.chartContainer, sightings);
+    if (typeof renderNewsList === "function") renderNewsList();
   }
 
   // --- Wire up events ---
 
   function init() {
-    initMap();
+    const leafletMap = initMap();
     applyTranslations();
+    if (typeof initNews === "function") initNews(leafletMap);
 
     el.langBtns.forEach((btn) => {
       btn.addEventListener("click", () => switchLang(btn.getAttribute("data-lang-btn")));

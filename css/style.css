@@ -367,6 +367,78 @@ button {
   flex-shrink: 0;
 }
 
+/* News mentions */
+
+.news-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.news-card-header h2 {
+  margin-bottom: 0;
+}
+
+.news-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.news-link {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.news-link:hover {
+  text-decoration: underline;
+}
+
+.news-disclaimer {
+  margin: 10px 0 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.news-marker-diamond {
+  display: block;
+  width: 12px;
+  height: 12px;
+  transform: rotate(45deg);
+  background: #4a3aa7;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  margin: 2px;
+}
+
+.popup-meta {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.news-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--brand-forest-dark);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: 900;
+}
+
 .delete-btn:hover {
   color: var(--danger);
   background: rgba(208, 59, 59, 0.1);

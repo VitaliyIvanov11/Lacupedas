@@ -1,0 +1,221 @@
+#!/usr/bin/env node
+// Fetches a handful of Latvian news RSS feeds, keeps only items that mention
+// bears ("lācis"/"lāči" and declensions), best-effort-matches a place name
+// mentioned in the text against a small gazetteer, and merges the result
+// into data/news.json. Runs on a schedule via .github/workflows/news-scan.yml
+// — no dependencies beyond Node's built-in fetch/crypto/fs.
+
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+
+const FEEDS = [
+  { name: "LSM.lv", url: "https://www.lsm.lv/rss/" },
+  { name: "Apollo.lv", url: "https://www.apollo.lv/rss" },
+  { name: "TVNET", url: "https://www.tvnet.lv/rss" },
+];
+
+// Whole-word match against every case form of "lācis" (bear) and "lācēns"
+// (bear cub). A plain substring match on the lāc-/lāč- stem is too loose —
+// it also fires on unrelated compounds/proper nouns that happen to contain
+// it, e.g. "Lāčusils" (a place name) or "Lāčplēsis" (Latvia's national
+// epic hero, extremely common in street names and dates). Word-boundary
+// matching against explicit forms avoids both.
+const BEAR_WORD_FORMS = [
+  "lācis", "lāča", "lācim", "lāci", "lāči", "lāču", "lāčiem", "lāčus", "lāčos",
+  "lāce", "lāces", "lācei", "lācē", "lācēm", "lācēs",
+  "lācēns", "lācēna", "lācēnam", "lācēnu", "lācēnā", "lācēni", "lācēniem", "lācēnus", "lācēnos",
+];
+const LV_LETTER = "a-zA-ZĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž";
+const BEAR_KEYWORD_RE = new RegExp(
+  `(?<![${LV_LETTER}])(?:${BEAR_WORD_FORMS.join("|")})(?![${LV_LETTER}])`,
+  "iu"
+);
+
+const MAX_AGE_DAYS = 60;
+const MAX_ITEMS = 150;
+const OUTPUT_PATH = path.join(__dirname, "..", "data", "news.json");
+
+// Best-effort place gazetteer: name -> [matchable stem(s), lat, lng].
+// Coordinates are approximate town-centre points, not survey-grade — this
+// only powers a rough "somewhere near here" map pin, per product decision.
+const GAZETTEER = [
+  ["Rīga", ["Rīg"], 56.9496, 24.1052],
+  ["Daugavpils", ["Daugavpil"], 55.8748, 26.5361],
+  ["Liepāja", ["Liepāj"], 56.5053, 21.0107],
+  ["Jelgava", ["Jelgav"], 56.6511, 23.7214],
+  ["Jūrmala", ["Jūrmal"], 56.968, 23.7704],
+  ["Ventspils", ["Ventspil"], 57.3894, 21.5606],
+  ["Rēzekne", ["Rēzekn"], 56.5099, 27.3328],
+  ["Valmiera", ["Valmier"], 57.5377, 25.4257],
+  ["Jēkabpils", ["Jēkabpil"], 56.4996, 25.8535],
+  ["Ogre", ["Ogr"], 56.8175, 24.6091],
+  ["Tukums", ["Tukum"], 56.9678, 23.1544],
+  ["Cēsis", ["Cēs"], 57.3119, 25.2748],
+  ["Sigulda", ["Sigulda", "Siguldā", "Siguldas"], 57.1536, 24.8598],
+  ["Kuldīga", ["Kuldīg"], 56.9682, 21.9622],
+  ["Saldus", ["Saldu"], 56.6644, 22.4914],
+  ["Talsi", ["Tals"], 57.2439, 22.5883],
+  ["Krāslava", ["Krāslav"], 55.895, 27.1707],
+  ["Ludza", ["Ludz"], 56.5486, 27.7194],
+  ["Balvi", ["Balv"], 57.1314, 27.2634],
+  ["Gulbene", ["Gulben"], 57.1783, 26.7539],
+  ["Alūksne", ["Alūksn"], 57.4247, 27.0453],
+  ["Madona", ["Madon"], 56.8531, 26.2178],
+  ["Preiļi", ["Preiļ"], 56.2967, 26.7239],
+  ["Aizkraukle", ["Aizkraukl"], 56.6011, 25.2547],
+  ["Bauska", ["Baus"], 56.4083, 24.1936],
+  ["Dobele", ["Dobel"], 56.6247, 23.2789],
+  ["Limbaži", ["Limbaž"], 57.5111, 24.7128],
+  ["Smiltene", ["Smilten"], 57.4239, 25.9017],
+  ["Valka", ["Valk"], 57.7736, 26.0181],
+  ["Līvāni", ["Līvān"], 56.3547, 26.1719],
+  ["Viļaka", ["Viļak"], 57.1878, 27.6742],
+  ["Zilupe", ["Zilup"], 56.3775, 28.1289],
+  ["Kārsava", ["Kārsav"], 56.7811, 27.6789],
+  ["Varakļāni", ["Varakļān"], 56.5906, 26.7594],
+  ["Viļāni", ["Viļān"], 56.5528, 26.9197],
+  ["Rūjiena", ["Rūjien"], 57.9014, 25.3283],
+  ["Mazsalaca", ["Mazsalac"], 57.8672, 25.0561],
+  ["Salacgrīva", ["Salacgrīv"], 57.7511, 24.3592],
+  ["Ērgļi", ["Ērgļ"], 56.8994, 25.6389],
+  ["Cesvaine", ["Cesvain"], 56.9686, 26.3125],
+  ["Lubāna", ["Lubān"], 56.8981, 26.716],
+  ["Priekule", ["Priekul"], 56.4297, 21.5967],
+  ["Grobiņa", ["Grobiņ"], 56.5533, 21.1636],
+  ["Skrunda", ["Skrund"], 56.6789, 22.0219],
+  ["Salaspils", ["Salaspil"], 56.8608, 24.3542],
+  ["Saulkrasti", ["Saulkrast"], 57.2597, 24.4183],
+  ["Vidzeme", ["Vidzem"], 57.2, 25.8],
+  ["Latgale", ["Latgal"], 56.4, 27.2],
+  ["Kurzeme", ["Kurzem"], 57.0, 21.9],
+  ["Zemgale", ["Zemgal"], 56.55, 23.5],
+];
+
+function decodeEntities(str) {
+  if (!str) return "";
+  return str
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;/g, "'")
+    .replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&amp;/g, "&")
+    .trim();
+}
+
+function extractTag(block, tag) {
+  const re = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, "i");
+  const m = block.match(re);
+  if (!m) return "";
+  let val = m[1].trim();
+  const cdata = val.match(/^<!\[CDATA\[([\s\S]*?)\]\]>$/);
+  if (cdata) val = cdata[1];
+  return decodeEntities(val.replace(/<[^>]+>/g, " ").trim());
+}
+
+function parseRss(xml) {
+  const items = [];
+  const itemBlocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
+  for (const block of itemBlocks) {
+    items.push({
+      title: extractTag(block, "title"),
+      link: extractTag(block, "link"),
+      pubDate: extractTag(block, "pubDate"),
+      description: extractTag(block, "description"),
+    });
+  }
+  return items;
+}
+
+function findPlace(text) {
+  const lower = text.toLowerCase();
+  for (const [name, stems, lat, lng] of GAZETTEER) {
+    for (const stem of stems) {
+      if (lower.includes(stem.toLowerCase())) {
+        return { placeName: name, lat, lng };
+      }
+    }
+  }
+  return { placeName: null, lat: null, lng: null };
+}
+
+function makeId(link) {
+  return crypto.createHash("sha1").update(link).digest("hex").slice(0, 16);
+}
+
+async function fetchFeed(feed) {
+  try {
+    const res = await fetch(feed.url, {
+      headers: { "User-Agent": "Lacupedas-bear-news-bot/1.0 (+https://github.com/VitaliyIvanov11/Lacupedas)" },
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      console.error(`[${feed.name}] HTTP ${res.status}`);
+      return [];
+    }
+    const xml = await res.text();
+    return parseRss(xml).map((item) => ({ ...item, source: feed.name }));
+  } catch (err) {
+    console.error(`[${feed.name}] fetch failed: ${err.message}`);
+    return [];
+  }
+}
+
+function loadExisting() {
+  try {
+    const raw = fs.readFileSync(OUTPUT_PATH, "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed.items) ? parsed.items : [];
+  } catch {
+    return [];
+  }
+}
+
+async function main() {
+  const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat();
+
+  const matched = allItems
+    .filter((item) => BEAR_KEYWORD_RE.test(item.title) || BEAR_KEYWORD_RE.test(item.description))
+    .map((item) => {
+      const place = findPlace(item.title + " " + item.description);
+      const pubDate = new Date(item.pubDate);
+      return {
+        id: makeId(item.link),
+        title: item.title,
+        link: item.link,
+        source: item.source,
+        pubDate: isNaN(pubDate) ? new Date().toISOString() : pubDate.toISOString(),
+        placeName: place.placeName,
+        lat: place.lat,
+        lng: place.lng,
+      };
+    });
+
+  const existing = loadExisting();
+  const byId = new Map(existing.map((i) => [i.id, i]));
+  for (const item of matched) byId.set(item.id, item);
+
+  const cutoff = Date.now() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
+  const merged = [...byId.values()]
+    .filter((i) => new Date(i.pubDate).getTime() >= cutoff)
+    .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
+    .slice(0, MAX_ITEMS);
+
+  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
+  fs.writeFileSync(
+    OUTPUT_PATH,
+    JSON.stringify({ generatedAt: new Date().toISOString(), items: merged }, null, 2) + "\n"
+  );
+
+  console.log(`Fetched ${allItems.length} articles across ${FEEDS.length} feeds.`);
+  console.log(`${matched.length} matched the bear keyword this run.`);
+  console.log(`${merged.length} total items kept (max ${MAX_ITEMS}, ${MAX_AGE_DAYS}-day window).`);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
