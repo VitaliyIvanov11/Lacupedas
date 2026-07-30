@@ -43,6 +43,9 @@ const translations = {
     listTitle: "Novērojumu saraksts",
     emptyList: "Nav neviena novērojuma. Pievienojiet pirmo!",
     submitError: "Neizdevās saglabāt — pārbaudiet interneta savienojumu un mēģiniet vēlreiz.",
+    confirmBtn: "Apstiprināt šo novērojumu",
+    disputeBtn: "Apšaubīt šo novērojumu",
+    voteError: "Neizdevās nosūtīt balsojumu — pārbaudiet interneta savienojumu.",
 
     disclaimer: "Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums. Dzēšana nav pieejama publiski. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
 
@@ -99,6 +102,9 @@ const translations = {
     listTitle: "Sightings list",
     emptyList: "No sightings yet. Add the first one!",
     submitError: "Couldn't save — check your internet connection and try again.",
+    confirmBtn: "Confirm this sighting",
+    disputeBtn: "Dispute this sighting",
+    voteError: "Couldn't send your vote — check your internet connection.",
 
     disclaimer: "This is a community-built app — sightings are visible to every visitor, not just you. Public deletion isn't available. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
 

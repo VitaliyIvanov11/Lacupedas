@@ -64,3 +64,78 @@ async function addSighting(sighting) {
   const [row] = await res.json();
   return row ? rowToSighting(row) : null;
 }
+
+// --- Confirm/dispute voting ---
+// One vote per browser per sighting, enforced by a unique constraint in the
+// database (sighting_id + device_id) — not just hidden client-side, so
+// clearing localStorage doesn't let the same visitor re-vote.
+const DEVICE_ID_KEY = "lacupedas.deviceId";
+const MY_VOTES_KEY = "lacupedas.myVotes";
+
+function getDeviceId() {
+  let id = localStorage.getItem(DEVICE_ID_KEY);
+  if (!id) {
+    id =
+      window.crypto && window.crypto.randomUUID
+        ? window.crypto.randomUUID()
+        : "id-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+    localStorage.setItem(DEVICE_ID_KEY, id);
+  }
+  return id;
+}
+
+function getMyVotes() {
+  try {
+    return JSON.parse(localStorage.getItem(MY_VOTES_KEY)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function rememberMyVote(sightingId, voteType) {
+  const votes = getMyVotes();
+  votes[sightingId] = voteType;
+  localStorage.setItem(MY_VOTES_KEY, JSON.stringify(votes));
+}
+
+async function loadVoteCounts() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/sighting_vote_counts?select=*`, {
+      headers: SUPABASE_HEADERS,
+    });
+    if (!res.ok) return {};
+    const rows = await res.json();
+    const byId = {};
+    rows.forEach((r) => {
+      byId[r.sighting_id] = { confirm: r.confirm_count, dispute: r.dispute_count };
+    });
+    return byId;
+  } catch {
+    return {};
+  }
+}
+
+// Returns "ok", "already-voted", or "error".
+async function submitVote(sightingId, voteType) {
+  const deviceId = getDeviceId();
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/sighting_votes`, {
+      method: "POST",
+      headers: {
+        ...SUPABASE_HEADERS,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({ sighting_id: sightingId, device_id: deviceId, vote_type: voteType }),
+    });
+    if (res.status === 409) {
+      rememberMyVote(sightingId, voteType);
+      return "already-voted";
+    }
+    if (!res.ok) return "error";
+    rememberMyVote(sightingId, voteType);
+    return "ok";
+  } catch {
+    return "error";
+  }
+}

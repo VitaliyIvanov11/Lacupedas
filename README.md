@@ -91,6 +91,23 @@ Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
 `date date`, `type text` (`sighting`/`tracks`/`damage`), `count int`,
 `description text`, `reporter text`, `photo_url text`, `created_at timestamptz`.
 
+### Confirm/dispute voting
+
+A second table, `sighting_votes` (`id uuid`, `sighting_id uuid` references
+`sightings`, `device_id text`, `vote_type text` — `confirm`/`dispute`,
+`created_at`), lets visitors confirm or dispute a report without touching
+the `sightings` row itself — the row stays insert-only, votes are counted
+by a `sighting_vote_counts` view (`GROUP BY sighting_id`) that the front end
+queries for the per-sighting tallies.
+
+One vote per browser per sighting is enforced with a `UNIQUE (sighting_id,
+device_id)` constraint in the database, not just by hiding the buttons
+client-side — a duplicate insert gets a real `409` from Postgres, so
+clearing `localStorage` doesn't let the same visitor vote again. `device_id`
+is a random UUID generated on first use and kept in `localStorage`
+(`js/storage.js`'s `getDeviceId()`) — it identifies a browser, not a person,
+and isn't tied to any other identity.
+
 ### Photo uploads
 
 `js/photo.js` handles the optional photo attachment: it downscales the

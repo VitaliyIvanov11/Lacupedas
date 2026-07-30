@@ -3,6 +3,7 @@
   const SIGHTINGS_POLL_MS = 2 * 60 * 1000; // 2 minutes
 
   let sightings = [];
+  let voteCounts = {};
   let pendingLatLng = null;
 
   const el = {
@@ -53,7 +54,9 @@
   }
 
   async function refreshAll() {
-    sightings = await loadSightings();
+    const [freshSightings, freshVoteCounts] = await Promise.all([loadSightings(), loadVoteCounts()]);
+    sightings = freshSightings;
+    voteCounts = freshVoteCounts;
     renderMarkers(sightings, (s) => openDetailsFromMarker(s));
     renderList();
     renderStatsAndChart();
@@ -145,12 +148,64 @@
         body.appendChild(thumb);
       }
 
+      body.appendChild(buildVoteRow(s));
+
       li.appendChild(body);
 
       li.addEventListener("click", () => flyToSighting(s));
 
       el.list.appendChild(li);
     });
+  }
+
+  function buildVoteRow(s) {
+    const counts = voteCounts[s.id] || { confirm: 0, dispute: 0 };
+    const myVote = getMyVotes()[s.id];
+
+    const row = document.createElement("div");
+    row.className = "vote-row";
+
+    const confirmBtn = document.createElement("button");
+    confirmBtn.type = "button";
+    confirmBtn.className = "vote-btn vote-confirm";
+    confirmBtn.innerHTML = `✓ <span>${counts.confirm}</span>`;
+    confirmBtn.title = t("confirmBtn");
+
+    const disputeBtn = document.createElement("button");
+    disputeBtn.type = "button";
+    disputeBtn.className = "vote-btn vote-dispute";
+    disputeBtn.innerHTML = `✕ <span>${counts.dispute}</span>`;
+    disputeBtn.title = t("disputeBtn");
+
+    if (myVote) {
+      confirmBtn.disabled = true;
+      disputeBtn.disabled = true;
+      (myVote === "confirm" ? confirmBtn : disputeBtn).classList.add("active");
+    }
+
+    [
+      [confirmBtn, "confirm"],
+      [disputeBtn, "dispute"],
+    ].forEach(([btn, voteType]) => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        confirmBtn.disabled = true;
+        disputeBtn.disabled = true;
+        const result = await submitVote(s.id, voteType);
+        if (result === "error") {
+          confirmBtn.disabled = !!myVote;
+          disputeBtn.disabled = !!myVote;
+          alert(t("voteError"));
+          return;
+        }
+        voteCounts = await loadVoteCounts();
+        renderList();
+      });
+    });
+
+    row.appendChild(confirmBtn);
+    row.appendChild(disputeBtn);
+    return row;
   }
 
   function openDetailsFromMarker(s) {
