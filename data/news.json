@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-30T07:22:17.401Z",
+  "generatedAt": "2026-07-30T07:27:45.787Z",
   "items": [
     {
       "id": "f4861bd22de6488b",
@@ -10,6 +10,26 @@
       "placeName": "Imanta (Rīga)",
       "lat": 56.9575,
       "lng": 24.0171
+    },
+    {
+      "id": "1dec7d380a08e2cb",
+      "title": "Zvejniekciemā manītais lācis blandījies divos īpašumos un devies tālāk uz Limbažu novadu",
+      "link": "https://www.tvnet.lv/8498307/zvejniekciema-manitais-lacis-blandijies-divos-ipasumos-un-devies-talak-uz-limbazu-novadu",
+      "source": "TVNET",
+      "pubDate": "2026-06-27T05:55:37.000Z",
+      "placeName": "Zvejniekciems",
+      "lat": 57.319,
+      "lng": 24.417
+    },
+    {
+      "id": "9d61a73cd7bcc2c9",
+      "title": "Jēkabpilī ieklīdušais lācis pavadīts prom no pilsētas",
+      "link": "https://www.lsm.lv/raksts/zinas/latvija/01.06.2026-jekabpili-ieklidusais-lacis-pavadits-prom-no-pilsetas.a649535/",
+      "source": "LSM.lv",
+      "pubDate": "2026-06-01T07:13:00.000Z",
+      "placeName": "Jēkabpils",
+      "lat": 56.4996,
+      "lng": 25.8535
     }
   ]
 }

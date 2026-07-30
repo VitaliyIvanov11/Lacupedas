@@ -43,6 +43,7 @@ const GAZETTEER = [
   // More specific Riga districts first — matched top-to-bottom, so a named
   // district wins over the generic "Rīga" fallback below it.
   ["Imanta (Rīga)", ["Imant"], 56.9575, 24.0171],
+  ["Zvejniekciems", ["Zvejniekciem"], 57.319, 24.417],
   ["Rīga", ["Rīg"], 56.9496, 24.1052],
   ["Daugavpils", ["Daugavpil"], 55.8748, 26.5361],
   ["Liepāja", ["Liepāj"], 56.5053, 21.0107],
