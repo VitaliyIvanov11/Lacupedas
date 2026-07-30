@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lāču Novērojumi Latvijā / Bear Sightings in Latvia</title>
+  <meta name="description" content="Kopienas veidota lāču novērojumu karte Latvijā / A community-built bear sighting map for Latvia" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%90%BB%3C/text%3E%3C/svg%3E" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">🐻</span>
+      <div>
+        <h1 data-i18n="appTitle">Lāču Novērojumi Latvijā</h1>
+        <p class="subtitle" data-i18n="appSubtitle">Kopienas veidota lāču novērojumu karte</p>
+      </div>
+    </div>
+    <div class="lang-switch" role="group" aria-label="Language / Valoda">
+      <button type="button" data-lang-btn="lv">LV</button>
+      <button type="button" data-lang-btn="en">EN</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="map-pane">
+      <div class="map-toolbar">
+        <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
+        <button type="button" id="use-location-btn" class="btn btn-secondary" data-i18n="useLocationBtn">Izmantot manu atrašanās vietu</button>
+      </div>
+      <p class="map-hint" data-i18n="mapHint">Noklikšķiniet uz kartes, lai pievienotu novērojumu</p>
+      <div id="picking-banner" class="picking-banner" hidden>
+        <span data-i18n="mapHintPicking">Noklikšķiniet uz kartes vietā, kur redzējāt lāci</span>
+        <button type="button" id="cancel-picking-btn" class="btn btn-ghost" data-i18n="cancelPicking">Atcelt</button>
+      </div>
+      <div id="map"></div>
+    </section>
+
+    <aside class="sidebar">
+      <section class="card stats-card">
+        <h2 data-i18n="statsTitle">Statistika</h2>
+        <div class="stats-grid">
+          <div class="stat">
+            <span class="stat-value" id="stat-total">0</span>
+            <span class="stat-label" data-i18n="totalLabel">Kopā novērojumu</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="stat-year">0</span>
+            <span class="stat-label" data-i18n="yearLabel">Šogad</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value stat-value-small" id="stat-last">—</span>
+            <span class="stat-label" data-i18n="lastLabel">Pēdējais novērojums</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card chart-card">
+        <h2 data-i18n="chartTitle">Novērojumi pa mēnešiem</h2>
+        <div id="chart-container" class="chart-container"></div>
+      </section>
+
+      <section class="card list-card">
+        <h2 data-i18n="listTitle">Novērojumu saraksts</h2>
+        <ul id="sightings-list" class="sightings-list"></ul>
+      </section>
+
+      <section class="card data-card">
+        <button type="button" id="export-btn" class="btn btn-ghost" data-i18n="exportBtn">Eksportēt (JSON)</button>
+        <button type="button" id="import-btn" class="btn btn-ghost" data-i18n="importBtn">Importēt</button>
+        <input type="file" id="import-input" accept="application/json" hidden />
+        <button type="button" id="clear-all-btn" class="btn btn-danger" data-i18n="clearAllBtn">Dzēst visus datus</button>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="app-footer">
+    <p data-i18n="disclaimer">
+      Šī ir sabiedrības veidota lietotne — dati tiek glabāti tikai jūsu pārlūkā (localStorage) un netiek sūtīti nevienam serverim.
+    </p>
+  </footer>
+
+  <div id="modal-overlay" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="form-title">
+      <h2 id="form-title" data-i18n="formTitleAdd">Jauns novērojums</h2>
+      <form id="sighting-form">
+        <div class="form-row">
+          <label data-i18n="fieldLocation">Atrašanās vieta</label>
+          <span id="form-location" class="form-location"></span>
+        </div>
+        <div class="form-row">
+          <label for="field-date" data-i18n="fieldDate">Datums</label>
+          <input type="date" id="field-date" name="date" required />
+        </div>
+        <div class="form-row">
+          <label for="field-type" data-i18n="fieldType">Novērojuma veids</label>
+          <select id="field-type" name="type" required>
+            <option value="sighting" data-i18n="typeSighting">Redzēts lācis</option>
+            <option value="tracks" data-i18n="typeTracks">Pēdas / pazīmes</option>
+            <option value="damage" data-i18n="typeDamage">Postījumi (mājlopi, bites u.c.)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="field-count" data-i18n="fieldCount">Lāču skaits</label>
+          <input type="number" id="field-count" name="count" min="1" max="20" value="1" required />
+        </div>
+        <div class="form-row">
+          <label for="field-description" data-i18n="fieldDescription">Apraksts</label>
+          <textarea id="field-description" name="description" rows="3" data-i18n-placeholder="descriptionPlaceholder"></textarea>
+        </div>
+        <div class="form-row">
+          <label for="field-reporter" data-i18n="fieldReporter">Jūsu vārds (nav obligāts)</label>
+          <input type="text" id="field-reporter" name="reporter" data-i18n-placeholder="reporterPlaceholder" />
+        </div>
+        <p id="form-error" class="form-error" hidden></p>
+        <div class="form-actions">
+          <button type="button" id="form-cancel-btn" class="btn btn-ghost" data-i18n="cancelBtn">Atcelt</button>
+          <button type="submit" class="btn btn-primary" data-i18n="submitBtn">Saglabāt</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
