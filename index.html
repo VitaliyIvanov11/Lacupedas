@@ -97,7 +97,7 @@
       <div class="map-toolbar">
         <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
         <button type="button" id="use-location-btn" class="btn btn-secondary" data-i18n="useLocationBtn">Izmantot manu atrašanās vietu</button>
-        <a href="padomi.html" class="btn btn-ghost toolbar-guide-link" data-i18n="guideNavLink">Noderīga informācija</a>
+        <a href="padomi.html" class="btn btn-tertiary toolbar-guide-link" data-i18n="guideNavLink">Noderīga informācija</a>
         <label class="heatmap-toggle">
           <input type="checkbox" id="heatmap-toggle" />
           <span data-i18n="heatmapToggleLabel">🔥 Blīvuma karte</span>
@@ -126,21 +126,27 @@
         <h2 data-i18n="statsTitle">Statistika</h2>
         <div class="stats-grid">
           <div class="stat stat-total">
-            <span class="stat-icon" aria-hidden="true">📍</span>
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            </span>
             <div class="stat-text">
               <span class="stat-value" id="stat-total">0</span>
               <span class="stat-label" data-i18n="totalLabel">Kopā novērojumu</span>
             </div>
           </div>
           <div class="stat stat-year">
-            <span class="stat-icon" aria-hidden="true">📅</span>
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+            </span>
             <div class="stat-text">
               <span class="stat-value" id="stat-year">0</span>
               <span class="stat-label" data-i18n="yearLabel">Šogad</span>
             </div>
           </div>
           <div class="stat stat-recent">
-            <span class="stat-icon" aria-hidden="true">🕐</span>
+            <span class="stat-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            </span>
             <div class="stat-text">
               <span class="stat-value stat-value-small" id="stat-last">—</span>
               <span class="stat-label" data-i18n="lastLabel">Pēdējais novērojums</span>
