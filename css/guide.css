@@ -153,6 +153,19 @@ body.guide-body {
 
 /* Guide hub */
 
+.hub-category {
+  margin: 28px 0 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.hub-category:first-of-type {
+  margin-top: 8px;
+}
+
 .hub-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -181,10 +194,28 @@ body.guide-body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.hub-card h2 {
+.hub-card h3 {
   margin: 0 0 8px;
   font-size: 1.05rem;
+  font-weight: 600;
   color: var(--text-primary);
+}
+
+.hub-card-compact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+}
+
+.hub-card-compact h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.hub-card-compact .hub-card-link {
+  flex-shrink: 0;
 }
 
 .hub-card p {
