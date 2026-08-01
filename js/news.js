@@ -100,7 +100,7 @@ function formatNewsDate(iso) {
   const lang = getLang();
   const d = new Date(iso);
   if (isNaN(d)) return iso;
-  return d.toLocaleDateString(lang === "lv" ? "lv-LV" : "en-GB", {
+  return d.toLocaleDateString(localeForLang(lang), {
     year: "numeric",
     month: "short",
     day: "numeric",

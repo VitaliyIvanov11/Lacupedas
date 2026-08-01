@@ -154,7 +154,90 @@ const translations = {
     newsDisclaimer: "Automatically collected every couple of hours from public news portals (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv, plus border-area news from Estonia — ERR.ee — and Lithuania — 15min.lt) by keyword match on \"bear\" in each language. Older confirmed cases (up to 2 years back) are occasionally added by hand after manual verification. Not verified by a human in real time — exact location is unknown, the map pin is only the nearest known town/municipality. Article copyright belongs to the original publishers.",
     newsNewCount: "New mentions: {n}",
   },
+  ru: {
+    appTitle: "Наблюдения медведей в Латвии",
+    appSubtitle: "Карта наблюдений медведей, созданная сообществом",
+    mapHint: "Нажмите на карту, чтобы добавить наблюдение",
+    mapHintPicking: "Нажмите на карту в месте, где вы видели медведя",
+    reportBtn: "Сообщить о наблюдении",
+    useLocationBtn: "Использовать моё текущее местоположение",
+    heatmapToggleLabel: "🔥 Карта плотности",
+    cancelPicking: "Отмена",
+    geoError: "Не удалось определить ваше местоположение. Проверьте разрешения браузера.",
+    geoUnsupported: "Ваш браузер не поддерживает определение местоположения.",
+
+    formTitleAdd: "Новое наблюдение",
+    fieldDate: "Дата",
+    fieldType: "Тип наблюдения",
+    typeSighting: "Замечен медведь",
+    typeTracks: "Следы / признаки",
+    typeDamage: "Ущерб (скот, пасеки и т.д.)",
+    typeDead: "Найдено погибшее животное",
+    typeDnaSample: "Собран образец ДНК",
+    fieldCount: "Количество медведей",
+    fieldDescription: "Описание",
+    descriptionPlaceholder: "Опишите, что вы видели...",
+    fieldReporter: "Ваше имя (необязательно)",
+    reporterPlaceholder: "Имя или псевдоним",
+    fieldLocation: "Местоположение",
+    fieldPhoto: "Фотография (необязательно)",
+    photoTooBig: "Изображение слишком большое (макс. 8 МБ до сжатия).",
+    photoInvalidType: "Этот файл не является изображением.",
+    photoUploadError: "Не удалось загрузить фото — наблюдение будет сохранено без него.",
+    submitBtn: "Сохранить",
+    cancelBtn: "Отмена",
+    requiredError: "Пожалуйста, заполните все обязательные поля.",
+
+    statsTitle: "Статистика",
+    totalLabel: "Всего наблюдений",
+    yearLabel: "В этом году",
+    lastLabel: "Последнее наблюдение",
+    noneYet: "Пока нет",
+
+    chartTitle: "Наблюдения по месяцам",
+    chartNoData: "В этом году пока нет данных",
+
+    listTitle: "Список наблюдений",
+    emptyList: "Пока нет наблюдений. Добавьте первое!",
+    submitError: "Не удалось сохранить — проверьте интернет-соединение и попробуйте снова.",
+    confirmBtn: "Подтвердить это наблюдение",
+    disputeBtn: "Оспорить это наблюдение",
+    voteError: "Не удалось отправить голос — проверьте интернет-соединение.",
+
+    filterAllTypes: "Все типы",
+    filterAllSources: "Все источники",
+    filterAllTime: "Всё время",
+    filterThisYear: "В этом году",
+    filterLast30d: "Последние 30 дней",
+    filterNoMatch: "Нет записей, соответствующих фильтру.",
+
+    disclaimer: "Это приложение создано сообществом — наблюдения видны всем посетителям, а не только вам. Публичное удаление недоступно. Для официального сообщения о встречах с крупными хищниками обращайтесь в Dabas aizsardzības pārvalde (Управление охраны природы Латвии).",
+
+    faqSummary: "Часто задаваемые вопросы о медведях в Латвии",
+    faqQ1: "Где в Латвии живут медведи?",
+    faqA1: "Бурые медведи в Латвии чаще всего встречаются в Видземе (особенно у границы с Эстонией) и Латгалии, но в последние годы наблюдения всё чаще появляются и в других регионах, включая Курземе и Земгале. Исследователи считают, что популяция медведей в Латвии продолжает расти.",
+    faqQ2: "Как распознать следы медведя?",
+    faqA2: "Следы медведя в лесу можно узнать по их крупному размеру и отпечаткам пяти пальцев с видимыми следами когтей. Если вы не уверены, лучше всего сфотографировать отпечаток и добавить его как наблюдение на этой карте.",
+    faqQ3: "Опасен ли медведь для человека?",
+    faqA3: "Медведи обычно избегают людей, нападения редки. При встрече с медведем рекомендуется сохранять спокойствие, не спешить и медленно отступать, не убегая.",
+
+    monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+    bearsUnit: "медведь(-ей)",
+    close: "Закрыть",
+
+    newsSectionTitle: "Упоминания в новостях",
+    newsToggleLabel: "Показать на карте",
+    newsEmpty: "Пока нет упоминаний в новостях.",
+    newsDisclaimer: "Автоматически собирается каждые несколько часов из публичных новостных порталов (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv), а также приграничные новости из Эстонии (ERR.ee) и Литвы (15min.lt) по ключевым словам «lācis»/«karu»/«lokys»/«медведь». Иногда вручную добавляются старые (до 2 лет) проверенные случаи. Не проверяется человеком в реальном времени — точное место неизвестно, метка на карте — лишь ближайший известный город/край. Авторские права на статьи принадлежат их издателям.",
+    newsNewCount: "Новых упоминаний: {n}",
+  },
 };
+
+const I18N_LOCALES = { lv: "lv-LV", en: "en-GB", ru: "ru-RU" };
+
+function localeForLang(lang) {
+  return I18N_LOCALES[lang] || I18N_LOCALES.lv;
+}
 
 const I18N_STORAGE_KEY = "lacupedas.lang";
 
