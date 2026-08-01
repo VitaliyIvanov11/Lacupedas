@@ -27,7 +27,15 @@ const FEEDS = [
   // Estonian and Lithuanian border-area coverage — bears cross borders, and
   // a sighting just over the line is still relevant context near Latvia.
   { name: "ERR.ee", url: "https://www.err.ee/rss", lang: "et" },
+  { name: "Postimees.ee", url: "https://www.postimees.ee/rss", lang: "et" },
+  { name: "Õhtuleht.ee", url: "https://www.ohtuleht.ee/rss", lang: "et" },
   { name: "15min.lt", url: "https://www.15min.lt/rss/naujienos", lang: "lt" },
+  // Delfi.lt has no combined "all news" feed — this is its "Lietuvoje"
+  // (general Lithuania/regional) category, the closest match to the other
+  // portals' general feeds and the most likely to carry a local animal story.
+  { name: "Delfi.lt", url: "https://feed.delfi.lt/v2/articles/7?format=rss", lang: "lt" },
+  { name: "LRT.lt", url: "https://www.lrt.lt/?rss", lang: "lt" },
+  { name: "Lrytas.lt", url: "https://www.lrytas.lt/rss/", lang: "lt" },
   // Russian-language regional portal (Daugavpils/Latgale) — the only feed
   // that carried the Silene nature-park sighting; LSM/Apollo/TVNET missed it.
   { name: "gorod.lv", url: "https://www.gorod.lv/rss", lang: "ru" },

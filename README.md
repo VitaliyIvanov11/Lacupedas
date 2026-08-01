@@ -157,10 +157,15 @@ still saves without it — a bad photo shouldn't lose the whole report.
    Apollo.lv, TVNET, Delfi.lv, LA.lv, Diena.lv, 1188.lv), two regional ones
    (gorod.lv — Russian-language, Daugavpils/Latgale; kodols.lv — Riga
    region) that between them caught sightings the national portals missed
-   (Silene nature park, Garkalne), plus one Estonian (ERR.ee) and one
-   Lithuanian (15min.lt) portal for border-area coverage — bears cross
-   borders, and a sighting just over the line is still relevant context
-   near Latvia.
+   (Silene nature park, Garkalne), plus three Estonian (ERR.ee,
+   Postimees.ee, Õhtuleht.ee) and three Lithuanian (15min.lt, LRT.lt,
+   Lrytas.lt) portals for border-area coverage — bears cross borders, and a
+   sighting just over the line is still relevant context near Latvia.
+   Delfi.lt has no combined "all news" RSS feed, so it's scanned via its
+   "Lietuvoje" (general Lithuania/regional) category feed instead — the
+   closest match to the other portals' general coverage, and the section
+   most likely to carry a local animal story. Delfi.ee was investigated but
+   doesn't appear to publish a public RSS feed at all anymore.
 2. Keeps only items whose title/description contain a whole-word match for
    "bear"/"bear cub" in that specific feed's language — Latvian "lācis"/
    "lāči"/"lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", Russian
