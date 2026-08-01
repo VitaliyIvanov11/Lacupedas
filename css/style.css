@@ -113,26 +113,6 @@ button {
   gap: 10px;
 }
 
-.header-nav {
-  display: flex;
-  align-items: center;
-}
-
-.guide-nav-link {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  white-space: nowrap;
-}
-
-.guide-nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
 @media (max-width: 520px) {
   .app-header {
     flex-wrap: wrap;
@@ -154,7 +134,7 @@ button {
 
   .header-right {
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-end;
   }
 }
 
@@ -188,10 +168,10 @@ button {
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
-  /* Sidebar gets a comfortable, capped reading width; the map pane absorbs
-     all remaining space so the app fills wide/ultrawide screens instead of
-     sitting in a fixed-width box with empty margins on either side. */
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+  /* Roughly even split — the sidebar (stats/news/list) carries as much of
+     the app's actual content as the map does, so it gets an equal share
+     of the width instead of being squeezed to a narrow reading column. */
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
   grid-template-rows: 1fr;
   gap: 16px;
   padding: 16px;
@@ -881,6 +861,14 @@ button {
   background: transparent;
   border-color: var(--border);
   color: var(--text-primary);
+}
+
+/* .toolbar-guide-link is an <a>, not a <button> — .btn/.btn-ghost cover
+   color/border/spacing, this just fixes anchor-specific defaults. */
+.toolbar-guide-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .btn-ghost:hover {
