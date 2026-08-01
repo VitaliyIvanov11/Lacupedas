@@ -207,9 +207,12 @@ To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 
 ```text
 index.html                     Map page markup
-padomi.html                     Content hub — links to guide.html, tracks.html, more later
+padomi.html                     Content hub — links to all pages below
 guide.html                       "What to do if you meet a bear" content page
 tracks.html                       "How to identify bear tracks/signs" content page
+biology.html                       "Bear biology and status in Latvia" content page
+advice.html                         "Advice by audience" content page (foragers, beekeepers, drivers)
+stories.html                         "Sighting stories" — narrative write-ups of real cases
 css/style.css                   Styling (single-viewport layout, light + dark mode)
 css/guide.css                    Content-page styling (normal scroll, do/don't cards, hub grid)
 js/i18n.js                       LV/EN/RU translation strings + language switching
@@ -227,14 +230,17 @@ data/news.json                 Output of the scanner, served to the front end
 
 ## Content pages
 
-`padomi.html` is a hub linking to a growing set of static, SEO-indexable
-content pages — currently `guide.html` (what to do if you meet a bear) and
-`tracks.html` (how to identify bear tracks/signs). Biology/population
-stats and audience-specific advice for mushroom-pickers/beekeepers/drivers
-are scoped but not yet built. Each page reuses `js/i18n.js` for LV/EN/RU
-but not the map/storage/news modules — a standalone `js/guide-page.js`
-just wires up the language switch. Navigation is map → hub → topic page,
-each with a "back one level" link.
+`padomi.html` is a hub linking to a set of static, SEO-indexable content
+pages: `guide.html` (what to do if you meet a bear), `tracks.html` (how to
+identify bear tracks/signs), `biology.html` (population, seasonality,
+legal status), `advice.html` (audience-specific tips for foragers,
+beekeepers/farmers, and drivers), and `stories.html` (short narrative
+write-ups of real, sourced sightings — the same underlying cases the news
+scanner already found, just told as short stories instead of a headline
+list). Each page reuses `js/i18n.js` for LV/EN/RU but not the map/storage/
+news modules — a standalone `js/guide-page.js` just wires up the language
+switch. Navigation is map → hub → topic page, each with a "back one level"
+link.
 
 Content is grounded in the Nature Conservation Agency's (DAP) publicly
 reported recommendations and the LVMI Silava "Bear Monitoring 2023–2025"
