@@ -233,7 +233,17 @@ js/guide-page.js                     Language switching for the standalone guide
 scripts/fetch-news.js         RSS scanner run by the GitHub Action (below)
 .github/workflows/news-scan.yml   Scheduled job that runs the scanner
 data/news.json                 Output of the scanner, served to the front end
+favicon.ico                    Hand-built multi-frame (16/32px) icon — see note below
+icons/                          Paw-print favicon/app icon set (PNG, 16px–512px) + apple-touch-icon
+site.webmanifest               PWA manifest (name, theme color, 192/512px icons)
 ```
+
+`favicon.ico` embeds PNG frames directly rather than legacy BMP data — supported
+by every current browser and by Windows since Vista, but not decodable via a
+plain `<img src="...ico">` (Chromium's `<img>` element doesn't have an ICO
+decoder; it only reads the format through the favicon-specific code path
+`<link rel="icon">` uses). Verified with Python/Pillow rather than a browser
+screenshot for that reason.
 
 ## Content pages
 
