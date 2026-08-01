@@ -201,23 +201,6 @@ body.guide-body {
   color: var(--text-primary);
 }
 
-.hub-card-compact {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 20px;
-}
-
-.hub-card-compact h3 {
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-.hub-card-compact .hub-card-link {
-  flex-shrink: 0;
-}
-
 .hub-card p {
   margin: 0 0 12px;
   font-size: 0.87rem;
