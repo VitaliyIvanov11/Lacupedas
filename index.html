@@ -228,6 +228,10 @@
           <label for="field-reporter" data-i18n="fieldReporter">Jūsu vārds (nav obligāts)</label>
           <input type="text" id="field-reporter" name="reporter" data-i18n-placeholder="reporterPlaceholder" />
         </div>
+        <p class="form-privacy-note">
+          <span data-i18n="formPrivacyNote">Iesniegtie dati (tostarp vārds un foto) ir publiski redzami visiem apmeklētājiem.</span>
+          <a href="privacy.html" target="_blank" data-i18n="privacyLinkText">Privātuma politika</a>
+        </p>
         <div class="form-row">
           <label for="field-photo" data-i18n="fieldPhoto">Fotoattēls (nav obligāts)</label>
           <input type="file" id="field-photo" name="photo" accept="image/*" />
@@ -243,6 +247,23 @@
     </div>
   </div>
 
+  <div id="report-issue-overlay" class="modal-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="report-issue-title">
+      <h2 id="report-issue-title" data-i18n="reportIssueTitle">Ziņot par kļūdu</h2>
+      <form id="report-issue-form">
+        <div class="form-row">
+          <label for="report-issue-reason" data-i18n="reportIssueReasonLabel">Kāpēc ziņo? (nav obligāts)</label>
+          <textarea id="report-issue-reason" name="reason" rows="3" data-i18n-placeholder="reportIssuePlaceholder"></textarea>
+        </div>
+        <p id="report-issue-error" class="form-error" hidden></p>
+        <div class="form-actions">
+          <button type="button" id="report-issue-cancel-btn" class="btn btn-ghost" data-i18n="cancelBtn">Atcelt</button>
+          <button type="submit" class="btn btn-primary" data-i18n="reportIssueSubmit">Sūtīt</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <script src="js/i18n.js"></script>
@@ -250,6 +271,7 @@
   <script src="js/photo.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/report-issue.js"></script>
   <script src="js/news.js"></script>
   <script src="js/app.js"></script>
 </body>

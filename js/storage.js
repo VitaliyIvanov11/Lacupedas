@@ -115,6 +115,30 @@ async function loadVoteCounts() {
   }
 }
 
+// --- "Report an issue" (fake/duplicate/wrong entry) ---
+// Write-only from the client's perspective: the anon key can INSERT but not
+// SELECT reports (see the RLS policy in README), so flagged items go into a
+// private moderation queue only the site owner can see via the Supabase
+// dashboard — visitors can't see who reported what, or how many reports an
+// entry has, which would otherwise invite abuse (mass-flagging a real
+// sighting to get it removed).
+async function submitReport(targetType, targetId, reason) {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/reports`, {
+      method: "POST",
+      headers: {
+        ...SUPABASE_HEADERS,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({ target_type: targetType, target_id: String(targetId), reason: reason || null }),
+    });
+    return res.ok ? "ok" : "error";
+  } catch {
+    return "error";
+  }
+}
+
 // Returns "ok", "already-voted", or "error".
 async function submitVote(sightingId, voteType) {
   const deviceId = getDeviceId();

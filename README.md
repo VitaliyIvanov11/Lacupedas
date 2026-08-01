@@ -148,6 +148,36 @@ a generic RLS "row violates policy" error that gives no hint the actual
 cause is a bucket-name mismatch. If a photo fails to upload, the sighting
 still saves without it — a bad photo shouldn't lose the whole report.
 
+### Reported issues (fake/duplicate flags)
+
+A third table, `reports` (`id uuid`, `target_type text` —
+`sighting`/`news`, `target_id text`, `reason text`, `created_at`), backs the
+🚩 button on every sightings-list and news-list entry. Unlike `sightings`
+and `sighting_votes`, its RLS policy grants the anon role `INSERT` only —
+no `SELECT` at all, not even an aggregate — so flagged items form a private
+moderation queue that only the project owner can read, via the Supabase
+Table Editor (using dashboard auth, not the anon key). This is deliberate:
+unlike vote counts, there's no legitimate front-end reason to expose how
+many times an entry has been flagged or by what device, since that could
+be used to gauge whether mass-flagging a real sighting is "working".
+
+```sql
+create table reports (
+  id uuid primary key default gen_random_uuid(),
+  target_type text not null check (target_type in ('sighting', 'news')),
+  target_id text not null,
+  reason text,
+  created_at timestamptz not null default now()
+);
+
+alter table reports enable row level security;
+
+create policy "Public can insert reports"
+  on reports for insert
+  to anon
+  with check (true);
+```
+
 ## News auto-collection
 
 `.github/workflows/news-scan.yml` runs `scripts/fetch-news.js` on a schedule
@@ -225,10 +255,13 @@ tracks.html                       "How to identify bear tracks/signs" content pa
 biology.html                       "Bear biology and status in Latvia" content page
 advice.html                         "Advice by audience" content page (foragers, beekeepers, drivers)
 stories.html                         "Sighting stories" — narrative write-ups of real cases
+about.html                           "About this project" — who/why/how verification works/sources
+privacy.html                         GDPR privacy policy
 css/style.css                   Styling (single-viewport layout, light + dark mode)
 css/guide.css                    Content-page styling (normal scroll, do/don't cards, hub grid)
 js/i18n.js                       LV/EN/RU translation strings + language switching
-js/storage.js                    Supabase-backed shared storage for community reports + votes
+js/storage.js                    Supabase-backed shared storage for community reports + votes + issue reports
+js/report-issue.js               "Report an issue" modal shared by the sightings and news lists
 js/photo.js                       Client-side photo compression + Storage upload
 js/map.js                        Leaflet map, markers, click-to-report, heatmap, mobile sleep/wake
 js/chart.js                       Monthly chart (inline SVG) — combined data

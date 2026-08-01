@@ -128,6 +128,18 @@ function renderNewsList() {
     const li = document.createElement("li");
     li.className = "sighting-item news-item";
 
+    const flagBtn = document.createElement("button");
+    flagBtn.type = "button";
+    flagBtn.className = "report-issue-btn";
+    flagBtn.textContent = "🚩";
+    flagBtn.title = t("reportIssueBtnTitle");
+    flagBtn.setAttribute("aria-label", t("reportIssueBtnTitle"));
+    flagBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openReportIssueModal("news", n.id);
+    });
+    li.appendChild(flagBtn);
+
     const dot = document.createElement("span");
     dot.className = "type-dot";
     dot.style.background = NEWS_MARKER_COLOR;

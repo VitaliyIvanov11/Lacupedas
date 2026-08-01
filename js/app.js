@@ -149,6 +149,18 @@
       li.className = "sighting-item";
       li.dataset.id = s.id;
 
+      const flagBtn = document.createElement("button");
+      flagBtn.type = "button";
+      flagBtn.className = "report-issue-btn";
+      flagBtn.textContent = "🚩";
+      flagBtn.title = t("reportIssueBtnTitle");
+      flagBtn.setAttribute("aria-label", t("reportIssueBtnTitle"));
+      flagBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openReportIssueModal("sighting", s.id);
+      });
+      li.appendChild(flagBtn);
+
       const dot = document.createElement("span");
       dot.className = "type-dot";
       dot.style.background = TYPE_COLORS[s.type] || TYPE_COLORS.sighting;
