@@ -70,6 +70,7 @@ function initMap() {
   markersLayer = L.layerGroup().addTo(map);
 
   const wakeHint = document.getElementById("map-wake-hint");
+  const sleepBtn = document.getElementById("map-sleep-btn");
   if (startAsleep && wakeHint) wakeHint.hidden = false;
 
   function wakeMap() {
@@ -81,6 +82,32 @@ function initMap() {
     map.doubleClickZoom.enable();
     map.boxZoom.enable();
     if (wakeHint) wakeHint.hidden = true;
+    // Only offer a way back to "asleep" on devices that started there —
+    // desktop has no page-level scroll for the map to steal, so it has
+    // nothing to opt back out of.
+    if (startAsleep && sleepBtn) sleepBtn.hidden = false;
+  }
+
+  // Lets a mobile visitor who's done panning/zooming put the map back to
+  // "asleep" so a swipe over its area scrolls the page again instead of
+  // panning the map — the inverse of wakeMap().
+  function sleepMap() {
+    if (!mapAwake) return;
+    mapAwake = false;
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.scrollWheelZoom.disable();
+    map.doubleClickZoom.disable();
+    map.boxZoom.disable();
+    if (sleepBtn) sleepBtn.hidden = true;
+    if (wakeHint) wakeHint.hidden = false;
+  }
+
+  if (sleepBtn) {
+    sleepBtn.addEventListener("click", (domEvent) => {
+      domEvent.stopPropagation();
+      sleepMap();
+    });
   }
 
   // A raw DOM listener, not map.on("click", ...): Leaflet only synthesizes
