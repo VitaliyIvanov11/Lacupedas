@@ -121,3 +121,81 @@ body.guide-body {
   color: var(--text-muted);
   line-height: 1.5;
 }
+
+.guide-lead-standalone {
+  margin: 0 0 20px;
+}
+
+.guide-info {
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: rgba(42, 120, 214, 0.08);
+  border: 1px solid rgba(42, 120, 214, 0.25);
+}
+
+.guide-info h3 {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: var(--series-1);
+}
+
+.guide-info ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 0.87rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.guide-info li {
+  margin-bottom: 6px;
+}
+
+/* Guide hub */
+
+.hub-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .hub-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hub-card {
+  display: block;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.hub-card:hover {
+  border-color: var(--brand-accent);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.hub-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.hub-card p {
+  margin: 0 0 12px;
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.hub-card-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brand-accent);
+}

@@ -207,9 +207,11 @@ To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 
 ```text
 index.html                     Map page markup
-guide.html                      "What to do if you meet a bear" content page
+padomi.html                     Content hub — links to guide.html, tracks.html, more later
+guide.html                       "What to do if you meet a bear" content page
+tracks.html                       "How to identify bear tracks/signs" content page
 css/style.css                   Styling (single-viewport layout, light + dark mode)
-css/guide.css                    Guide-page-specific styling (normal scroll, do/don't cards)
+css/guide.css                    Content-page styling (normal scroll, do/don't cards, hub grid)
 js/i18n.js                       LV/EN/RU translation strings + language switching
 js/storage.js                    Supabase-backed shared storage for community reports + votes
 js/photo.js                       Client-side photo compression + Storage upload
@@ -225,16 +227,25 @@ data/news.json                 Output of the scanner, served to the front end
 
 ## Content pages
 
-`guide.html` is the first of a planned series of static, SEO-indexable
-content pages (bear-track identification, biology/population stats,
-audience-specific advice for mushroom-pickers/beekeepers/drivers are
-scoped but not yet built). It reuses `js/i18n.js` for LV/EN/RU but not the
-map/storage/news modules — a standalone `js/guide-page.js` just wires up
-the language switch. Content is grounded in the Nature Conservation
-Agency's (DAP) publicly reported recommendations and the LVMI Silava "Bear
-Monitoring 2023–2025" research project (silava.lv), not just generic
-bear-safety advice — worth re-checking against DAP's current guidance if
-this page is revised later, since agency recommendations can be updated.
+`padomi.html` is a hub linking to a growing set of static, SEO-indexable
+content pages — currently `guide.html` (what to do if you meet a bear) and
+`tracks.html` (how to identify bear tracks/signs). Biology/population
+stats and audience-specific advice for mushroom-pickers/beekeepers/drivers
+are scoped but not yet built. Each page reuses `js/i18n.js` for LV/EN/RU
+but not the map/storage/news modules — a standalone `js/guide-page.js`
+just wires up the language switch. Navigation is map → hub → topic page,
+each with a "back one level" link.
+
+Content is grounded in the Nature Conservation Agency's (DAP) publicly
+reported recommendations and the LVMI Silava "Bear Monitoring 2023–2025"
+research project (silava.lv), not just generic bear-safety advice — worth
+re-checking against DAP's current guidance if these pages are revised
+later, since agency recommendations and figures (e.g. track measurements)
+can be updated. Note that some source pages here render their body text
+client-side, so `curl`/WebFetch may only retrieve metadata (title,
+description) and not the full article — cross-check figures against a
+second independent source when that happens, same as was done for the
+paw-print measurements in `tracks.html`.
 
 ## Note
 
