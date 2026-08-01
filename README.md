@@ -153,21 +153,28 @@ still saves without it — a bad photo shouldn't lose the whole report.
 `.github/workflows/news-scan.yml` runs `scripts/fetch-news.js` on a schedule
 (every 2 hours) and on manual dispatch. It:
 
-1. Fetches the RSS feeds of a few major Latvian news portals (LSM.lv,
-   Apollo.lv, TVNET), two regional ones (gorod.lv — Russian-language,
-   Daugavpils/Latgale; kodols.lv — Riga region) that between them caught
-   sightings the national portals missed (Silene nature park, Garkalne),
-   plus one Estonian (ERR.ee) and one Lithuanian (15min.lt) portal for
-   border-area coverage — bears cross borders, and a sighting just over the
-   line is still relevant context near Latvia.
+1. Fetches the RSS feeds of the major Latvian news portals (LSM.lv,
+   Apollo.lv, TVNET, Delfi.lv, LA.lv, Diena.lv, 1188.lv), two regional ones
+   (gorod.lv — Russian-language, Daugavpils/Latgale; kodols.lv — Riga
+   region) that between them caught sightings the national portals missed
+   (Silene nature park, Garkalne), plus one Estonian (ERR.ee) and one
+   Lithuanian (15min.lt) portal for border-area coverage — bears cross
+   borders, and a sighting just over the line is still relevant context
+   near Latvia.
 2. Keeps only items whose title/description contain a whole-word match for
-   "bear"/"bear cub" in the feed's language — Latvian "lācis"/"lāči"/
-   "lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", Russian
+   "bear"/"bear cub" in that specific feed's language — Latvian "lācis"/
+   "lāči"/"lācēns", Estonian "karu", Lithuanian "lokys"/"lokiukas", Russian
    "медведь"/"медвежонок", all case forms. Word-boundary matching, not a
    substring, so it doesn't fire on unrelated words that happen to contain
    the same letters (e.g. Latvian "Lāčplēsis", the national epic hero, or
    place names like "Lāčusils"; Lithuanian "lokalus", meaning "local";
-   Russian surname "Медведев").
+   Russian surname "Медведев"). Each feed is only tested against its own
+   language's word list (`FEEDS[].lang` in the script) rather than all four
+   at once — Latvian "karu" (accusative of "karš", "war", ubiquitous in
+   Ukraine-war coverage) is spelled identically to Estonian "karu" (bear).
+   Testing every feed against every language turned every Latvian war
+   article into a false bear match the moment general-news LV portals were
+   added; this was caught before it ever reached `data/news.json`.
 3. Best-effort matches a town/region name mentioned in the text against a
    small built-in gazetteer (`GAZETTEER` in the script — all of Latvia, plus
    only the Estonian/Lithuanian towns within roughly 50-70km of the Latvian

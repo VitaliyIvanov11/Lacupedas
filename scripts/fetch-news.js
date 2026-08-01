@@ -9,19 +9,30 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
+// `lang` pins each feed to the single keyword-form list that should be
+// tested against it (see BEAR_KEYWORD_RES_BY_LANG below). This matters
+// because the word lists collide across languages: Latvian "karu" (accusative
+// of "karš", i.e. "war" — extremely common in Ukraine-war coverage) is
+// spelled identically to Estonian "karu" (bear, nominative). Testing every
+// feed against every language's word list turned every Latvian war article
+// into a false "bear" match once general LV news portals were added.
 const FEEDS = [
-  { name: "LSM.lv", url: "https://www.lsm.lv/rss/" },
-  { name: "Apollo.lv", url: "https://www.apollo.lv/rss" },
-  { name: "TVNET", url: "https://www.tvnet.lv/rss" },
+  { name: "LSM.lv", url: "https://www.lsm.lv/rss/", lang: "lv" },
+  { name: "Apollo.lv", url: "https://www.apollo.lv/rss", lang: "lv" },
+  { name: "TVNET", url: "https://www.tvnet.lv/rss", lang: "lv" },
+  { name: "Delfi.lv", url: "https://www.delfi.lv/rss/index.xml", lang: "lv" },
+  { name: "LA.lv", url: "https://www.la.lv/feed", lang: "lv" },
+  { name: "Diena.lv", url: "https://diena.lv/rss", lang: "lv" },
+  { name: "1188.lv", url: "https://www.1188.lv/rss", lang: "lv" },
   // Estonian and Lithuanian border-area coverage — bears cross borders, and
   // a sighting just over the line is still relevant context near Latvia.
-  { name: "ERR.ee", url: "https://www.err.ee/rss" },
-  { name: "15min.lt", url: "https://www.15min.lt/rss/naujienos" },
+  { name: "ERR.ee", url: "https://www.err.ee/rss", lang: "et" },
+  { name: "15min.lt", url: "https://www.15min.lt/rss/naujienos", lang: "lt" },
   // Russian-language regional portal (Daugavpils/Latgale) — the only feed
   // that carried the Silene nature-park sighting; LSM/Apollo/TVNET missed it.
-  { name: "gorod.lv", url: "https://www.gorod.lv/rss" },
+  { name: "gorod.lv", url: "https://www.gorod.lv/rss", lang: "ru" },
   // Riga-region portal — caught the Garkalne/Ropaži sighting.
-  { name: "kodols.lv", url: "https://kodols.lv/rss.xml" },
+  { name: "kodols.lv", url: "https://kodols.lv/rss.xml", lang: "lv" },
 ];
 
 // Whole-word match against every case form of "bear"/"bear cub" in each
@@ -65,15 +76,19 @@ function wordBoundaryRegex(forms, extraLetters) {
   return new RegExp(`(?<![${letters}])(?:${forms.join("|")})(?![${letters}])`, "iu");
 }
 
-const BEAR_KEYWORD_RES = [
-  wordBoundaryRegex(BEAR_WORD_FORMS_LV, "ĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž"),
-  wordBoundaryRegex(BEAR_WORD_FORMS_ET, "ÕõÄäÖöÜüŠšŽž"),
-  wordBoundaryRegex(BEAR_WORD_FORMS_LT, "ĄąČčĘęĖėĮįŠšŲųŪūŽž"),
-  wordBoundaryRegex(BEAR_WORD_FORMS_RU, "а-яА-ЯёЁ"),
-];
+// One regex per language — deliberately NOT combined into a single
+// language-agnostic list, so each feed is only tested against the word
+// forms of the language it's actually published in (see the `lang` note
+// on FEEDS above).
+const BEAR_KEYWORD_RE_BY_LANG = {
+  lv: wordBoundaryRegex(BEAR_WORD_FORMS_LV, "ĀāČčĒēĢģĪīĶķĻļŅņŠšŪūŽž"),
+  et: wordBoundaryRegex(BEAR_WORD_FORMS_ET, "ÕõÄäÖöÜüŠšŽž"),
+  lt: wordBoundaryRegex(BEAR_WORD_FORMS_LT, "ĄąČčĘęĖėĮįŠšŲųŪūŽž"),
+  ru: wordBoundaryRegex(BEAR_WORD_FORMS_RU, "а-яА-ЯёЁ"),
+};
 
-function mentionsBear(text) {
-  return BEAR_KEYWORD_RES.some((re) => re.test(text));
+function mentionsBear(text, lang) {
+  return BEAR_KEYWORD_RE_BY_LANG[lang].test(text);
 }
 
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
@@ -229,7 +244,7 @@ async function fetchFeed(feed) {
       return [];
     }
     const xml = await res.text();
-    return parseRss(xml).map((item) => ({ ...item, source: feed.name }));
+    return parseRss(xml).map((item) => ({ ...item, source: feed.name, lang: feed.lang }));
   } catch (err) {
     console.error(`[${feed.name}] fetch failed: ${err.message}`);
     return [];
@@ -250,7 +265,7 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat();
 
   const matched = allItems
-    .filter((item) => mentionsBear(item.title) || mentionsBear(item.description))
+    .filter((item) => mentionsBear(item.title, item.lang) || mentionsBear(item.description, item.lang))
     .map((item) => {
       const place = findPlace(item.title + " " + item.description);
       const pubDate = new Date(item.pubDate);
