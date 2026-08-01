@@ -20,6 +20,14 @@ let heatLayer = null;
 let pickingMode = false;
 let onMapPick = null;
 
+// On narrow (mobile) viewports the map starts "asleep" — drag/zoom
+// disabled so a swipe meant to scroll the page doesn't get captured as a
+// map pan. A tap on the map wakes it (enables drag/zoom) permanently for
+// the rest of the visit. Desktop doesn't need this: the app shell has no
+// page-level scroll there, so there's nothing for the map to steal.
+const MOBILE_QUERY = window.matchMedia("(max-width: 900px)");
+let mapAwake = true;
+
 function pawIcon(type) {
   const color = TYPE_COLORS[type] || TYPE_COLORS.sighting;
   return L.divIcon({
@@ -32,6 +40,9 @@ function pawIcon(type) {
 }
 
 function initMap() {
+  const startAsleep = MOBILE_QUERY.matches;
+  mapAwake = !startAsleep;
+
   map = L.map("map", {
     center: LATVIA_CENTER,
     zoom: 7,
@@ -42,6 +53,11 @@ function initMap() {
       [59.5, 30.5],
     ],
     maxBoundsViscosity: 0.6,
+    dragging: !startAsleep,
+    touchZoom: !startAsleep,
+    scrollWheelZoom: !startAsleep,
+    doubleClickZoom: !startAsleep,
+    boxZoom: !startAsleep,
   });
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -53,9 +69,32 @@ function initMap() {
 
   markersLayer = L.layerGroup().addTo(map);
 
-  map.on("click", (e) => {
+  const wakeHint = document.getElementById("map-wake-hint");
+  if (startAsleep && wakeHint) wakeHint.hidden = false;
+
+  function wakeMap() {
+    if (mapAwake) return;
+    mapAwake = true;
+    map.dragging.enable();
+    map.touchZoom.enable();
+    map.scrollWheelZoom.enable();
+    map.doubleClickZoom.enable();
+    map.boxZoom.enable();
+    if (wakeHint) wakeHint.hidden = true;
+  }
+
+  // A raw DOM listener, not map.on("click", ...): Leaflet only synthesizes
+  // its own "click" event via the Drag handler's tap detection, so with
+  // dragging disabled (map "asleep" on mobile) Leaflet's click never fires
+  // at all — which would make the map unwakeable, since waking itself
+  // depends on a click. The native click always fires regardless.
+  map.getContainer().addEventListener("click", (domEvent) => {
+    wakeMap();
     if (pickingMode && onMapPick) {
-      onMapPick(e.latlng.lat, e.latlng.lng);
+      const rect = map.getContainer().getBoundingClientRect();
+      const point = L.point(domEvent.clientX - rect.left, domEvent.clientY - rect.top);
+      const latlng = map.containerPointToLatLng(point);
+      onMapPick(latlng.lat, latlng.lng);
     }
   });
 

@@ -65,7 +65,12 @@
         <span data-i18n="mapHintPicking">Noklikšķiniet uz kartes vietā, kur redzējāt lāci</span>
         <button type="button" id="cancel-picking-btn" class="btn btn-ghost" data-i18n="cancelPicking">Atcelt</button>
       </div>
-      <div id="map"></div>
+      <div class="map-wrap">
+        <div id="map"></div>
+        <div id="map-wake-hint" class="map-wake-hint" hidden data-i18n="mapWakeHint">
+          Pieskarieties kartei, lai to varētu pārvietot un tuvināt
+        </div>
+      </div>
     </section>
 
     <aside class="sidebar">
