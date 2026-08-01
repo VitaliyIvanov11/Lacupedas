@@ -1,10 +1,13 @@
 // Wires together the map, form, list, stats and chart. Vanilla JS, no build step.
 (function () {
   const SIGHTINGS_POLL_MS = 2 * 60 * 1000; // 2 minutes
+  const LIST_PAGE_SIZE = 6;
+  const LIST_PAGE_STEP = 10;
 
   let sightings = [];
   let voteCounts = {};
   let pendingLatLng = null;
+  let sightingsShownCount = LIST_PAGE_SIZE;
 
   const el = {
     map: null,
@@ -135,7 +138,7 @@
     }
 
     const sorted = [...filtered].sort((a, b) => (a.date < b.date ? 1 : -1));
-    sorted.forEach((s) => {
+    sorted.slice(0, sightingsShownCount).forEach((s) => {
       const li = document.createElement("li");
       li.className = "sighting-item";
       li.dataset.id = s.id;
@@ -195,6 +198,20 @@
 
       el.list.appendChild(li);
     });
+
+    if (sorted.length > sightingsShownCount) {
+      const more = document.createElement("li");
+      more.className = "list-show-more";
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = `${t("showMoreBtn")} (+${sorted.length - sightingsShownCount})`;
+      btn.addEventListener("click", () => {
+        sightingsShownCount += LIST_PAGE_STEP;
+        renderList(filtered);
+      });
+      more.appendChild(btn);
+      el.list.appendChild(more);
+    }
   }
 
   function buildVoteRow(s) {
@@ -418,8 +435,14 @@
     });
     el.form.addEventListener("submit", submitForm);
     el.photoInput.addEventListener("change", onPhotoSelected);
-    el.typeFilter.addEventListener("change", renderFilteredSightings);
-    el.timeFilter.addEventListener("change", renderFilteredSightings);
+    el.typeFilter.addEventListener("change", () => {
+      sightingsShownCount = LIST_PAGE_SIZE;
+      renderFilteredSightings();
+    });
+    el.timeFilter.addEventListener("change", () => {
+      sightingsShownCount = LIST_PAGE_SIZE;
+      renderFilteredSightings();
+    });
     el.heatmapToggle.addEventListener("change", refreshHeatmap);
 
     refreshAll();

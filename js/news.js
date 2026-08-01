@@ -5,6 +5,8 @@
 // the page stays open — no manual reload needed.
 
 const NEWS_POLL_MS = 10 * 60 * 1000; // 10 minutes
+const NEWS_PAGE_SIZE = 6;
+const NEWS_PAGE_STEP = 10;
 
 let newsItems = [];
 let newsLayer = null;
@@ -12,6 +14,7 @@ let newsVisible = true;
 let newsMap = null;
 let newsSeenIds = new Set();
 let newsDataChangeCallback = null;
+let newsShownCount = NEWS_PAGE_SIZE;
 
 function matchesNewsTimeFilter(iso, filterValue) {
   if (filterValue === "all") return true;
@@ -121,13 +124,13 @@ function renderNewsList() {
     return;
   }
 
-  filtered.forEach((n) => {
+  filtered.slice(0, newsShownCount).forEach((n) => {
     const li = document.createElement("li");
     li.className = "sighting-item news-item";
 
     const dot = document.createElement("span");
     dot.className = "type-dot";
-    dot.style.background = "#4a3aa7";
+    dot.style.background = NEWS_MARKER_COLOR;
     li.appendChild(dot);
 
     const body = document.createElement("div");
@@ -156,6 +159,20 @@ function renderNewsList() {
     li.appendChild(body);
     list.appendChild(li);
   });
+
+  if (filtered.length > newsShownCount) {
+    const more = document.createElement("li");
+    more.className = "list-show-more";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = `${t("showMoreBtn")} (+${filtered.length - newsShownCount})`;
+    btn.addEventListener("click", () => {
+      newsShownCount += NEWS_PAGE_STEP;
+      renderNewsList();
+    });
+    more.appendChild(btn);
+    list.appendChild(more);
+  }
 }
 
 function updateNewsToast(newCount) {
@@ -202,6 +219,7 @@ function initNews(map, onDataChange) {
   [sourceFilter, timeFilter].forEach((select) => {
     if (select) {
       select.addEventListener("change", () => {
+        newsShownCount = NEWS_PAGE_SIZE;
         renderNewsMarkers();
         renderNewsList();
       });

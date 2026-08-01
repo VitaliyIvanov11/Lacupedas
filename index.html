@@ -71,6 +71,10 @@
           Pieskarieties kartei, lai to varētu pārvietot un tuvināt
         </div>
         <button type="button" id="map-sleep-btn" class="map-sleep-btn" hidden data-i18n="mapSleepBtn">🔒 Fiksēt karti</button>
+        <div class="map-legend">
+          <button type="button" id="map-legend-toggle" class="map-legend-toggle" aria-expanded="false" data-i18n="legendToggle">🗺️ Leģenda</button>
+          <div id="map-legend-panel" class="map-legend-panel" hidden></div>
+        </div>
       </div>
     </section>
 
@@ -78,17 +82,26 @@
       <section class="card stats-card">
         <h2 data-i18n="statsTitle">Statistika</h2>
         <div class="stats-grid">
-          <div class="stat">
-            <span class="stat-value" id="stat-total">0</span>
-            <span class="stat-label" data-i18n="totalLabel">Kopā novērojumu</span>
+          <div class="stat stat-total">
+            <span class="stat-icon" aria-hidden="true">📍</span>
+            <div class="stat-text">
+              <span class="stat-value" id="stat-total">0</span>
+              <span class="stat-label" data-i18n="totalLabel">Kopā novērojumu</span>
+            </div>
           </div>
-          <div class="stat">
-            <span class="stat-value" id="stat-year">0</span>
-            <span class="stat-label" data-i18n="yearLabel">Šogad</span>
+          <div class="stat stat-year">
+            <span class="stat-icon" aria-hidden="true">📅</span>
+            <div class="stat-text">
+              <span class="stat-value" id="stat-year">0</span>
+              <span class="stat-label" data-i18n="yearLabel">Šogad</span>
+            </div>
           </div>
-          <div class="stat">
-            <span class="stat-value stat-value-small" id="stat-last">—</span>
-            <span class="stat-label" data-i18n="lastLabel">Pēdējais novērojums</span>
+          <div class="stat stat-recent">
+            <span class="stat-icon" aria-hidden="true">🕐</span>
+            <div class="stat-text">
+              <span class="stat-value stat-value-small" id="stat-last">—</span>
+              <span class="stat-label" data-i18n="lastLabel">Pēdējais novērojums</span>
+            </div>
           </div>
         </div>
       </section>

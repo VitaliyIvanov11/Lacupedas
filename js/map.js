@@ -14,6 +14,49 @@ const TYPE_COLORS = {
   dead: "#eda100", // categorical slot 4 (yellow)
 };
 
+// News-mention markers use a fixed diamond/indigo style (see .news-marker-diamond
+// in style.css and the matching type-dot color in news.js) since scraped news
+// items aren't classified into a sighting/tracks/damage/etc. type.
+const NEWS_MARKER_COLOR = "#4a3aa7";
+
+const LEGEND_ROWS = [
+  { color: TYPE_COLORS.sighting, shape: "dot", key: "typeSighting" },
+  { color: TYPE_COLORS.tracks, shape: "dot", key: "typeTracks" },
+  { color: TYPE_COLORS.damage, shape: "dot", key: "typeDamage" },
+  { color: TYPE_COLORS.dna_sample, shape: "dot", key: "typeDnaSample" },
+  { color: TYPE_COLORS.dead, shape: "dot", key: "typeDead" },
+  { color: NEWS_MARKER_COLOR, shape: "diamond", key: "legendNews" },
+];
+
+function buildLegend() {
+  const toggle = document.getElementById("map-legend-toggle");
+  const panel = document.getElementById("map-legend-panel");
+  if (!toggle || !panel) return;
+
+  LEGEND_ROWS.forEach((row) => {
+    const rowEl = document.createElement("div");
+    rowEl.className = "legend-row";
+
+    const swatch = document.createElement("span");
+    swatch.className = "legend-swatch " + (row.shape === "diamond" ? "legend-diamond" : "legend-dot");
+    swatch.style.background = row.color;
+    rowEl.appendChild(swatch);
+
+    const label = document.createElement("span");
+    label.setAttribute("data-i18n", row.key);
+    label.textContent = t(row.key);
+    rowEl.appendChild(label);
+
+    panel.appendChild(rowEl);
+  });
+
+  toggle.addEventListener("click", () => {
+    const willOpen = panel.hidden;
+    panel.hidden = !willOpen;
+    toggle.setAttribute("aria-expanded", String(willOpen));
+  });
+}
+
 let map;
 let markersLayer;
 let heatLayer = null;
@@ -109,6 +152,8 @@ function initMap() {
       sleepMap();
     });
   }
+
+  buildLegend();
 
   // A raw DOM listener, not map.on("click", ...): Leaflet only synthesizes
   // its own "click" event via the Drag handler's tap detection, so with
