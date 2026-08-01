@@ -13,7 +13,6 @@
     map: null,
     langBtns: document.querySelectorAll("[data-lang-btn]"),
     reportBtn: document.getElementById("report-btn"),
-    useLocationBtn: document.getElementById("use-location-btn"),
     heatmapToggle: document.getElementById("heatmap-toggle"),
     cancelPickingBtn: document.getElementById("cancel-picking-btn"),
     pickingBanner: document.getElementById("picking-banner"),
@@ -308,21 +307,6 @@
     el.pickingBanner.hidden = true;
   }
 
-  function useMyLocation() {
-    if (!navigator.geolocation) {
-      alert(t("geoUnsupported"));
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        pendingLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        openForm();
-      },
-      () => alert(t("geoError")),
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  }
-
   function resetPhotoField() {
     if (el.photoPreview.src) URL.revokeObjectURL(el.photoPreview.src);
     el.photoPreview.hidden = true;
@@ -458,7 +442,6 @@
 
     el.reportBtn.addEventListener("click", startPicking);
     el.cancelPickingBtn.addEventListener("click", stopPicking);
-    el.useLocationBtn.addEventListener("click", useMyLocation);
     el.formCancelBtn.addEventListener("click", closeForm);
     el.modalOverlay.addEventListener("click", (e) => {
       if (e.target === el.modalOverlay) closeForm();
