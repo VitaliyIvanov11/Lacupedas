@@ -179,6 +179,7 @@ const translations = {
     biologyFacts3: "Latvijā lācim nav dabisko ienaidnieku",
     biologyFacts4: "Lācis ikdienā nav agresīvs un izvairās no cilvēkiem — bīstams tas var kļūt, ja pāragri iztraucēts no ziemas guļas, ievainots vai sargā mazuļus",
     biologySourceNote: "Šī informācija balstīta uz Dabas aizsardzības pārvaldes, VARAM un LVMI Silava publiski pieejamiem paziņojumiem un monitoringa datiem (2025–2026).",
+    biologySourcesLabel: "Avoti:",
 
     hubForagersCardDesc: "Kā droši uzvesties mežā sēņošanas un ogošanas sezonā.",
     hubBeeCardDesc: "Kā pasargāt bites un mājlopus, kur meklēt kompensāciju par postījumiem.",
@@ -216,6 +217,7 @@ const translations = {
     hubStoriesCardDesc: "Īsi, patiesi stāsti par lāču novērojumiem Latvijā — no pilsētas ielām līdz dabas parkiem.",
 
     storiesTitle: "Novērojumu stāsti",
+    relatedTitle: "Saistītās lapas",
     storiesSubtitle: "Īsi, patiesi stāsti par lāču novērojumiem Latvijā pēdējo divu gadu laikā",
     storiesIntro: "Katrs no šiem gadījumiem ir apstiprināts pēc publiski pieejamām ziņu publikācijām — bez precīzām privātmāju adresēm.",
     story1Place: "Imanta, Rīga",
@@ -473,6 +475,7 @@ const translations = {
     biologyFacts3: "Bears have no natural predators in Latvia",
     biologyFacts4: "A bear is not normally aggressive and avoids people — it can become dangerous if woken too early from hibernation, injured, or defending cubs",
     biologySourceNote: "This information is based on publicly available statements and monitoring data (2025–2026) from the Nature Conservation Agency, the Ministry (VARAM), and LVMI Silava.",
+    biologySourcesLabel: "Sources:",
 
     hubForagersCardDesc: "How to stay safe in the forest during mushroom and berry season.",
     hubBeeCardDesc: "How to protect bees and livestock, and where to seek damage compensation.",
@@ -510,6 +513,7 @@ const translations = {
     hubStoriesCardDesc: "Short, real stories of bear sightings across Latvia — from city streets to nature parks.",
 
     storiesTitle: "Sighting stories",
+    relatedTitle: "Related pages",
     storiesSubtitle: "Short, real stories of bear sightings in Latvia over the past two years",
     storiesIntro: "Each of these cases is confirmed from publicly available news coverage — no exact private-home addresses.",
     story1Place: "Imanta, Rīga",
@@ -767,6 +771,7 @@ const translations = {
     biologyFacts3: "В Латвии у медведя нет естественных врагов",
     biologyFacts4: "Обычно медведь не агрессивен и избегает людей — опасным он может стать, если его слишком рано разбудили из спячки, он ранен или защищает медвежат",
     biologySourceNote: "Эта информация основана на общедоступных заявлениях и данных мониторинга (2025–2026) Управления охраны природы, министерства (VARAM) и LVMI Silava.",
+    biologySourcesLabel: "Источники:",
 
     hubForagersCardDesc: "Как безопасно вести себя в лесу в сезон грибов и ягод.",
     hubBeeCardDesc: "Как защитить пчёл и скот и куда обращаться за компенсацией ущерба.",
@@ -804,6 +809,7 @@ const translations = {
     hubStoriesCardDesc: "Короткие, реальные истории наблюдений медведей в Латвии — от городских улиц до природных парков.",
 
     storiesTitle: "Истории наблюдений",
+    relatedTitle: "Похожие страницы",
     storiesSubtitle: "Короткие, реальные истории наблюдений медведей в Латвии за последние два года",
     storiesIntro: "Каждый из этих случаев подтверждён по общедоступным новостным публикациям — без точных адресов частных домов.",
     story1Place: "Иманта, Рига",
