@@ -206,19 +206,35 @@ To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 ## Project structure
 
 ```text
-index.html                     Page markup
+index.html                     Map page markup
+guide.html                      "What to do if you meet a bear" content page
 css/style.css                   Styling (single-viewport layout, light + dark mode)
-js/i18n.js                       LV/EN translation strings + language switching
-js/storage.js                    Supabase-backed shared storage for community reports
+css/guide.css                    Guide-page-specific styling (normal scroll, do/don't cards)
+js/i18n.js                       LV/EN/RU translation strings + language switching
+js/storage.js                    Supabase-backed shared storage for community reports + votes
 js/photo.js                       Client-side photo compression + Storage upload
-js/map.js                        Leaflet map, markers, click-to-report
+js/map.js                        Leaflet map, markers, click-to-report, heatmap
 js/chart.js                       Monthly chart (inline SVG) — combined data
-js/news.js                         News-mentions layer: fetch, poll, render
-js/app.js                           Wires everything together; combined stats
+js/news.js                         News-mentions layer: fetch, poll, render, filter
+js/app.js                           Wires everything together; combined stats, filters, voting
+js/guide-page.js                     Language switching for the standalone guide page
 scripts/fetch-news.js         RSS scanner run by the GitHub Action (below)
 .github/workflows/news-scan.yml   Scheduled job that runs the scanner
 data/news.json                 Output of the scanner, served to the front end
 ```
+
+## Content pages
+
+`guide.html` is the first of a planned series of static, SEO-indexable
+content pages (bear-track identification, biology/population stats,
+audience-specific advice for mushroom-pickers/beekeepers/drivers are
+scoped but not yet built). It reuses `js/i18n.js` for LV/EN/RU but not the
+map/storage/news modules — a standalone `js/guide-page.js` just wires up
+the language switch. Content is grounded in the Nature Conservation
+Agency's (DAP) publicly reported recommendations and the LVMI Silava "Bear
+Monitoring 2023–2025" research project (silava.lv), not just generic
+bear-safety advice — worth re-checking against DAP's current guidance if
+this page is revised later, since agency recommendations can be updated.
 
 ## Note
 

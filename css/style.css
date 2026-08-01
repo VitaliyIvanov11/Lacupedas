@@ -107,6 +107,32 @@ button {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.guide-nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  white-space: nowrap;
+}
+
+.guide-nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .lang-switch {
   display: flex;
   gap: 4px;
