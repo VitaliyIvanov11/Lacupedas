@@ -188,13 +188,14 @@ button {
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  /* Sidebar gets a comfortable, capped reading width; the map pane absorbs
+     all remaining space so the app fills wide/ultrawide screens instead of
+     sitting in a fixed-width box with empty margins on either side. */
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
   grid-template-rows: 1fr;
   gap: 16px;
   padding: 16px;
-  max-width: 1400px;
   width: 100%;
-  margin: 0 auto;
   overflow: hidden;
 }
 

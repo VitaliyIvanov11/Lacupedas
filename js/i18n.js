@@ -47,7 +47,7 @@ const translations = {
     chartNoData: "Šogad vēl nav datu",
 
     listTitle: "Novērojumu saraksts",
-    emptyList: "Nav neviena novērojuma. Pievienojiet pirmo!",
+    emptyList: "Neviens kopienas novērojums vēl nav pievienots — pievieno pirmo! Kartē redzamie punkti pašlaik nāk no ziņu portāliem (skaties \"Ziņu pieminējumi\" zemāk).",
     submitError: "Neizdevās saglabāt — pārbaudiet interneta savienojumu un mēģiniet vēlreiz.",
     confirmBtn: "Apstiprināt šo novērojumu",
     disputeBtn: "Apšaubīt šo novērojumu",
@@ -162,13 +162,13 @@ const translations = {
     biologyFacts4: "Lācis ikdienā nav agresīvs un izvairās no cilvēkiem — bīstams tas var kļūt, ja pāragri iztraucēts no ziemas guļas, ievainots vai sargā mazuļus",
     biologySourceNote: "Šī informācija balstīta uz Dabas aizsardzības pārvaldes, VARAM un LVMI Silava publiski pieejamiem paziņojumiem un monitoringa datiem (2025–2026).",
 
-    hubAdviceCardDesc: "Padomi sēņotājiem un tūristiem, biškopjiem un lauksaimniekiem, autovadītājiem.",
     hubForagersCardDesc: "Kā droši uzvesties mežā sēņošanas un ogošanas sezonā.",
     hubBeeCardDesc: "Kā pasargāt bites un mājlopus, kur meklēt kompensāciju par postījumiem.",
     hubDriversCardDesc: "Ko darīt, ja lācis parādās uz ceļa, un kā rīkoties sadursmes gadījumā.",
+    hubHuntersCardDesc: "Kā medību laikā neizprovocēt lāci un kur ziņot par pēdām vai migu.",
 
     adviceTitle: "Padomi pēc jomas",
-    adviceSubtitle: "Sēņotājiem un tūristiem, biškopjiem un lauksaimniekiem, autovadītājiem",
+    adviceSubtitle: "Sēņotājiem un tūristiem, biškopjiem un lauksaimniekiem, autovadītājiem un medniekiem",
     adviceForagersTitle: "Sēņotājiem un tūristiem",
     adviceForagers1: "Ejot mežā, radi troksni — runā, dziedi vai izmanto zvaniņu, lai lācis tevi pamana laikus un pats izvairās",
     adviceForagers2: "Esi īpaši uzmanīgs rudenī ogu un sēņu vietās — arī lāči tur meklē barību",
@@ -187,7 +187,13 @@ const translations = {
     adviceDrivers3: "Nekādā gadījumā strauji negriez stūri, lai izvairītos no sadursmes — tas biežāk izraisa nopietnākas avārijas nekā pati sadursme",
     adviceDrivers4: "Ja sadursme nenovēršama, bremzē taisni, negriežot stūri",
     adviceDrivers5: "Pēc sastapšanās vai sadursmes ziņo policijai un, ja dzīvnieks ievainots, arī Valsts meža dienestam vai Dabas aizsardzības pārvaldei",
-    adviceSourceNote: "Kompensāciju kārtība balstīta uz Dabas aizsardzības pārvaldes publicēto pakalpojumu aprakstu par kompensācijām par īpaši aizsargājamo nemedījamo sugu nodarītiem postījumiem.",
+    adviceHuntersTitle: "Medniekiem",
+    adviceHunters1: "Neizvieto ēsmas vai atkritumus, kas var pievilkt lāci tuvāk apdzīvotām vietām",
+    adviceHunters2: "Ja medībās pamani lāča pēdas, migas vietu vai citas pazīmes, ziņo par to Valsts meža dienestam — šādi novērojumi ir viens no lāču monitoringa datu avotiem Latvijā",
+    adviceHunters3: "Brūnais lācis Latvijā ir īpaši aizsargājama, nemedījama suga — tas ir spēkā arī tad, ja lācis parādās, medījot citu sugu",
+    adviceHunters4: "Lāča aizsardzība izriet arī no ES Biotopu direktīvas (92/43/EEK) un Natura 2000 teritoriju tīkla — ik pēc sešiem gadiem Latvijai par sugas stāvokli jāziņo Eiropas Komisijai",
+    adviceHunters5: "Novērojumus var reģistrēt arī Valsts meža dienesta lietotnē",
+    adviceSourceNote: "Kompensāciju kārtība balstīta uz Dabas aizsardzības pārvaldes publicēto pakalpojumu aprakstu par kompensācijām par īpaši aizsargājamo nemedījamo sugu nodarītiem postījumiem. Informācija par aizsardzības statusu un monitoringu — uz ES Biotopu direktīvu (92/43/EEK) un LVMI Silava pētījumu \"Lāču monitorings 2023.–2025. gadā\".",
 
     hubStoriesCardDesc: "Īsi, patiesi stāsti par lāču novērojumiem Latvijā — no pilsētas ielām līdz dabas parkiem.",
 
@@ -272,7 +278,7 @@ const translations = {
     chartNoData: "No data yet this year",
 
     listTitle: "Sightings list",
-    emptyList: "No sightings yet. Add the first one!",
+    emptyList: "No community sightings reported yet — add the first one! The points on the map right now come from news portals (see \"News mentions\" below).",
     submitError: "Couldn't save — check your internet connection and try again.",
     confirmBtn: "Confirm this sighting",
     disputeBtn: "Dispute this sighting",
@@ -387,13 +393,13 @@ const translations = {
     biologyFacts4: "A bear is not normally aggressive and avoids people — it can become dangerous if woken too early from hibernation, injured, or defending cubs",
     biologySourceNote: "This information is based on publicly available statements and monitoring data (2025–2026) from the Nature Conservation Agency, the Ministry (VARAM), and LVMI Silava.",
 
-    hubAdviceCardDesc: "Tips for mushroom-pickers and hikers, beekeepers and farmers, and drivers.",
     hubForagersCardDesc: "How to stay safe in the forest during mushroom and berry season.",
     hubBeeCardDesc: "How to protect bees and livestock, and where to seek damage compensation.",
     hubDriversCardDesc: "What to do if a bear appears on the road, and how to react in a collision.",
+    hubHuntersCardDesc: "How to avoid provoking a bear while hunting, and where to report tracks or a den.",
 
     adviceTitle: "Advice by audience",
-    adviceSubtitle: "For mushroom-pickers and hikers, beekeepers and farmers, and drivers",
+    adviceSubtitle: "For mushroom-pickers and hikers, beekeepers and farmers, drivers, and hunters",
     adviceForagersTitle: "Mushroom-pickers and hikers",
     adviceForagers1: "Make noise as you walk — talk, sing, or use a bell, so a bear notices you early and avoids you on its own",
     adviceForagers2: "Be extra alert in autumn in berry and mushroom areas — bears forage there too",
@@ -412,7 +418,13 @@ const translations = {
     adviceDrivers3: "Never swerve sharply to avoid a collision — that causes more serious crashes more often than the collision itself",
     adviceDrivers4: "If a collision is unavoidable, brake in a straight line without turning the wheel",
     adviceDrivers5: "After an encounter or collision, report it to the police, and if the animal is injured, also to the State Forest Service or the Nature Conservation Agency",
-    adviceSourceNote: "The compensation process is based on the Nature Conservation Agency's published service description for compensation for damage caused by specially protected non-huntable species.",
+    adviceHuntersTitle: "Hunters",
+    adviceHunters1: "Don't set out bait or leftovers that could draw a bear closer to inhabited areas",
+    adviceHunters2: "If you come across bear tracks, a den site, or other signs while hunting, report it to the State Forest Service — such observations are one of the data sources for bear monitoring in Latvia",
+    adviceHunters3: "The brown bear is a protected, non-huntable species in Latvia — this applies even if a bear appears while you're hunting a different species",
+    adviceHunters4: "This protection also stems from the EU Habitats Directive (92/43/EEC) and the Natura 2000 network of protected areas — Latvia must report to the European Commission on the species' status every six years",
+    adviceHunters5: "Observations can also be logged in the State Forest Service's app",
+    adviceSourceNote: "The compensation process is based on the Nature Conservation Agency's published service description for compensation for damage caused by specially protected non-huntable species. Information on legal status and monitoring is based on the EU Habitats Directive (92/43/EEC) and LVMI Silava's \"Bear monitoring 2023–2025\" study.",
 
     hubStoriesCardDesc: "Short, real stories of bear sightings across Latvia — from city streets to nature parks.",
 
@@ -497,7 +509,7 @@ const translations = {
     chartNoData: "В этом году пока нет данных",
 
     listTitle: "Список наблюдений",
-    emptyList: "Пока нет наблюдений. Добавьте первое!",
+    emptyList: "Пока никто не добавил наблюдение через сайт — добавьте первое! Точки на карте сейчас — это упоминания в новостях (см. «Упоминания в новостях» ниже).",
     submitError: "Не удалось сохранить — проверьте интернет-соединение и попробуйте снова.",
     confirmBtn: "Подтвердить это наблюдение",
     disputeBtn: "Оспорить это наблюдение",
@@ -612,13 +624,13 @@ const translations = {
     biologyFacts4: "Обычно медведь не агрессивен и избегает людей — опасным он может стать, если его слишком рано разбудили из спячки, он ранен или защищает медвежат",
     biologySourceNote: "Эта информация основана на общедоступных заявлениях и данных мониторинга (2025–2026) Управления охраны природы, министерства (VARAM) и LVMI Silava.",
 
-    hubAdviceCardDesc: "Советы для грибников и туристов, пасечников и фермеров, водителей.",
     hubForagersCardDesc: "Как безопасно вести себя в лесу в сезон грибов и ягод.",
     hubBeeCardDesc: "Как защитить пчёл и скот и куда обращаться за компенсацией ущерба.",
     hubDriversCardDesc: "Что делать при появлении медведя на дороге и как действовать при столкновении.",
+    hubHuntersCardDesc: "Как не спровоцировать медведя во время охоты и куда сообщать о следах или берлоге.",
 
     adviceTitle: "Советы по аудиториям",
-    adviceSubtitle: "Для грибников и туристов, пасечников и фермеров, водителей",
+    adviceSubtitle: "Для грибников и туристов, пасечников и фермеров, водителей и охотников",
     adviceForagersTitle: "Грибникам и туристам",
     adviceForagers1: "Идя по лесу, создавайте шум — разговаривайте, пойте или используйте колокольчик, чтобы медведь заметил вас заранее и сам избежал встречи",
     adviceForagers2: "Будьте особенно внимательны осенью в местах сбора ягод и грибов — медведи тоже ищут там пищу",
@@ -637,7 +649,13 @@ const translations = {
     adviceDrivers3: "Ни в коем случае резко не выкручивайте руль, чтобы избежать столкновения — это чаще приводит к более серьёзным авариям, чем само столкновение",
     adviceDrivers4: "Если столкновение неизбежно, тормозите по прямой, не поворачивая руль",
     adviceDrivers5: "После встречи или столкновения сообщите в полицию, а если животное ранено — также в Государственную лесную службу или Управление охраны природы",
-    adviceSourceNote: "Порядок компенсации основан на опубликованном Управлением охраны природы описании услуги по компенсации ущерба, причинённого особо охраняемыми непромысловыми видами.",
+    adviceHuntersTitle: "Охотникам",
+    adviceHunters1: "Не оставляйте приманку или пищевые отходы, которые могут привлечь медведя ближе к населённым пунктам",
+    adviceHunters2: "Если во время охоты вы заметили следы медведя, берлогу или другие признаки, сообщите об этом в Государственную лесную службу — такие наблюдения являются одним из источников данных для мониторинга медведей в Латвии",
+    adviceHunters3: "Бурый медведь в Латвии — особо охраняемый, не подлежащий охоте вид; это действует и в том случае, если медведь появился во время охоты на другой вид",
+    adviceHunters4: "Эта защита также основана на Директиве ЕС о местообитаниях (92/43/EEC) и сети охраняемых территорий Natura 2000 — раз в шесть лет Латвия обязана отчитываться перед Еврокомиссией о состоянии вида",
+    adviceHunters5: "Наблюдения также можно регистрировать в приложении Государственной лесной службы",
+    adviceSourceNote: "Порядок компенсации основан на опубликованном Управлением охраны природы описании услуги по компенсации ущерба, причинённого особо охраняемыми непромысловыми видами. Информация о правовом статусе и мониторинге — на Директиве ЕС о местообитаниях (92/43/EEC) и исследовании LVMI Silava «Мониторинг медведей 2023–2025».",
 
     hubStoriesCardDesc: "Короткие, реальные истории наблюдений медведей в Латвии — от городских улиц до природных парков.",
 
