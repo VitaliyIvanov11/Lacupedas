@@ -84,6 +84,8 @@ const translations = {
     faqA2: "Lāča pēdas mežā var atpazīt pēc to lielā izmēra un pieciem pirkstu nospiedumiem ar redzamiem nagu iespiedumiem. Ja neesi pārliecināts, vislabāk ir nofotografēt pēdu nospiedumu un pievienot to kā novērojumu šajā kartē.",
     faqQ3: "Vai lācis ir bīstams cilvēkiem?",
     faqA3: "Lāči parasti izvairās no cilvēkiem, un uzbrukumi ir reti. Sastopot lāci, ieteicams saglabāt mieru, nesteigties un lēnām attālināties, neskrienot.",
+    faqQ4: "Vai lāču Latvijā kļūst vairāk?",
+    faqA4: "Jā. Pēc 2025. gada monitoringa datiem Latvijā mīt aptuveni 190 brūno lāču — piecu gadu laikā populācija ir gandrīz dubultojusies. Šo skaitu apstiprina gan LVMI Silava monitorings, gan Latvijas Mednieku asociācijas (LATMA) publicētie dati, kas balstīti uz pēdu nospiedumiem, kameru attēliem, kā arī medniekiem un sabiedrības ziņotajiem novērojumiem. Arvien biežāk tiek konstatētas arī lācenes ar mazuļiem, kas apstiprina, ka lāči Latvijā veiksmīgi vairojas.",
 
     guideTitle: "Ko darīt, ja satiec lāci?",
     guideSubtitle: "Praktiski padomi, balstīti uz Dabas aizsardzības pārvaldes ieteikumiem",
@@ -164,6 +166,8 @@ const translations = {
     biologyPop2: "Piecu gadu laikā populācija ir gandrīz dubultojusies",
     biologyPop3: "Visvairāk lāču sastopami Vidzemē (īpaši pierobežā ar Igauniju) un Latgalē, taču arvien biežāk tie novēroti arī Kurzemē un Zemgalē",
     biologyPop4: "Dabas aizsardzības pārvalde uzsver — populācija Latvijā nav apdraudēta",
+    biologyPop5: "Arvien biežāk tiek konstatētas lācenes ar mazuļiem — tas apstiprina, ka lāči Latvijā ne tikai uzturas, bet arī veiksmīgi vairojas",
+    biologyPop6: "Lācis ir mobils dzīvnieks, kas var pārvietoties lielos attālumos — daļa novērojumu var attiekties uz vienu un to pašu īpatni, tāpēc skaitlis vienmēr jāskata kā aplēse, nevis precīza uzskaite",
     biologySeasonTitle: "🗓️ Sezonalitāte",
     biologySeason1: "Ziemas guļā lāči dodas no oktobra līdz decembrim, atkarībā no laika apstākļiem",
     biologySeason2: "No miega tie mostas martā vai aprīlī",
@@ -179,6 +183,7 @@ const translations = {
     biologyFacts3: "Latvijā lācim nav dabisko ienaidnieku",
     biologyFacts4: "Lācis ikdienā nav agresīvs un izvairās no cilvēkiem — bīstams tas var kļūt, ja pāragri iztraucēts no ziemas guļas, ievainots vai sargā mazuļus",
     biologySourceNote: "Šī informācija balstīta uz Dabas aizsardzības pārvaldes, VARAM un LVMI Silava publiski pieejamiem paziņojumiem un monitoringa datiem (2025–2026).",
+    biologyLatmaNote: "Aptuveno skaitli 190 apstiprina arī Latvijas Mednieku asociācijas (LATMA) 2026. gada marta publikācija, kas balstīta uz to pašu monitoringa pētījumu.",
     biologySourcesLabel: "Avoti:",
 
     hubForagersCardDesc: "Kā droši uzvesties mežā sēņošanas un ogošanas sezonā.",
@@ -212,6 +217,7 @@ const translations = {
     adviceHunters3: "Brūnais lācis Latvijā ir īpaši aizsargājama, nemedījama suga — tas ir spēkā arī tad, ja lācis parādās, medījot citu sugu",
     adviceHunters4: "Lāča aizsardzība izriet arī no ES Biotopu direktīvas (92/43/EEK) un Natura 2000 teritoriju tīkla — ik pēc sešiem gadiem Latvijai par sugas stāvokli jāziņo Eiropas Komisijai",
     adviceHunters5: "Novērojumus var reģistrēt arī Valsts meža dienesta lietotnē",
+    adviceHunters6: "Medniekiem šeit ir reāla nozīme — Latvijas Mednieku asociācija norāda, ka tieši mednieku un sabiedrības ziņotās pēdas, kameru attēli un novērojumi ir viens no galvenajiem datu avotiem, pēc kuriem tiek lēsts lāču skaits Latvijā",
     adviceSourceNote: "Kompensāciju kārtība balstīta uz Dabas aizsardzības pārvaldes publicēto pakalpojumu aprakstu par kompensācijām par īpaši aizsargājamo nemedījamo sugu nodarītiem postījumiem. Informācija par aizsardzības statusu un monitoringu — uz ES Biotopu direktīvu (92/43/EEK) un LVMI Silava pētījumu \"Lāču monitorings 2023.–2025. gadā\".",
 
     hubStoriesCardDesc: "Īsi, patiesi stāsti par lāču novērojumiem Latvijā — no pilsētas ielām līdz dabas parkiem.",
@@ -380,6 +386,8 @@ const translations = {
     faqA2: "Bear tracks in the forest can be recognized by their large size and five toe prints with visible claw marks. If you're not sure, it's best to photograph the print and add it as a sighting on this map.",
     faqQ3: "Are bears dangerous to people?",
     faqA3: "Bears generally avoid people, and attacks are rare. If you encounter a bear, it's best to stay calm, not rush, and slowly back away without running.",
+    faqQ4: "Are there more bears in Latvia now?",
+    faqA4: "Yes. According to 2025 monitoring data, Latvia is home to roughly 190 brown bears — the population has nearly doubled over five years. That figure is confirmed both by LVMI Silava's monitoring and by data published by the Latvian Hunters' Association (LATMA), based on tracks, camera-trap images, and observations reported by hunters and the public. Females with cubs are also being spotted more often, confirming that bears are successfully reproducing in Latvia.",
 
     guideTitle: "What to do if you meet a bear",
     guideSubtitle: "Practical advice based on Nature Conservation Agency recommendations",
@@ -460,6 +468,8 @@ const translations = {
     biologyPop2: "The population has nearly doubled over the past five years",
     biologyPop3: "Most bears are found in Vidzeme (especially near the Estonian border) and Latgale, but sightings are increasingly common in Kurzeme and Zemgale too",
     biologyPop4: "The Nature Conservation Agency stresses that the population in Latvia is not endangered",
+    biologyPop5: "Females with cubs are being spotted more and more often — confirming that bears in Latvia aren't just present, but successfully reproducing",
+    biologyPop6: "Bears are mobile animals capable of covering long distances — some observations may refer to the same individual, so the figure should always be read as an estimate, not a precise count",
     biologySeasonTitle: "🗓️ Seasonality",
     biologySeason1: "Bears go into their winter den between October and December, depending on weather",
     biologySeason2: "They wake from hibernation in March or April",
@@ -475,6 +485,7 @@ const translations = {
     biologyFacts3: "Bears have no natural predators in Latvia",
     biologyFacts4: "A bear is not normally aggressive and avoids people — it can become dangerous if woken too early from hibernation, injured, or defending cubs",
     biologySourceNote: "This information is based on publicly available statements and monitoring data (2025–2026) from the Nature Conservation Agency, the Ministry (VARAM), and LVMI Silava.",
+    biologyLatmaNote: "The approximate figure of 190 is also confirmed by a March 2026 publication from the Latvian Hunters' Association (LATMA), based on the same monitoring research.",
     biologySourcesLabel: "Sources:",
 
     hubForagersCardDesc: "How to stay safe in the forest during mushroom and berry season.",
@@ -508,6 +519,7 @@ const translations = {
     adviceHunters3: "The brown bear is a protected, non-huntable species in Latvia — this applies even if a bear appears while you're hunting a different species",
     adviceHunters4: "This protection also stems from the EU Habitats Directive (92/43/EEC) and the Natura 2000 network of protected areas — Latvia must report to the European Commission on the species' status every six years",
     adviceHunters5: "Observations can also be logged in the State Forest Service's app",
+    adviceHunters6: "Hunters genuinely matter here — the Latvian Hunters' Association notes that tracks, camera-trap images, and observations reported by hunters and the public are one of the main data sources behind Latvia's bear population estimate",
     adviceSourceNote: "The compensation process is based on the Nature Conservation Agency's published service description for compensation for damage caused by specially protected non-huntable species. Information on legal status and monitoring is based on the EU Habitats Directive (92/43/EEC) and LVMI Silava's \"Bear monitoring 2023–2025\" study.",
 
     hubStoriesCardDesc: "Short, real stories of bear sightings across Latvia — from city streets to nature parks.",
@@ -676,6 +688,8 @@ const translations = {
     faqA2: "Следы медведя в лесу можно узнать по их крупному размеру и отпечаткам пяти пальцев с видимыми следами когтей. Если вы не уверены, лучше всего сфотографировать отпечаток и добавить его как наблюдение на этой карте.",
     faqQ3: "Опасен ли медведь для человека?",
     faqA3: "Медведи обычно избегают людей, нападения редки. При встрече с медведем рекомендуется сохранять спокойствие, не спешить и медленно отступать, не убегая.",
+    faqQ4: "Медведей в Латвии становится больше?",
+    faqA4: "Да. По данным мониторинга 2025 года, в Латвии обитает около 190 бурых медведей — за пять лет популяция почти удвоилась. Эту цифру подтверждают и мониторинг LVMI Silava, и данные, опубликованные Латвийской ассоциацией охотников (LATMA), основанные на отпечатках лап, снимках с фотоловушек, а также наблюдениях охотников и общественности. Всё чаще фиксируются и самки с медвежатами, что подтверждает: медведи в Латвии успешно размножаются.",
 
     guideTitle: "Что делать при встрече с медведем",
     guideSubtitle: "Практические советы на основе рекомендаций Управления охраны природы",
@@ -756,6 +770,8 @@ const translations = {
     biologyPop2: "За последние пять лет популяция почти удвоилась",
     biologyPop3: "Больше всего медведей встречается в Видземе (особенно у границы с Эстонией) и Латгалии, но наблюдения всё чаще фиксируются и в Курземе, и в Земгале",
     biologyPop4: "Управление охраны природы подчёркивает, что популяция в Латвии не находится под угрозой",
+    biologyPop5: "Всё чаще фиксируются самки с медвежатами — это подтверждает, что медведи в Латвии не просто присутствуют, а успешно размножаются",
+    biologyPop6: "Медведь — мобильное животное, способное перемещаться на большие расстояния: часть наблюдений может относиться к одной и той же особи, поэтому цифру всегда стоит воспринимать как оценку, а не точный подсчёт",
     biologySeasonTitle: "🗓️ Сезонность",
     biologySeason1: "В зимнюю спячку медведи уходят с октября по декабрь, в зависимости от погоды",
     biologySeason2: "Просыпаются от спячки в марте или апреле",
@@ -771,6 +787,7 @@ const translations = {
     biologyFacts3: "В Латвии у медведя нет естественных врагов",
     biologyFacts4: "Обычно медведь не агрессивен и избегает людей — опасным он может стать, если его слишком рано разбудили из спячки, он ранен или защищает медвежат",
     biologySourceNote: "Эта информация основана на общедоступных заявлениях и данных мониторинга (2025–2026) Управления охраны природы, министерства (VARAM) и LVMI Silava.",
+    biologyLatmaNote: "Приблизительную цифру 190 подтверждает и публикация Латвийской ассоциации охотников (LATMA) от марта 2026 года, основанная на том же исследовании мониторинга.",
     biologySourcesLabel: "Источники:",
 
     hubForagersCardDesc: "Как безопасно вести себя в лесу в сезон грибов и ягод.",
@@ -804,6 +821,7 @@ const translations = {
     adviceHunters3: "Бурый медведь в Латвии — особо охраняемый, не подлежащий охоте вид; это действует и в том случае, если медведь появился во время охоты на другой вид",
     adviceHunters4: "Эта защита также основана на Директиве ЕС о местообитаниях (92/43/EEC) и сети охраняемых территорий Natura 2000 — раз в шесть лет Латвия обязана отчитываться перед Еврокомиссией о состоянии вида",
     adviceHunters5: "Наблюдения также можно регистрировать в приложении Государственной лесной службы",
+    adviceHunters6: "Роль охотников здесь реальна — Латвийская ассоциация охотников отмечает, что именно сообщённые охотниками и обществом следы, снимки с фотоловушек и наблюдения — один из главных источников данных, по которым оценивается число медведей в Латвии",
     adviceSourceNote: "Порядок компенсации основан на опубликованном Управлением охраны природы описании услуги по компенсации ущерба, причинённого особо охраняемыми непромысловыми видами. Информация о правовом статусе и мониторинге — на Директиве ЕС о местообитаниях (92/43/EEC) и исследовании LVMI Silava «Мониторинг медведей 2023–2025».",
 
     hubStoriesCardDesc: "Короткие, реальные истории наблюдений медведей в Латвии — от городских улиц до природных парков.",

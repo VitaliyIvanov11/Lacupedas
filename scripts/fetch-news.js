@@ -41,6 +41,11 @@ const FEEDS = [
   { name: "gorod.lv", url: "https://www.gorod.lv/rss", lang: "ru" },
   // Riga-region portal — caught the Garkalne/Ropaži sighting.
   { name: "kodols.lv", url: "https://kodols.lv/rss.xml", lang: "lv" },
+  // Latvijas Mednieku asociācija — hunters are one of the named data
+  // sources behind the official population monitoring (see biology.html
+  // and advice.html's "Medniekiem" section), and LATMA's own site
+  // periodically covers bear population/encounter stories directly.
+  { name: "LATMA", url: "https://www.latma.lv/feed/", lang: "lv" },
 ];
 
 // Whole-word match against every case form of "bear"/"bear cub" in each

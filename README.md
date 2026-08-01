@@ -187,7 +187,10 @@ create policy "Public can insert reports"
    Apollo.lv, TVNET, Delfi.lv, LA.lv, Diena.lv, 1188.lv), two regional ones
    (gorod.lv — Russian-language, Daugavpils/Latgale; kodols.lv — Riga
    region) that between them caught sightings the national portals missed
-   (Silene nature park, Garkalne), plus three Estonian (ERR.ee,
+   (Silene nature park, Garkalne), LATMA (the Latvian Hunters' Association's
+   own site — hunters are a named data source behind the official
+   population monitoring, and LATMA occasionally publishes bear-specific
+   stories directly), plus three Estonian (ERR.ee,
    Postimees.ee, Õhtuleht.ee) and three Lithuanian (15min.lt, LRT.lt,
    Lrytas.lt) portals for border-area coverage — bears cross borders, and a
    sighting just over the line is still relevant context near Latvia.
