@@ -213,7 +213,7 @@ css/guide.css                    Guide-page-specific styling (normal scroll, do/
 js/i18n.js                       LV/EN/RU translation strings + language switching
 js/storage.js                    Supabase-backed shared storage for community reports + votes
 js/photo.js                       Client-side photo compression + Storage upload
-js/map.js                        Leaflet map, markers, click-to-report, heatmap
+js/map.js                        Leaflet map, markers, click-to-report, heatmap, mobile sleep/wake
 js/chart.js                       Monthly chart (inline SVG) — combined data
 js/news.js                         News-mentions layer: fetch, poll, render, filter
 js/app.js                           Wires everything together; combined stats, filters, voting
