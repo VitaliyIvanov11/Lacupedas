@@ -396,6 +396,14 @@ button {
   border-radius: 50%;
   border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.15s ease;
+}
+
+/* Scale the inner dot/diamond on hover, not the outer Leaflet-positioned
+   icon element — that one already carries Leaflet's own translate3d()
+   transform for placement, which a hover transform would clobber. */
+.leaflet-marker-icon:hover .bear-marker-dot {
+  transform: scale(1.35);
 }
 
 /* Sidebar */
@@ -416,6 +424,7 @@ button {
 
 .card {
   flex: 0 0 auto;
+  min-width: 0;
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -712,9 +721,23 @@ button {
 
 .filter-group {
   flex: 0 0 auto;
+  max-width: 100%;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
   margin-bottom: 6px;
+}
+
+.filter-checkbox {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
 }
 
 .filter-select {
@@ -784,6 +807,11 @@ button {
   border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
   margin: 2px;
+  transition: transform 0.15s ease;
+}
+
+.leaflet-marker-icon:hover .news-marker-diamond {
+  transform: rotate(45deg) scale(1.35);
 }
 
 .popup-meta {
@@ -791,7 +819,7 @@ button {
   color: #666;
 }
 
-.news-toast {
+.toast {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -802,6 +830,22 @@ button {
   font-size: 0.85rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   z-index: 900;
+  animation: toast-in 0.2s ease-out;
+}
+
+.toast-success {
+  background: var(--success);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Buttons */

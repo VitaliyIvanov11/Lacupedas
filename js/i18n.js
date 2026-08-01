@@ -61,7 +61,9 @@ const translations = {
     filterAllTime: "Viss laiks",
     filterThisYear: "Šogad",
     filterLast30d: "Pēdējās 30 dienas",
+    filterWithPhoto: "📷 Tikai ar foto",
     filterNoMatch: "Nav ierakstu, kas atbilst filtram.",
+    reportSuccessToast: "Paldies! Jūsu novērojums pievienots ✓",
 
     disclaimer: "Šī ir sabiedrības veidota lietotne — novērojumi ir redzami visiem apmeklētājiem, nevis tikai jums. Dzēšana nav pieejama publiski. Oficiālai ziņošanai par lielo plēsēju novērojumiem sazinieties ar Dabas aizsardzības pārvaldi.",
 
@@ -295,7 +297,9 @@ const translations = {
     filterAllTime: "All time",
     filterThisYear: "This year",
     filterLast30d: "Last 30 days",
+    filterWithPhoto: "📷 With photo only",
     filterNoMatch: "No entries match this filter.",
+    reportSuccessToast: "Thanks! Your sighting has been added ✓",
 
     disclaimer: "This is a community-built app — sightings are visible to every visitor, not just you. Public deletion isn't available. For official large-carnivore reporting, contact Latvia's Nature Conservation Agency (Dabas aizsardzības pārvalde).",
 
@@ -529,7 +533,9 @@ const translations = {
     filterAllTime: "Всё время",
     filterThisYear: "В этом году",
     filterLast30d: "Последние 30 дней",
+    filterWithPhoto: "📷 Только с фото",
     filterNoMatch: "Нет записей, соответствующих фильтру.",
+    reportSuccessToast: "Спасибо! Ваше наблюдение добавлено ✓",
 
     disclaimer: "Это приложение создано сообществом — наблюдения видны всем посетителям, а не только вам. Публичное удаление недоступно. Для официального сообщения о встречах с крупными хищниками обращайтесь в Dabas aizsardzības pārvalde (Управление охраны природы Латвии).",
 

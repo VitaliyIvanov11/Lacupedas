@@ -28,6 +28,8 @@
     list: document.getElementById("sightings-list"),
     typeFilter: document.getElementById("sightings-type-filter"),
     timeFilter: document.getElementById("sightings-time-filter"),
+    photoFilter: document.getElementById("sightings-photo-filter"),
+    reportToast: document.getElementById("report-toast"),
     statTotal: document.getElementById("stat-total"),
     statYear: document.getElementById("stat-year"),
     statLast: document.getElementById("stat-last"),
@@ -93,8 +95,12 @@
   function getFilteredSightings() {
     const type = el.typeFilter.value;
     const time = el.timeFilter.value;
+    const photoOnly = el.photoFilter.checked;
     return sightings.filter(
-      (s) => (type === "all" || s.type === type) && matchesTimeFilter(s.date, time)
+      (s) =>
+        (type === "all" || s.type === type) &&
+        matchesTimeFilter(s.date, time) &&
+        (!photoOnly || !!s.photoUrl)
     );
   }
 
@@ -349,6 +355,17 @@
     pendingLatLng = null;
   }
 
+  function showReportToast() {
+    const toast = el.reportToast;
+    if (!toast) return;
+    toast.textContent = t("reportSuccessToast");
+    toast.hidden = false;
+    clearTimeout(showReportToast._timer);
+    showReportToast._timer = setTimeout(() => {
+      toast.hidden = true;
+    }, 5000);
+  }
+
   async function submitForm(e) {
     e.preventDefault();
     if (!pendingLatLng) return;
@@ -391,6 +408,7 @@
       await addSighting(sighting);
       closeForm();
       await refreshAll();
+      showReportToast();
     } catch (err) {
       el.formError.hidden = false;
       el.formError.textContent = t("submitError");
@@ -440,6 +458,10 @@
       renderFilteredSightings();
     });
     el.timeFilter.addEventListener("change", () => {
+      sightingsShownCount = LIST_PAGE_SIZE;
+      renderFilteredSightings();
+    });
+    el.photoFilter.addEventListener("change", () => {
       sightingsShownCount = LIST_PAGE_SIZE;
       renderFilteredSightings();
     });

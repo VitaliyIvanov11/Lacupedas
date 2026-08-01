@@ -128,6 +128,10 @@
               <option value="year" data-i18n="filterThisYear">Šogad</option>
               <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
             </select>
+            <label class="filter-checkbox">
+              <input type="checkbox" id="sightings-photo-filter" />
+              <span data-i18n="filterWithPhoto">📷 Tikai ar foto</span>
+            </label>
           </div>
         </div>
         <ul id="sightings-list" class="sightings-list"></ul>
@@ -157,7 +161,8 @@
     </aside>
   </main>
 
-  <div id="news-toast" class="news-toast" hidden></div>
+  <div id="news-toast" class="toast" hidden></div>
+  <div id="report-toast" class="toast toast-success" hidden></div>
 
   <footer class="app-footer">
     <p data-i18n="disclaimer">
