@@ -24,7 +24,7 @@ const translations = {
     navMap: "Karte",
     navReport: "Ziņot",
     navStats: "Statistika",
-    navMore: "Vairāk",
+    navMore: "Info",
 
     formTitleAdd: "Jauns novērojums",
     fieldDate: "Datums",
@@ -334,7 +334,7 @@ const translations = {
     navMap: "Map",
     navReport: "Report",
     navStats: "Stats",
-    navMore: "More",
+    navMore: "Info",
 
     formTitleAdd: "New sighting",
     fieldDate: "Date",
@@ -644,7 +644,7 @@ const translations = {
     navMap: "Карта",
     navReport: "Сообщить",
     navStats: "Статистика",
-    navMore: "Ещё",
+    navMore: "Инфо",
 
     formTitleAdd: "Новое наблюдение",
     fieldDate: "Дата",
