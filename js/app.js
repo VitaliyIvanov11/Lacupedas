@@ -85,9 +85,16 @@
   // Stats/chart reflect both community reports and news-collected mentions
   // combined — a fresh install has zero of the former, so anchoring the
   // headline numbers to sightings alone would show "0" even when the news
-  // scanner already found a dozen real, dated cases.
+  // scanner already found a dozen real, dated cases. Only news items with a
+  // matched place (lat/lng — see findPlace() in scripts/fetch-news.js) count
+  // here: a named town/village is a reliable sign the article is about a
+  // specific incident rather than population stats, hunting policy, or a
+  // passing mention. The news list itself still shows every bear-related
+  // article regardless (see renderNewsList()).
   function combinedForStats() {
-    const newsAsEntries = latestNewsItems.map((n) => ({ date: n.pubDate.slice(0, 10) }));
+    const newsAsEntries = latestNewsItems
+      .filter((n) => n.lat != null && n.lng != null)
+      .map((n) => ({ date: n.pubDate.slice(0, 10) }));
     return sightings.concat(newsAsEntries);
   }
 
