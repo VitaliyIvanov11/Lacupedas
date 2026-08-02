@@ -60,3 +60,30 @@
 .stats-main .stat-recent {
   background: rgba(217, 123, 41, 0.08);
 }
+
+/* Distinct from the orange/green community-data cards above — a clearly
+   separate "official research" figure so the two numbers (our community
+   report count vs. LVMI Silava's population estimate) never read as the
+   same kind of count. */
+.research-card {
+  border-left: 3px solid var(--series-1);
+}
+
+.research-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 2px 0 10px;
+}
+
+.research-number {
+  color: var(--series-1);
+}
+
+.research-desc {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
