@@ -19,6 +19,7 @@ const translations = {
     showMoreBtn: "Rādīt vairāk",
     guideNavLink: "Noderīga informācija",
     reportBtn: "Ziņot par novērojumu",
+    quickReportBtn: "Ziņot",
     openMapBtn: "Atvērt karti",
     cancelPicking: "Atcelt",
 
@@ -64,7 +65,7 @@ const translations = {
     statsDetailLink: "Skatīt detalizēti ›",
     totalLabel: "Kopā novērojumu",
     yearLabel: "Šogad",
-    lastLabel: "Pēdējais novērojums",
+    lastLabel: "Pēdējais",
     noneYet: "Vēl nav",
 
     chartTitle: "Novērojumi pa mēnešiem",
@@ -332,6 +333,7 @@ const translations = {
     showMoreBtn: "Show more",
     guideNavLink: "Useful Information",
     reportBtn: "Report a sighting",
+    quickReportBtn: "Report",
     openMapBtn: "Open map",
     cancelPicking: "Cancel",
 
@@ -645,6 +647,7 @@ const translations = {
     showMoreBtn: "Показать больше",
     guideNavLink: "Полезная информация",
     reportBtn: "Сообщить о наблюдении",
+    quickReportBtn: "Сообщить",
     openMapBtn: "Открыть карту",
     cancelPicking: "Отмена",
 
@@ -688,9 +691,9 @@ const translations = {
 
     statsTitle: "Статистика",
     statsDetailLink: "Подробнее ›",
-    totalLabel: "Всего наблюдений",
+    totalLabel: "Всего",
     yearLabel: "В этом году",
-    lastLabel: "Последнее наблюдение",
+    lastLabel: "Последнее",
     noneYet: "Пока нет",
 
     chartTitle: "Наблюдения по месяцам",
