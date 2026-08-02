@@ -415,6 +415,17 @@ button {
   .news-card {
     flex: none;
   }
+
+  /* On index.html's mobile home feed, the full chart + filterable list
+     move to the standalone stats.html (reached via .stats-detail-link on
+     the compact stats-grid below) — news stays here and now reads right
+     after the compact stats card. Scoped to .layout: stats.html reuses
+     these same .chart-card/.list-card classes and must keep showing them
+     at every width. */
+  .layout .chart-card,
+  .layout .list-card {
+    display: none;
+  }
 }
 
 .card h2 {
@@ -422,6 +433,20 @@ button {
   font-size: 0.9rem;
   margin-bottom: 6px;
   color: var(--text-primary);
+}
+
+.stats-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Points at stats.html, the mobile detail page the chart/list moved to
+   (see .layout .chart-card/.list-card above) — desktop keeps them inline
+   in the sidebar, so it has no need for this link. */
+.stats-detail-link {
+  display: none;
 }
 
 .stats-grid {
@@ -435,6 +460,47 @@ button {
   align-items: center;
   gap: 8px;
   min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .stats-detail-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    flex: 0 0 auto;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--brand-accent);
+    text-decoration: none;
+  }
+
+  .stats-grid {
+    gap: 6px;
+  }
+
+  .stat {
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    padding: 10px 6px 12px;
+    border-radius: 10px;
+  }
+
+  .stat-text {
+    align-items: center;
+  }
+
+  .stat-total {
+    background: rgba(137, 135, 129, 0.08);
+  }
+
+  .stat-year {
+    background: rgba(12, 163, 12, 0.08);
+  }
+
+  .stat-recent {
+    background: rgba(217, 123, 41, 0.08);
+  }
 }
 
 .stat-icon {

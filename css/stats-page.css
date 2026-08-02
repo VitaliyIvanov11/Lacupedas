@@ -1,0 +1,62 @@
+/* stats.html — reuses guide.css's body.guide-body (normal scrolling page)
+   and .back-link, plus .stats-card/.chart-card/.list-card straight from
+   style.css. This file only covers what's specific to this page's layout:
+   a scrolling column instead of the sidebar's fixed-height flex column,
+   and always-on icon-on-top stat boxes (that style is mobile-only on
+   index.html, but this page is reached from mobile, so it's the default
+   look here regardless of viewport). */
+
+.stats-main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stats-main .card {
+  flex: none;
+}
+
+.stats-main .sightings-list {
+  flex: none;
+  max-height: none;
+  overflow-y: visible;
+  gap: 10px;
+}
+
+.stats-main .sighting-item {
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.stats-main .stats-grid {
+  gap: 6px;
+}
+
+.stats-main .stat {
+  flex-direction: column;
+  text-align: center;
+  gap: 6px;
+  padding: 10px 6px 12px;
+  border-radius: 10px;
+}
+
+.stats-main .stat-text {
+  align-items: center;
+}
+
+.stats-main .stat-total {
+  background: rgba(137, 135, 129, 0.08);
+}
+
+.stats-main .stat-year {
+  background: rgba(12, 163, 12, 0.08);
+}
+
+.stats-main .stat-recent {
+  background: rgba(217, 123, 41, 0.08);
+}
