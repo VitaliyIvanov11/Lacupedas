@@ -179,16 +179,36 @@ button {
   overflow: hidden;
 }
 
+/* Mobile-only home feed: quick actions to the standalone map.html (see
+   .mobile-bottom-nav near the footer for the rest of the mobile nav), shown
+   in place of the embedded map — .map-pane is hidden below 900px. */
+.mobile-quick-actions {
+  display: none;
+}
+
 @media (max-width: 900px) {
   body {
     height: auto;
     overflow: visible;
+    /* Clear the fixed .mobile-bottom-nav so it never covers page content. */
+    padding-bottom: 64px;
   }
 
   .layout {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     overflow: visible;
+  }
+
+  .mobile-quick-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .mobile-quick-btn {
+    flex: 1 1 0;
+    text-align: center;
+    text-decoration: none;
   }
 }
 
@@ -205,17 +225,6 @@ button {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-}
-
-.heatmap-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  color: var(--text-secondary);
-  cursor: pointer;
-  white-space: nowrap;
-  margin-left: 4px;
 }
 
 .map-hint {
@@ -255,6 +264,13 @@ button {
 }
 
 @media (max-width: 900px) {
+  /* Scoped to .layout (index.html's desktop map+sidebar shell) — map.html
+     reuses .map-pane too, but isn't mobile-gated, so its map must stay
+     visible at every width. */
+  .layout .map-pane {
+    display: none;
+  }
+
   .map-wrap {
     flex: none;
   }
@@ -268,42 +284,6 @@ button {
 
 #map.picking {
   cursor: crosshair;
-}
-
-.map-wake-hint {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 24px;
-  background: rgba(11, 11, 11, 0.35);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
-  border-radius: 10px;
-  pointer-events: none;
-  z-index: 500;
-}
-
-.map-sleep-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 501;
-  border: none;
-  border-radius: 999px;
-  padding: 7px 12px;
-  background: rgba(11, 11, 11, 0.6);
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.map-sleep-btn:hover {
-  background: rgba(11, 11, 11, 0.75);
 }
 
 .map-legend {
@@ -551,7 +531,18 @@ button {
 @media (max-width: 900px) {
   .sightings-list {
     flex: none;
-    max-height: 320px;
+    /* No inner scroll box here: the map-pane is gone on mobile, so this
+       list is the main page content and should flow with the page like a
+       normal feed — capped by pagination (see LIST_PAGE_SIZE), not height. */
+    max-height: none;
+    gap: 10px;
+  }
+
+  .sighting-item {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
   }
 }
 
@@ -816,6 +807,36 @@ button {
   transform: rotate(45deg) scale(1.35);
 }
 
+/* Sighting clusters (leaflet.markercluster's default divIcon markup/classes)
+   in brand green; news clusters get their own class (see newsClusterIcon()
+   in news.js) so the two stay visually distinct, same as the individual
+   marker colors above. */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background: color-mix(in srgb, var(--brand-forest) 25%, transparent);
+}
+
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background: var(--brand-forest);
+  color: #fff;
+}
+
+.news-marker-cluster.marker-cluster-small,
+.news-marker-cluster.marker-cluster-medium,
+.news-marker-cluster.marker-cluster-large {
+  background: color-mix(in srgb, #4a3aa7 25%, transparent);
+}
+
+.news-marker-cluster.marker-cluster-small div,
+.news-marker-cluster.marker-cluster-medium div,
+.news-marker-cluster.marker-cluster-large div {
+  background: #4a3aa7;
+  color: #fff;
+}
+
 .popup-meta {
   font-size: 0.75rem;
   color: #666;
@@ -909,9 +930,48 @@ button {
   margin: 0 auto;
 }
 
+/* Mobile bottom nav — fixed tab bar replacing the desktop map-pane's
+   toolbar as the way to reach the standalone map.html (see
+   .mobile-quick-actions near .layout for the other entry point). */
+.mobile-bottom-nav {
+  display: none;
+}
+
 @media (max-width: 900px) {
   .app-footer {
     padding: 12px 20px 24px;
+  }
+
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 600;
+    background: var(--brand-forest-dark);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .mobile-nav-item {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 4px 6px;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .mobile-nav-item.mobile-nav-active {
+    color: #fff;
+  }
+
+  .mobile-nav-report {
+    color: var(--brand-accent);
   }
 }
 

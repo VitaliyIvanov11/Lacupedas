@@ -19,6 +19,8 @@
   <link rel="manifest" href="site.webmanifest" />
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <link rel="stylesheet" href="css/style.css" />
 
   <script type="application/ld+json">
@@ -93,14 +95,15 @@
   </header>
 
   <main class="layout">
+    <div class="mobile-quick-actions">
+      <a href="map.html?report=1" class="btn btn-primary mobile-quick-btn" data-i18n="reportBtn">Ziņot par novērojumu</a>
+      <a href="map.html" class="btn btn-secondary mobile-quick-btn" data-i18n="openMapBtn">Atvērt karti</a>
+    </div>
+
     <section class="map-pane">
       <div class="map-toolbar">
         <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
         <a href="padomi.html" class="btn btn-secondary toolbar-guide-link" data-i18n="guideNavLink">Noderīga informācija</a>
-        <label class="heatmap-toggle">
-          <input type="checkbox" id="heatmap-toggle" />
-          <span data-i18n="heatmapToggleLabel">🔥 Blīvuma karte</span>
-        </label>
       </div>
       <p class="map-hint" data-i18n="mapHint">Noklikšķiniet uz kartes, lai pievienotu novērojumu</p>
       <div id="picking-banner" class="picking-banner" hidden>
@@ -109,10 +112,6 @@
       </div>
       <div class="map-wrap">
         <div id="map"></div>
-        <div id="map-wake-hint" class="map-wake-hint" hidden data-i18n="mapWakeHint">
-          Pieskarieties kartei, lai to varētu pārvietot un tuvināt
-        </div>
-        <button type="button" id="map-sleep-btn" class="map-sleep-btn" hidden data-i18n="mapSleepBtn">🔒 Fiksēt karti</button>
         <div class="map-legend">
           <button type="button" id="map-legend-toggle" class="map-legend-toggle" aria-expanded="false" data-i18n="legendToggle">🗺️ Leģenda</button>
           <div id="map-legend-panel" class="map-legend-panel" hidden></div>
@@ -121,7 +120,7 @@
     </section>
 
     <aside class="sidebar">
-      <section class="card stats-card">
+      <section id="stats-section" class="card stats-card">
         <h2 data-i18n="statsTitle">Statistika</h2>
         <div class="stats-grid">
           <div class="stat stat-total">
@@ -318,13 +317,37 @@
     </div>
   </div>
 
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a href="index.html" class="mobile-nav-item mobile-nav-active">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+      <span data-i18n="navHome">Sākums</span>
+    </a>
+    <a href="map.html" class="mobile-nav-item">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <span data-i18n="navMap">Karte</span>
+    </a>
+    <a href="map.html?report=1" class="mobile-nav-item mobile-nav-report">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg>
+      <span data-i18n="navReport">Ziņot</span>
+    </a>
+    <a href="#stats-section" class="mobile-nav-item">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+      <span data-i18n="navStats">Statistika</span>
+    </a>
+    <a href="padomi.html" class="mobile-nav-item">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+      <span data-i18n="navMore">Vairāk</span>
+    </a>
+  </nav>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/photo.js"></script>
   <script src="js/chart.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/report-form.js"></script>
   <script src="js/report-issue.js"></script>
   <script src="js/news.js"></script>
   <script src="js/app.js"></script>

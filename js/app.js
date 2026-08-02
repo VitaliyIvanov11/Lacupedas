@@ -6,29 +6,15 @@
 
   let sightings = [];
   let voteCounts = {};
-  let pendingLatLng = null;
   let sightingsShownCount = LIST_PAGE_SIZE;
 
   const el = {
     map: null,
     langBtns: document.querySelectorAll("[data-lang-btn]"),
-    reportBtn: document.getElementById("report-btn"),
-    heatmapToggle: document.getElementById("heatmap-toggle"),
-    cancelPickingBtn: document.getElementById("cancel-picking-btn"),
-    pickingBanner: document.getElementById("picking-banner"),
-    modalOverlay: document.getElementById("modal-overlay"),
-    form: document.getElementById("sighting-form"),
-    formLocation: document.getElementById("form-location"),
-    formCancelBtn: document.getElementById("form-cancel-btn"),
-    formError: document.getElementById("form-error"),
-    photoInput: document.getElementById("field-photo"),
-    photoPreview: document.getElementById("photo-preview"),
-    photoError: document.getElementById("photo-error"),
     list: document.getElementById("sightings-list"),
     typeFilter: document.getElementById("sightings-type-filter"),
     timeFilter: document.getElementById("sightings-time-filter"),
     photoFilter: document.getElementById("sightings-photo-filter"),
-    reportToast: document.getElementById("report-toast"),
     statTotal: document.getElementById("stat-total"),
     statYear: document.getElementById("stat-year"),
     statLast: document.getElementById("stat-last"),
@@ -68,19 +54,6 @@
     voteCounts = freshVoteCounts;
     renderFilteredSightings();
     renderStatsAndChart();
-    refreshHeatmap();
-  }
-
-  function getHeatmapPoints() {
-    const sightingPoints = sightings.map((s) => ({ lat: s.lat, lng: s.lng, weight: s.count || 1 }));
-    const newsPoints = latestNewsItems
-      .filter((n) => n.lat != null && n.lng != null)
-      .map((n) => ({ lat: n.lat, lng: n.lng, weight: 1 }));
-    return sightingPoints.concat(newsPoints);
-  }
-
-  function refreshHeatmap() {
-    setHeatmap(el.heatmapToggle.checked, getHeatmapPoints());
   }
 
   function matchesTimeFilter(dateStr, filterValue) {
@@ -290,129 +263,6 @@
     }
   }
 
-  // --- Reporting flow ---
-
-  function startPicking() {
-    setPickingMode(true, (lat, lng) => {
-      pendingLatLng = { lat, lng };
-      setPickingMode(false);
-      el.pickingBanner.hidden = true;
-      openForm();
-    });
-    el.pickingBanner.hidden = false;
-  }
-
-  function stopPicking() {
-    setPickingMode(false);
-    el.pickingBanner.hidden = true;
-  }
-
-  function resetPhotoField() {
-    if (el.photoPreview.src) URL.revokeObjectURL(el.photoPreview.src);
-    el.photoPreview.hidden = true;
-    el.photoPreview.removeAttribute("src");
-    el.photoError.hidden = true;
-  }
-
-  function onPhotoSelected() {
-    resetPhotoField();
-    const file = el.photoInput.files[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      el.photoError.hidden = false;
-      el.photoError.textContent = t("photoInvalidType");
-      el.photoInput.value = "";
-      return;
-    }
-    if (file.size > PHOTO_MAX_SOURCE_BYTES) {
-      el.photoError.hidden = false;
-      el.photoError.textContent = t("photoTooBig");
-      el.photoInput.value = "";
-      return;
-    }
-    el.photoPreview.src = URL.createObjectURL(file);
-    el.photoPreview.hidden = false;
-  }
-
-  function openForm() {
-    if (!pendingLatLng) return;
-    el.form.reset();
-    el.formError.hidden = true;
-    resetPhotoField();
-    el.form.elements["date"].value = new Date().toISOString().slice(0, 10);
-    el.form.elements["count"].value = 1;
-    el.formLocation.textContent = pendingLatLng.lat.toFixed(4) + ", " + pendingLatLng.lng.toFixed(4);
-    el.modalOverlay.hidden = false;
-  }
-
-  function closeForm() {
-    el.modalOverlay.hidden = true;
-    resetPhotoField();
-    pendingLatLng = null;
-  }
-
-  function showReportToast() {
-    const toast = el.reportToast;
-    if (!toast) return;
-    toast.textContent = t("reportSuccessToast");
-    toast.hidden = false;
-    clearTimeout(showReportToast._timer);
-    showReportToast._timer = setTimeout(() => {
-      toast.hidden = true;
-    }, 5000);
-  }
-
-  async function submitForm(e) {
-    e.preventDefault();
-    if (!pendingLatLng) return;
-    const fd = new FormData(el.form);
-    const date = fd.get("date");
-    const type = fd.get("type");
-    const count = Math.max(1, parseInt(fd.get("count"), 10) || 1);
-    const description = (fd.get("description") || "").trim();
-    const reporter = (fd.get("reporter") || "").trim();
-
-    if (!date || !type) {
-      el.formError.hidden = false;
-      el.formError.textContent = t("requiredError");
-      return;
-    }
-
-    const sighting = {
-      lat: pendingLatLng.lat,
-      lng: pendingLatLng.lng,
-      date,
-      type,
-      count,
-      description,
-      reporter,
-    };
-
-    const submitBtn = el.form.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    el.formError.hidden = true;
-    try {
-      const photoFile = el.photoInput.files[0];
-      if (photoFile) {
-        try {
-          sighting.photoUrl = await processAndUploadPhoto(photoFile);
-        } catch (photoErr) {
-          // Don't lose the whole report over a photo hiccup — save without it.
-          console.error(photoErr);
-        }
-      }
-      await addSighting(sighting);
-      closeForm();
-      await refreshAll();
-      showReportToast();
-    } catch (err) {
-      el.formError.hidden = false;
-      el.formError.textContent = t("submitError");
-    } finally {
-      submitBtn.disabled = false;
-    }
-  }
-
   // --- Language ---
 
   function switchLang(lang) {
@@ -426,13 +276,21 @@
   // --- Wire up events ---
 
   function init() {
-    const leafletMap = initMap();
+    // Below 900px, index.html shows a mobile home feed instead of the
+    // embedded map — .map-pane (and its #map/#modal-overlay/picking flow)
+    // is hidden via CSS, so there's nothing for initMap()/initReportForm()
+    // to attach to. Reporting there happens on the standalone map.html
+    // instead (see .mobile-quick-actions / .mobile-bottom-nav links).
+    const isMobile = typeof MOBILE_QUERY !== "undefined" && MOBILE_QUERY.matches;
+    const leafletMap = isMobile ? null : initMap();
     applyTranslations();
+    if (!isMobile && typeof initReportForm === "function") {
+      initReportForm(leafletMap, { onSaved: refreshAll });
+    }
     if (typeof initNews === "function") {
       initNews(leafletMap, (newsItems) => {
         latestNewsItems = newsItems;
         renderStatsAndChart();
-        refreshHeatmap();
       });
     }
 
@@ -440,14 +298,6 @@
       btn.addEventListener("click", () => switchLang(btn.getAttribute("data-lang-btn")));
     });
 
-    el.reportBtn.addEventListener("click", startPicking);
-    el.cancelPickingBtn.addEventListener("click", stopPicking);
-    el.formCancelBtn.addEventListener("click", closeForm);
-    el.modalOverlay.addEventListener("click", (e) => {
-      if (e.target === el.modalOverlay) closeForm();
-    });
-    el.form.addEventListener("submit", submitForm);
-    el.photoInput.addEventListener("change", onPhotoSelected);
     el.typeFilter.addEventListener("change", () => {
       sightingsShownCount = LIST_PAGE_SIZE;
       renderFilteredSightings();
@@ -460,7 +310,6 @@
       sightingsShownCount = LIST_PAGE_SIZE;
       renderFilteredSightings();
     });
-    el.heatmapToggle.addEventListener("change", refreshHeatmap);
 
     refreshAll();
     setInterval(refreshAll, SIGHTINGS_POLL_MS);

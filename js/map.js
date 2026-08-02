@@ -59,17 +59,12 @@ function buildLegend() {
 
 let map;
 let markersLayer;
-let heatLayer = null;
 let pickingMode = false;
 let onMapPick = null;
 
-// On narrow (mobile) viewports the map starts "asleep" — drag/zoom
-// disabled so a swipe meant to scroll the page doesn't get captured as a
-// map pan. A tap on the map wakes it (enables drag/zoom) permanently for
-// the rest of the visit. Desktop doesn't need this: the app shell has no
-// page-level scroll there, so there's nothing for the map to steal.
+// Shared mobile breakpoint check, used by app.js to gate the desktop-only
+// embedded map/report-form init on the mobile-restructured home page.
 const MOBILE_QUERY = window.matchMedia("(max-width: 900px)");
-let mapAwake = true;
 
 function pawIcon(type) {
   const color = TYPE_COLORS[type] || TYPE_COLORS.sighting;
@@ -83,9 +78,6 @@ function pawIcon(type) {
 }
 
 function initMap() {
-  const startAsleep = MOBILE_QUERY.matches;
-  mapAwake = !startAsleep;
-
   map = L.map("map", {
     center: LATVIA_CENTER,
     zoom: 7,
@@ -96,11 +88,6 @@ function initMap() {
       [59.5, 30.5],
     ],
     maxBoundsViscosity: 0.6,
-    dragging: !startAsleep,
-    touchZoom: !startAsleep,
-    scrollWheelZoom: !startAsleep,
-    doubleClickZoom: !startAsleep,
-    boxZoom: !startAsleep,
   });
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -110,58 +97,19 @@ function initMap() {
 
   map.fitBounds(LATVIA_BOUNDS);
 
-  markersLayer = L.layerGroup().addTo(map);
-
-  const wakeHint = document.getElementById("map-wake-hint");
-  const sleepBtn = document.getElementById("map-sleep-btn");
-  if (startAsleep && wakeHint) wakeHint.hidden = false;
-
-  function wakeMap() {
-    if (mapAwake) return;
-    mapAwake = true;
-    map.dragging.enable();
-    map.touchZoom.enable();
-    map.scrollWheelZoom.enable();
-    map.doubleClickZoom.enable();
-    map.boxZoom.enable();
-    if (wakeHint) wakeHint.hidden = true;
-    // Only offer a way back to "asleep" on devices that started there —
-    // desktop has no page-level scroll for the map to steal, so it has
-    // nothing to opt back out of.
-    if (startAsleep && sleepBtn) sleepBtn.hidden = false;
-  }
-
-  // Lets a mobile visitor who's done panning/zooming put the map back to
-  // "asleep" so a swipe over its area scrolls the page again instead of
-  // panning the map — the inverse of wakeMap().
-  function sleepMap() {
-    if (!mapAwake) return;
-    mapAwake = false;
-    map.dragging.disable();
-    map.touchZoom.disable();
-    map.scrollWheelZoom.disable();
-    map.doubleClickZoom.disable();
-    map.boxZoom.disable();
-    if (sleepBtn) sleepBtn.hidden = true;
-    if (wakeHint) wakeHint.hidden = false;
-  }
-
-  if (sleepBtn) {
-    sleepBtn.addEventListener("click", (domEvent) => {
-      domEvent.stopPropagation();
-      sleepMap();
-    });
-  }
+  markersLayer = L.markerClusterGroup({
+    maxClusterRadius: 50,
+    spiderfyOnMaxZoom: true,
+    showCoverageOnHover: false,
+  }).addTo(map);
 
   buildLegend();
 
-  // A raw DOM listener, not map.on("click", ...): Leaflet only synthesizes
-  // its own "click" event via the Drag handler's tap detection, so with
-  // dragging disabled (map "asleep" on mobile) Leaflet's click never fires
-  // at all — which would make the map unwakeable, since waking itself
-  // depends on a click. The native click always fires regardless.
+  // A raw DOM listener, not map.on("click", ...): Leaflet marker/cluster
+  // clicks don't call stopPropagation(), so this also fires when clicking a
+  // marker while in picking mode (pre-existing edge case, not addressed
+  // here).
   map.getContainer().addEventListener("click", (domEvent) => {
-    wakeMap();
     if (pickingMode && onMapPick) {
       const rect = map.getContainer().getBoundingClientRect();
       const point = L.point(domEvent.clientX - rect.left, domEvent.clientY - rect.top);
@@ -209,6 +157,9 @@ function sightingPopupHtml(s) {
 }
 
 function renderMarkers(sightings, onMarkerClick) {
+  // No-op on the mobile home feed, where initMap() is skipped and there's
+  // no #map to render into (see the isMobile gating in app.js's init()).
+  if (!markersLayer) return;
   markersLayer.clearLayers();
   sightings.forEach((s) => {
     const marker = L.marker([s.lat, s.lng], { icon: pawIcon(s.type) });
@@ -221,22 +172,7 @@ function renderMarkers(sightings, onMarkerClick) {
 }
 
 function flyToSighting(s) {
+  // No-op on the mobile home feed, where there's no embedded map to fly.
+  if (!map) return;
   map.flyTo([s.lat, s.lng], Math.max(map.getZoom(), 11), { duration: 0.6 });
-}
-
-// Density overlay across all confirmed sightings + news mentions (not
-// affected by the sidebar list filters — this is meant to read as the
-// overall picture, not "current filter view").
-function setHeatmap(active, points) {
-  if (heatLayer) {
-    map.removeLayer(heatLayer);
-    heatLayer = null;
-  }
-  if (active && points.length > 0) {
-    heatLayer = L.heatLayer(
-      points.map((p) => [p.lat, p.lng, p.weight || 1]),
-      { radius: 26, blur: 20, maxZoom: 13, minOpacity: 0.35 }
-    );
-    heatLayer.addTo(map);
-  }
 }

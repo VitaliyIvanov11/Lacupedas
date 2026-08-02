@@ -1,0 +1,86 @@
+/* map.html — a standalone, full-bleed instance of the .map-pane/.map-wrap/
+   #map shell from style.css (no sidebar), reachable directly or via
+   index.html's mobile home feed. */
+
+.map-page-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  padding: 16px;
+}
+
+.map-page-main .map-pane {
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+/* style.css's shared 900px query switches body to auto-height/scrolling —
+   correct for index.html's mobile home feed, but this page has no other
+   content to scroll to: keep it a fixed, full-height single-viewport map
+   at every width, same as desktop. */
+@media (max-width: 900px) {
+  body:has(.map-page-main) {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    /* Undo style.css's bottom-nav clearance — this page has no bottom nav. */
+    padding-bottom: 0;
+  }
+
+  .map-page-main .map-wrap {
+    flex: 1 1 auto;
+  }
+
+  .map-page-main #map {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+  }
+}
+
+.map-toolbar .back-link {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-decoration: none;
+  margin-right: 4px;
+}
+
+.map-toolbar .back-link:hover {
+  text-decoration: underline;
+}
+
+/* Mirrors .map-legend/.map-legend-toggle/.map-legend-panel, positioned on
+   the opposite corner so the two panels never overlap. */
+.map-recency {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 501;
+}
+
+.map-recency-toggle {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: rgba(11, 11, 11, 0.6);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.map-recency-toggle:hover {
+  background: rgba(11, 11, 11, 0.75);
+}
+
+.map-recency-panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  width: 190px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}

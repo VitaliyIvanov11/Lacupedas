@@ -65,6 +65,22 @@ function newsIcon() {
   });
 }
 
+// Mirrors leaflet.markercluster's default iconCreateFunction (same size
+// thresholds/markup) but adds a distinguishing class so CSS can give news
+// clusters their own indigo color, separate from the sighting clusters'
+// brand-green default (see .news-marker-cluster in style.css).
+function newsClusterIcon(cluster) {
+  const count = cluster.getChildCount();
+  let sizeClass = "marker-cluster-small";
+  if (count >= 100) sizeClass = "marker-cluster-large";
+  else if (count >= 10) sizeClass = "marker-cluster-medium";
+  return L.divIcon({
+    html: `<div><span>${count}</span></div>`,
+    className: "marker-cluster news-marker-cluster " + sizeClass,
+    iconSize: L.point(40, 40),
+  });
+}
+
 async function fetchNewsData() {
   try {
     const res = await fetch(`data/news.json?t=${Date.now()}`, { cache: "no-store" });
@@ -78,7 +94,14 @@ async function fetchNewsData() {
 
 function renderNewsMarkers() {
   if (!newsMap) return;
-  if (!newsLayer) newsLayer = L.layerGroup();
+  if (!newsLayer) {
+    newsLayer = L.markerClusterGroup({
+      maxClusterRadius: 50,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      iconCreateFunction: newsClusterIcon,
+    });
+  }
   newsLayer.clearLayers();
   getFilteredNews()
     .filter((n) => n.lat != null && n.lng != null)
