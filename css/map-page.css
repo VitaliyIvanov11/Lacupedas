@@ -23,8 +23,6 @@
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
-    /* Undo style.css's bottom-nav clearance — this page has no bottom nav. */
-    padding-bottom: 0;
   }
 
   .map-page-main .map-wrap {
