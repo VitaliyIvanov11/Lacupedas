@@ -104,6 +104,28 @@ function mentionsBear(text, lang) {
   return BEAR_KEYWORD_RE_BY_LANG[lang].test(text);
 }
 
+// Articles that genuinely contain a whole-word bear match but aren't about
+// a sighting/encounter at all — a keyword hit alone can't tell "someone saw
+// a bear" apart from "a bear was mentioned in passing" (a restaurant review
+// name-dropping bears as a scene-setter, a foreign-country story a LV/EE/LT
+// portal happened to run, a funding/procurement announcement that recaps an
+// old, already-recorded sighting for context, etc.). No practical way to
+// catch this class of false positive automatically without real NLP, so
+// specific known cases get denylisted here once found. Keyed by article
+// link (matches makeId's hashing input) so it survives re-fetches.
+const EXCLUDED_LINKS = new Set([
+  // Diena.lv restaurant review that opens with a scene-setting line about
+  // bears changing mushroom-pickers' habits — not a sighting.
+  "https://diena.lv/raksts/sestdiena/pieredze/kukulam-restorans?utm_source=rss&utm_campaign=rss&utm_medium=links",
+  // Postimees.ee: "Romania is grappling with a growing bear problem" — a
+  // foreign-country story, not about Latvia or its border region.
+  "https://pmo.ee/8519851",
+  // LA.lv: a research-funding procurement announcement that recaps the
+  // already-recorded end-of-May Jēkabpils incident for context — not a new
+  // sighting, and wrongly placed a map pin on Jēkabpils for a funding story.
+  "https://www.la.lv/ar-lacu-petisanu-nu-iespejams-ari-pavisam-labs-bizness-izsludinats-180-000-eiro-verts-iepirkums",
+]);
+
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
 const MAX_ITEMS = 150;
 const OUTPUT_PATH = path.join(__dirname, "..", "data", "news.json");
@@ -278,6 +300,7 @@ async function main() {
   const allItems = (await Promise.all(FEEDS.map(fetchFeed))).flat();
 
   const matched = allItems
+    .filter((item) => !EXCLUDED_LINKS.has(item.link))
     .filter((item) => mentionsBear(item.title, item.lang) || mentionsBear(item.description, item.lang))
     .map((item) => {
       const place = findPlace(item.title + " " + item.description);

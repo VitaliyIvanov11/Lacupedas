@@ -1,36 +1,6 @@
 {
-  "generatedAt": "2026-08-02T15:17:27.176Z",
+  "generatedAt": "2026-08-02T16:04:38.314Z",
   "items": [
-    {
-      "id": "42a8e0f6c2a12b45",
-      "title": "Kukulam restorāns",
-      "link": "https://diena.lv/raksts/sestdiena/pieredze/kukulam-restorans?utm_source=rss&utm_campaign=rss&utm_medium=links",
-      "source": "Diena.lv",
-      "pubDate": "2026-08-02T13:00:00.000Z",
-      "placeName": null,
-      "lat": null,
-      "lng": null
-    },
-    {
-      "id": "9c47c1e6fc038267",
-      "title": "Rumeenia maadleb kasvava karuprobleemiga",
-      "link": "https://pmo.ee/8519851",
-      "source": "Postimees.ee",
-      "pubDate": "2026-08-02T12:04:00.000Z",
-      "placeName": null,
-      "lat": null,
-      "lng": null
-    },
-    {
-      "id": "ff6136c48bc2ab5c",
-      "title": "Ar lāču pētīšanu nu iespējams arī pavisam labs “bizness” – izsludināts 180 000 eiro vērts iepirkums",
-      "link": "https://www.la.lv/ar-lacu-petisanu-nu-iespejams-ari-pavisam-labs-bizness-izsludinats-180-000-eiro-verts-iepirkums",
-      "source": "LA.lv",
-      "pubDate": "2026-08-02T10:14:13.000Z",
-      "placeName": "Jēkabpils",
-      "lat": 56.4996,
-      "lng": 25.8535
-    },
     {
       "id": "326caa5e28c10cea",
       "title": "Lāču ģimene ieradusies iemēģināt Imantas veloceliņu",

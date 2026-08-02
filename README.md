@@ -239,6 +239,22 @@ region" piece, paired with an invented specific village name that doesn't
 appear anywhere in that article. The link being real doesn't mean the
 attached claim is.
 
+A whole-word keyword match also can't tell "this article is about a bear
+sighting" apart from "this article mentions a bear in passing" — a restaurant
+review that opens with a scene-setting line about bears changing
+mushroom-pickers' habits, a foreign-country story a LV/EE/LT portal happened
+to run (an Estonian portal covering Romania's bear problem), or a
+funding/procurement announcement that recaps an old, already-recorded
+sighting for context all matched and got treated as new sightings — one even
+placed a map pin on a town for a funding story that had nothing to do with a
+new encounter there. There's no practical way to catch this class
+automatically without real NLP, so `EXCLUDED_LINKS` in `fetch-news.js` is a
+manually-maintained denylist of specific article links found to be false
+positives this way — keyed by link (not id) so it's readable/auditable, and
+checked before the keyword test so excluded articles never re-enter
+`data/news.json` on a later run even while they're still in a feed's rolling
+window.
+
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
 in the "News mentions" list without a page reload. Only the headline, source,
