@@ -991,9 +991,6 @@ function applyTranslations() {
   });
   const select = document.getElementById("lang-select");
   if (select) select.value = lang;
-
-  const footerYear = document.getElementById("footer-year");
-  if (footerYear) footerYear.textContent = new Date().getFullYear();
 }
 
 // Wires the header's language <select> — shared by every page instead of
