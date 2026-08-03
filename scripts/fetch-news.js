@@ -209,6 +209,8 @@ const EXCLUDED_LINKS = new Set([
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
 const MAX_ITEMS = 150;
 const OUTPUT_PATH = path.join(__dirname, "..", "data", "news.json");
+const FEED_PATH = path.join(__dirname, "..", "feed.xml");
+const FEED_ITEM_LIMIT = 50;
 
 // Best-effort place gazetteer: name -> [matchable stem(s), lat, lng].
 // Coordinates are approximate town-centre points, not survey-grade — this
@@ -388,6 +390,47 @@ async function fetchFeed(feed) {
   }
 }
 
+function escapeXml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+// Standard RSS 2.0, so any RSS-to-email service (Blogtrottr, etc.) can turn
+// this into an email digest without this project needing to run its own
+// email infrastructure. Titles are LV — the feed itself has no per-visitor
+// language selection the way the site does.
+function buildRssFeed(items) {
+  const itemsXml = items
+    .slice(0, FEED_ITEM_LIMIT)
+    .map((item) => {
+      const title = (item.title && item.title.lv) || item.title || "";
+      return `  <item>
+    <title>${escapeXml(title)}</title>
+    <link>${escapeXml(item.link)}</link>
+    <guid isPermaLink="false">${escapeXml(item.id)}</guid>
+    <pubDate>${new Date(item.pubDate).toUTCString()}</pubDate>
+    <source>${escapeXml(item.source)}</source>
+  </item>`;
+    })
+    .join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Lacupedas — lāču ziņu pieminējumi Latvijā</title>
+  <link>https://lacupedas.lv/</link>
+  <description>Automātiski savākti ziņu portālu raksti, kuros pieminēti lāču novērojumi Latvijā un pierobežā.</description>
+  <language>lv</language>
+  <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+${itemsXml}
+</channel>
+</rss>
+`;
+}
+
 function loadExisting() {
   try {
     const raw = fs.readFileSync(OUTPUT_PATH, "utf8");
@@ -451,6 +494,7 @@ async function main() {
     OUTPUT_PATH,
     JSON.stringify({ generatedAt: new Date().toISOString(), items: merged }, null, 2) + "\n"
   );
+  fs.writeFileSync(FEED_PATH, buildRssFeed(merged));
 
   console.log(`Fetched ${allItems.length} articles across ${FEEDS.length} feeds.`);
   console.log(`${matched.length} matched the bear keyword this run.`);

@@ -271,6 +271,7 @@ const translations = {
     sourceSilava: "LVMI Silava",
     sourceDap: "DAP",
     newsUpdatedAt: "Dati atjaunināti: {date}",
+    newsRssLinkText: "RSS plūsma",
     newsNewCount: "Jauni pieminējumi: {n}",
 
     aboutTitle: "Par projektu",
@@ -587,6 +588,7 @@ const translations = {
     sourceSilava: "LVMI Silava",
     sourceDap: "DAP",
     newsUpdatedAt: "Data updated: {date}",
+    newsRssLinkText: "RSS feed",
     newsNewCount: "New mentions: {n}",
 
     aboutTitle: "About this project",
@@ -903,6 +905,7 @@ const translations = {
     sourceSilava: "LVMI Silava",
     sourceDap: "DAP",
     newsUpdatedAt: "Данные обновлены: {date}",
+    newsRssLinkText: "RSS-лента",
     newsNewCount: "Новых упоминаний: {n}",
 
     aboutTitle: "О проекте",

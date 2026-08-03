@@ -973,6 +973,16 @@ button {
   display: none;
 }
 
+.news-rss-link {
+  flex: 0 0 auto;
+  margin: 2px 0 0;
+  font-size: 0.68rem;
+}
+
+.news-rss-link a {
+  color: var(--text-muted);
+}
+
 .news-marker-diamond {
   display: block;
   width: 12px;

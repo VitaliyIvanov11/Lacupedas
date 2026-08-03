@@ -409,6 +409,15 @@ article text — since copyright stays with the original publisher.
 To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 `data/news.json`; no API keys or dependencies required, Node 18+).
 
+Each run also writes `feed.xml` — a standard RSS 2.0 feed of the same
+merged items (LV titles only; the feed itself has no per-visitor language
+selection), linked from `index.html`'s `<head>` via `<link rel="alternate"
+type="application/rss+xml">` and from the news list directly. This is the
+"email digest" option from the audit checklist without building actual
+email infrastructure: any RSS-to-email service (e.g. Blogtrottr) can turn
+`https://lacupedas.lv/feed.xml` into an email subscription on the
+visitor's own account, no backend of ours required.
+
 ## Project structure
 
 ```text
