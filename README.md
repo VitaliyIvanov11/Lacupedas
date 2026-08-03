@@ -452,7 +452,9 @@ visitor's own account, no backend of ours required.
 ## Project structure
 
 ```text
-index.html                     Map page markup
+index.html                     Home feed (mobile) / embedded map + sidebar (desktop)
+map.html                       Standalone full-bleed map page — clustering, filters, legend, report flow
+stats.html                     Standalone stats page — totals, chart, sightings list, research/region cards
 padomi.html                     Content hub — links to all pages below
 guide.html                       "What to do if you meet a bear" content page
 tracks.html                       "How to identify bear tracks/signs" content page
@@ -461,22 +463,29 @@ advice.html                         "Advice by audience" content page (foragers,
 stories.html                         "Sighting stories" — narrative write-ups of real cases
 about.html                           "About this project" — who/why/how verification works/sources
 privacy.html                         GDPR privacy policy
-css/style.css                   Styling (single-viewport layout, light + dark mode)
+css/style.css                   Shared styling (design tokens, layout, light + dark mode)
 css/guide.css                    Content-page styling (normal scroll, do/don't cards, hub grid)
+css/map-page.css                 map.html-specific styling (full-bleed, recency panel)
+css/stats-page.css               stats.html-specific styling (research/region cards)
 js/i18n.js                       LV/EN/RU translation strings + language switching
 js/storage.js                    Supabase-backed shared storage for community reports + votes + issue reports
 js/report-issue.js               "Report an issue" modal shared by the sightings and news lists
-js/photo.js                       Client-side photo compression + Storage upload
-js/map.js                        Leaflet map, markers, click-to-report, heatmap, mobile sleep/wake
+js/report-form.js                Sighting-report modal + click-to-pick flow, shared by index.html/map.html
+js/photo.js                       Client-side photo compression + EXIF-stripping Storage upload
+js/map.js                        Leaflet map, marker clustering, click-to-report
 js/chart.js                       Monthly chart (inline SVG) — combined data
-js/news.js                         News-mentions layer: fetch, poll, render, filter
-js/app.js                           Wires everything together; combined stats, filters, voting
-js/guide-page.js                     Language switching for the standalone guide page
-scripts/fetch-news.js         RSS scanner run by the GitHub Action (below)
+js/news.js                         News-mentions layer: fetch, poll, render, filter, clustering
+js/sightings-panel.js            Sightings list/stats/chart rendering, shared by index.html/stats.html
+js/app.js                           Wires index.html together; desktop map vs. mobile home-feed split
+js/map-page.js                   Wires map.html together (standalone)
+js/stats-page.js                 Wires stats.html together (standalone)
+js/guide-page.js                     Language switching for the standalone content pages
+scripts/fetch-news.js         RSS scanner run by the GitHub Action (below); also writes feed.xml
 .github/workflows/news-scan.yml   Scheduled job that runs the scanner
 data/news.json                 Output of the scanner, served to the front end
+feed.xml                       RSS 2.0 feed of the same scanner output
 favicon.ico                    Hand-built multi-frame (16/32px) icon — see note below
-icons/                          Paw-print favicon/app icon set (PNG, 16px–512px) + apple-touch-icon
+icons/                          Paw-print favicon/app icon set (PNG, 16px–512px) + apple-touch-icon + og-banner.png
 site.webmanifest               PWA manifest (name, theme color, 192/512px icons)
 ```
 
