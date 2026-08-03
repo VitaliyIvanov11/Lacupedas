@@ -130,6 +130,44 @@ one-off encounters, and `dna_sample` is a collected sample, not a site. If
 a den/migas-type report is ever added, its coordinates should be rounded
 (e.g. to ~1km) before display, same reasoning as the EXIF stripping above.
 
+### Planned: extended report fields (not yet built)
+
+Two fields would add real value without inventing new `type` categories:
+a **time of day** (morning/day/evening/night) and a **cub count** separate
+from the total headcount — DAP's own guidance specifically calls out
+females with cubs as a population-growth signal (already reflected in the
+FAQ's "lācenes ar mazuļiem" note), and time-of-day is standard monitoring
+metadata. Checked DAP's public bear-reporting guidance before writing this
+(dabasdati.lv submissions, precise date + GPS + photo/video) — it doesn't
+document a separate "how observed" field beyond what `type` already covers
+(`tracks`/`pazīmes` already umbrellas footprints, fur, feces, and claw
+marks/scratches per that guidance), so no new `type` values are proposed.
+
+These aren't wired up yet, unlike `source`/`status` above, for a different
+reason: those are read-only groundwork (`rowToSighting()` just defaults an
+absent column, which is always safe), but a new form field needs to be
+part of the `INSERT` payload — and PostgREST rejects an insert that
+references a column the table doesn't have yet. Shipping the fields in
+the form now, before the columns exist, would either break every
+submission or (if the fields were UI-only and silently dropped) mislead
+reporters into thinking data was saved that wasn't. So this stays
+documentation until the migration is actually run:
+
+```sql
+ALTER TABLE sightings ADD COLUMN time_of_day text;
+ALTER TABLE sightings ADD CONSTRAINT sightings_time_of_day_check
+  CHECK (time_of_day IS NULL OR time_of_day IN ('morning', 'day', 'evening', 'night'));
+ALTER TABLE sightings ADD COLUMN cub_count int;
+ALTER TABLE sightings ADD CONSTRAINT sightings_cub_count_check
+  CHECK (cub_count IS NULL OR (cub_count >= 0 AND cub_count <= count));
+```
+
+Once that's run: add two optional fields to `#sighting-form` in both
+index.html and map.html (time-of-day `<select>`, cub-count `<input
+type="number">` shown alongside the existing `count` field), include them
+in `submitReportForm()`'s `sighting` object and `addSighting()`'s payload,
+and read them back in `rowToSighting()`.
+
 ### Historical/official data (not yet imported)
 
 `js/storage.js`'s `rowToSighting()` and the front end already understand a
