@@ -16,6 +16,16 @@ let newsSeenIds = new Set();
 let newsDataChangeCallback = null;
 let newsShownCount = NEWS_PAGE_SIZE;
 
+// title is { lv, en, ru } — machine-translated at scrape time (see
+// buildTitleTranslations() in scripts/fetch-news.js) so the list always
+// reads in the visitor's selected language, not whichever language the
+// source portal happened to publish in. Falls back gracefully for any
+// item saved before that field existed (title as a plain string).
+function newsTitleFor(n) {
+  if (typeof n.title === "string") return n.title;
+  return n.title[getLang()] || n.title.lv || n.title.en || n.title.ru || "";
+}
+
 function matchesNewsTimeFilter(iso, filterValue) {
   if (filterValue === "all") return true;
   const d = new Date(iso);
@@ -108,7 +118,7 @@ function renderNewsMarkers() {
     .forEach((n) => {
       const marker = L.marker([n.lat, n.lng], { icon: newsIcon() });
       marker.bindPopup(
-        `<a href="${newsEscapeHtml(n.link)}" target="_blank" rel="noopener"><strong>${newsEscapeHtml(n.title)}</strong></a>` +
+        `<a href="${newsEscapeHtml(n.link)}" target="_blank" rel="noopener"><strong>${newsEscapeHtml(newsTitleFor(n))}</strong></a>` +
           `<br><span class="popup-meta">${newsEscapeHtml(n.source)}</span>`
       );
       marker.on("mouseover", () => marker.openPopup());
@@ -212,7 +222,7 @@ function renderNewsList() {
     link.target = "_blank";
     link.rel = "noopener";
     link.className = "news-link";
-    link.textContent = n.title;
+    link.textContent = newsTitleFor(n);
     body.appendChild(link);
 
     li.appendChild(body);

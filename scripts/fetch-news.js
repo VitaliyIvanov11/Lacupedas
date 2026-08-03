@@ -48,6 +48,64 @@ const FEEDS = [
   { name: "LATMA", url: "https://www.latma.lv/feed/", lang: "lv" },
 ];
 
+// Recovers each item's feed language from its `source` name — needed to
+// pick translation source/target languages, since `lang` itself isn't
+// persisted in data/news.json (only used transiently during matching).
+const SOURCE_LANG = Object.fromEntries(FEEDS.map((f) => [f.name, f.lang]));
+
+// The site's 3 UI languages — every news title gets a version in each, so
+// the list always reads in whatever language the visitor has selected
+// instead of showing whatever language the source portal happened to
+// publish in (see js/i18n.js's translations object for the same set).
+const UI_LANGS = ["lv", "en", "ru"];
+
+// Google Translate's public web-widget endpoint — no API key, no signup,
+// good quality (same engine as translate.google.com), but undocumented and
+// unsupported: could rate-limit or change shape without notice. Falls back
+// to the original text on any failure rather than leaving a title blank.
+async function translateText(text, sourceLang, targetLang) {
+  try {
+    const url =
+      `https://translate.googleapis.com/translate_a/single?client=gtx&dt=t` +
+      `&sl=${encodeURIComponent(sourceLang)}&tl=${encodeURIComponent(targetLang)}` +
+      `&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0" },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) return null;
+    const data = await res.json();
+    // data[0] is a list of [translatedChunk, originalChunk, ...] pairs —
+    // long input can come back split into multiple chunks to rejoin.
+    return data[0].map((chunk) => chunk[0]).join("");
+  } catch {
+    return null;
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Builds { lv, en, ru }: the source language's slot gets the original text
+// verbatim (no point round-tripping it through translation), the other two
+// get machine-translated. A small delay between requests is just good
+// manners toward a free, unofficial endpoint — this runs in the background
+// on a schedule, so there's no reason to hammer it.
+async function buildTitleTranslations(text, sourceLang) {
+  const titles = {};
+  for (const lang of UI_LANGS) {
+    if (lang === sourceLang) {
+      titles[lang] = text;
+      continue;
+    }
+    const translated = await translateText(text, sourceLang, lang);
+    titles[lang] = translated || text;
+    await sleep(200);
+  }
+  return titles;
+}
+
 // Whole-word match against every case form of "bear"/"bear cub" in each
 // feed's language. A plain substring match on the shared stem is too loose —
 // it also fires on unrelated compounds/proper nouns that happen to contain
@@ -349,6 +407,22 @@ async function main() {
     .filter((i) => new Date(i.pubDate).getTime() >= cutoff)
     .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
     .slice(0, MAX_ITEMS);
+
+  // Translate once per item, the run it first appears (or, for items saved
+  // before this field existed, the next run after this deploy) — title is
+  // still a plain string at this point for both cases; already-translated
+  // items (title is already a {lv,en,ru} object) are skipped.
+  let translatedCount = 0;
+  for (const entry of merged) {
+    if (typeof entry.title === "string") {
+      const sourceLang = SOURCE_LANG[entry.source] || "lv";
+      entry.title = await buildTitleTranslations(entry.title, sourceLang);
+      translatedCount++;
+    }
+  }
+  if (translatedCount > 0) {
+    console.log(`Translated ${translatedCount} item title(s) into lv/en/ru.`);
+  }
 
   fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
   fs.writeFileSync(

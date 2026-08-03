@@ -452,7 +452,11 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 8px;
+}
+
+.stats-card {
+  padding: 12px 12px 14px;
 }
 
 /* Points at stats.html, the mobile detail page the chart/list moved to
@@ -465,8 +469,9 @@ button {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  gap: 6px;
   align-items: stretch;
+  padding-top: 2px;
 }
 
 .stat {
@@ -475,22 +480,26 @@ button {
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 12px;
+  gap: 2px;
   min-width: 0;
-  min-height: 180px;
+  min-height: 72px;
   height: 100%;
-  padding: 18px 14px 16px;
-  border-radius: 22px;
-  border: 1px solid rgba(11, 11, 11, 0.04);
-  background: rgba(255, 255, 255, 0.72);
+  padding: 10px 6px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(11, 11, 11, 0.03);
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.18);
 }
 
 @media (max-width: 900px) {
   .stats-detail-link {
     display: inline-flex;
     align-items: center;
-    gap: 2px;
+    gap: 4px;
     flex: 0 0 auto;
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--brand-accent);
@@ -498,16 +507,14 @@ button {
   }
 
   .stats-grid {
-    gap: 10px;
+    gap: 6px;
   }
 
-  /* Compact single-row pill per stat — same height class as
-     .mobile-quick-btn above it, no icon (see .stat-icon below). */
   .stat {
-    gap: 10px;
-    min-height: 170px;
-    padding: 16px 12px 14px;
-    border-radius: 20px;
+    gap: 2px;
+    min-height: 68px;
+    padding: 9px 4px 7px;
+    border-radius: 12px;
   }
 
   .stat-text {
@@ -515,73 +522,33 @@ button {
   }
 
   .stat-value {
-    font-size: 2.15rem;
+    font-size: 1.28rem;
   }
 
   .stat-value-small {
-    font-size: 1.15rem;
-  }
-
-  .stat-label {
     font-size: 0.82rem;
   }
 
-  .stat-total {
-    background: rgba(137, 135, 129, 0.08);
-  }
-
-  .stat-year {
-    background: rgba(12, 163, 12, 0.08);
-  }
-
-  .stat-recent {
-    background: rgba(217, 123, 41, 0.08);
+  .stat-label {
+    font-size: 0.64rem;
   }
 }
 
 .stat-icon {
-  flex: 0 0 auto;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  background: var(--gridline);
-}
-
-.stat-icon svg {
-  width: 22px;
-  height: 22px;
-}
-
-.stat-total .stat-icon {
-  background: rgba(137, 135, 129, 0.2);
-  color: var(--text-secondary);
-}
-
-.stat-year .stat-icon {
-  background: rgba(12, 163, 12, 0.15);
-  color: var(--success);
-}
-
-.stat-recent .stat-icon {
-  background: rgba(217, 123, 41, 0.18);
-  color: var(--brand-accent);
+  display: none;
 }
 
 .stat-text {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
   min-width: 0;
   align-items: center;
   text-align: center;
 }
 
 .stat-value {
-  font-size: clamp(2.25rem, 3.2vw, 3rem);
+  font-size: clamp(1.35rem, 1.9vw, 1.65rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -589,40 +556,41 @@ button {
 }
 
 .stat-value-small {
-  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+  font-size: clamp(0.8rem, 1vw, 0.92rem);
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
 .stat-value-date {
-  max-width: 8ch;
-  min-height: 2.4em;
+  max-width: 5ch;
+  min-height: 1.1em;
   text-wrap: balance;
 }
 
 .stat-label {
-  max-width: 10ch;
-  font-size: 0.88rem;
+  max-width: 7ch;
+  font-size: 0.68rem;
   color: var(--text-muted);
-  line-height: 1.3;
+  line-height: 1.2;
   text-wrap: balance;
+  opacity: 0.92;
 }
 
 .stats-card h2 {
-  font-size: 0.98rem;
+  font-size: 0.88rem;
   margin-bottom: 0;
 }
 
 .stat-total {
-  background: linear-gradient(180deg, rgba(137, 135, 129, 0.08), rgba(137, 135, 129, 0.03));
+  background: rgba(137, 135, 129, 0.045);
 }
 
 .stat-year {
-  background: linear-gradient(180deg, rgba(12, 163, 12, 0.1), rgba(12, 163, 12, 0.04));
+  background: rgba(47, 93, 63, 0.05);
 }
 
 .stat-recent {
-  background: linear-gradient(180deg, rgba(217, 123, 41, 0.11), rgba(217, 123, 41, 0.04));
+  background: rgba(217, 123, 41, 0.055);
 }
 
 .chart-container svg {
