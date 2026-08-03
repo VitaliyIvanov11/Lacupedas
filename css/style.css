@@ -847,13 +847,31 @@ button {
 .news-link {
   display: block;
   margin-top: 4px;
-  font-size: 0.82rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.35;
   color: var(--text-primary);
   text-decoration: none;
 }
 
 .news-link:hover {
   text-decoration: underline;
+}
+
+.news-thumb-link {
+  flex: 0 0 auto;
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.news-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .news-disclaimer {
