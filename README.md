@@ -255,6 +255,24 @@ checked before the keyword test so excluded articles never re-enter
 `data/news.json` on a later run even while they're still in a feed's rolling
 window.
 
+Word-boundary matching avoids some proper-noun collisions for free — a
+Russian article about someone surnamed "Медведев" doesn't match, since that
+surname's case forms don't line up with the bare word "медведь"'s. Latvian
+"Lācis" isn't so lucky: it's also a common surname, and being derived from
+the same word, it declines through exactly the same case forms as the
+animal ("Lācis", "Lāča", "Lāci", ...), so no spelling-based rule can tell
+them apart — a sports article headlined "Treneris Lācis: Fināls ..." (an
+athletics coach) matched and got treated as a sighting. `fetch-news.js`'s
+`looksLikeLacisSurname()` catches the two shapes that cover most real
+surname mentions in LV news instead: a capitalized word right before the
+match (a first name or title — "Jānis Lācis", "Treneris Lācis") or a
+headline-style attribution right after it ("Lācis: ..."). A lowercase
+"lācis" mid-sentence is always the animal (surnames stay capitalized
+regardless of sentence position), so this can only ever suppress a match
+that was already capitalized — kept it from also hiding genuine
+capitalized-but-sentence-initial bear headlines like "Lācis iznācis pie
+...", which have neither a leading name/title nor a trailing colon.
+
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
 in the "News mentions" list without a page reload. Only the headline, source,
