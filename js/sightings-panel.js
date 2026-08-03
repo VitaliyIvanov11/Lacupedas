@@ -9,6 +9,11 @@
 
 const LIST_PAGE_SIZE = 6;
 const LIST_PAGE_STEP = 10;
+const STAT_LABELS = {
+  lv: { total: "Kopā", year: "Šogad", last: "Pēdējais" },
+  en: { total: "Total", year: "This year", last: "Latest" },
+  ru: { total: "Всего", year: "За год", last: "Последнее" },
+};
 
 let spSightings = [];
 let spVoteCounts = {};
@@ -38,6 +43,14 @@ function formatStatDate(dateStr) {
     month: "short",
     ...(isCurrentYear ? {} : { year: "numeric" }),
   });
+}
+
+function applyCompactStatLabels() {
+  if (!spEl) return;
+  const labels = STAT_LABELS[getLang()] || STAT_LABELS.lv;
+  if (spEl.statLabelTotal) spEl.statLabelTotal.textContent = labels.total;
+  if (spEl.statLabelYear) spEl.statLabelYear.textContent = labels.year;
+  if (spEl.statLabelLast) spEl.statLabelLast.textContent = labels.last;
 }
 
 function typeLabel(type) {
@@ -285,9 +298,14 @@ function initSightingsPanel() {
     statTotal: document.getElementById("stat-total"),
     statYear: document.getElementById("stat-year"),
     statLast: document.getElementById("stat-last"),
+    statLabelTotal: document.getElementById("stat-label-total"),
+    statLabelYear: document.getElementById("stat-label-year"),
+    statLabelLast: document.getElementById("stat-label-last"),
     chartContainer: document.getElementById("chart-container"),
   };
   if (!spEl.list) return;
+
+  applyCompactStatLabels();
 
   [spEl.typeFilter, spEl.timeFilter, spEl.photoFilter].forEach((field) => {
     field.addEventListener("change", () => {

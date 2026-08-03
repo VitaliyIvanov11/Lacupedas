@@ -543,6 +543,7 @@ button {
   flex-direction: column;
   gap: 2px;
   min-width: 0;
+  width: 100%;
   align-items: center;
   text-align: center;
 }
@@ -553,6 +554,10 @@ button {
   font-variant-numeric: tabular-nums;
   line-height: 1;
   letter-spacing: -0.04em;
+  min-height: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .stat-value-small {
@@ -563,7 +568,7 @@ button {
 
 .stat-value-date {
   max-width: 5ch;
-  min-height: 1.1em;
+  min-height: 1em;
   text-wrap: balance;
 }
 
@@ -574,6 +579,10 @@ button {
   line-height: 1.2;
   text-wrap: balance;
   opacity: 0.92;
+  min-height: 2.4em;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .stats-card h2 {

@@ -35,6 +35,7 @@
     initSightingsPanel();
 
     initLangSwitcher(() => {
+      if (typeof applyCompactStatLabels === "function") applyCompactStatLabels();
       renderList(getFilteredSightings());
       renderStatsAndChart();
       if (typeof renderNewsList === "function") renderNewsList();
