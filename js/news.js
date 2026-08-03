@@ -151,7 +151,8 @@ function renderNewsMarkers() {
       const marker = L.marker([n.lat, n.lng], { icon: newsIcon() });
       marker.bindPopup(
         `<a href="${newsEscapeHtml(n.link)}" target="_blank" rel="noopener"><strong>${newsEscapeHtml(newsTitleFor(n))}</strong></a>` +
-          `<br><span class="popup-meta">${newsEscapeHtml(n.source)}</span>`
+          `<br><span class="popup-meta">${newsEscapeHtml(n.source)}</span>` +
+          `<br><span class="popup-meta popup-approx">${newsEscapeHtml(t("newsApproxLocation"))}</span>`
       );
       marker.on("mouseover", () => marker.openPopup());
       marker.on("mouseout", () => marker.closePopup());

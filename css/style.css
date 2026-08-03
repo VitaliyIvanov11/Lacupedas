@@ -1045,6 +1045,10 @@ button {
   color: #666;
 }
 
+.popup-approx {
+  font-style: italic;
+}
+
 .toast {
   position: fixed;
   bottom: 20px;
