@@ -1336,7 +1336,8 @@ button {
   color: var(--brand-accent);
 }
 
-.form-emergency-note {
+.form-emergency-note,
+.emergency-note {
   margin: 0 0 14px;
   padding: 10px 12px;
   border: 1px solid rgba(208, 59, 59, 0.35);
@@ -1347,14 +1348,21 @@ button {
   color: var(--text-secondary);
 }
 
-.form-emergency-note strong {
+.form-emergency-note strong,
+.emergency-note strong {
   display: block;
   color: var(--danger);
   margin-bottom: 2px;
 }
 
-.form-emergency-note a {
+.form-emergency-note a,
+.emergency-note a {
   color: var(--brand-accent);
+}
+
+.emergency-note {
+  font-size: 0.85rem;
+  margin: 0 0 16px;
 }
 
 .hp-field {
