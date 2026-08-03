@@ -224,6 +224,27 @@ server involved. This isn't new data exposure — it's the same fields
 REST endpoint, just packaged as a convenient bulk download instead of
 requiring someone to script against the API themselves.
 
+Push notifications and full PWA offline mode were considered and
+deliberately skipped for now: push needs a subscription-storing backend
+and a paid/registered push service this project doesn't have, and an
+offline cache mostly buys nothing here since the whole point of every
+page is live, Supabase-backed data — a cached shell would just show
+stale or empty content. Neither is worth the added complexity yet.
+
+**Self-service deletion (GDPR, deferred):** privacy.html is honest that
+this isn't available today — deletion happens by email request, which is
+GDPR-compliant, just not self-service. Building real self-service needs
+either a login system (the site is deliberately anonymous/no-login) or a
+per-report secret token: generate a random token at submit time, show it
+once in the success toast (`showReportToast()` in `js/report-form.js`),
+store it in a new `delete_token text` column, and let a visitor who still
+has their token delete that one row later. That last step needs either
+loosening the `sightings` RLS policy to allow anon `DELETE` when the
+token matches (a real security decision — worth a deliberate yes/no, not
+a silent default) or a Supabase Edge Function that checks the token
+server-side before deleting. Not built without that decision being made
+first.
+
 ### Confirm/dispute voting
 
 A second table, `sighting_votes` (`id uuid`, `sighting_id uuid` references
