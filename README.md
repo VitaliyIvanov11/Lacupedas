@@ -434,6 +434,56 @@ description) and not the full article — cross-check figures against a
 second independent source when that happens, same as was done for the
 paw-print measurements in `tracks.html`.
 
+## Planned: multi-language indexing (not built)
+
+Every page today serves one HTML document (`lang="lv"` in the source) and
+translates it client-side via `js/i18n.js`'s `applyTranslations()` after
+load. That means Google mostly only indexes the Latvian text that's
+actually present in the served HTML — the RU/EN versions exist for human
+visitors who switch the `<select>`, but there's no distinct crawlable URL
+or `hreflang` signal telling search engines those versions exist at all.
+Fixing this properly needs a build step, which this repo doesn't have
+today (every page is hand-authored static HTML, deployed to GitHub Pages
+as-is). Sketch of how it would work, without committing to it yet:
+
+1. **New `scripts/build-i18n-pages.js`** (Node, no dependencies, same style
+   as `scripts/fetch-news.js`): for each source page and each of `lv`/`en`/
+   `ru`, parse the HTML, walk `[data-i18n]`/`[data-i18n-placeholder]`
+   elements the same way `applyTranslations()` does client-side, and write
+   out a fully pre-translated static copy — reusing `js/i18n.js`'s
+   `translations` object as the single source of truth so there's still
+   only one place to edit copy, not three.
+2. **Output layout**: keep the existing LV pages at their current root
+   paths (`/`, `/map.html`, ...) so no existing link/backlink/bookmark
+   breaks, and emit the other two languages into sibling directories
+   (`/en/`, `/en/map.html`, `/ru/map.html`, ...) — a directory-per-language
+   split is the simplest scheme for a host with no server-side routing
+   (GitHub Pages just serves files). Avoid a `?lang=` query param scheme —
+   Google explicitly discourages that for hreflang.
+3. Each generated page gets its own translated `<title>`/`<meta
+   description>`/OG tags (new per-language i18n keys would be needed for
+   these, since only the LV values are hardcoded in `<head>` today) plus
+   `<link rel="alternate" hreflang="lv|en|ru" href="...">` pairs across all
+   three versions, and an `hreflang="x-default"` pointing at the LV root.
+4. Wire the build script into the GitHub Pages deploy workflow so `/en/`
+   and `/ru/` are generated fresh on every deploy — build output, not
+   something committed to git (unlike `data/news.json`, which is committed
+   because client JS also reads it at runtime).
+5. `sitemap.xml` gains entries for the new URLs.
+
+What this does **not** fix: the live, Supabase-backed content (map
+markers, sightings list, news list) is still rendered by JS after page
+load either way, in every language — that's fine, since it's not the
+content actually targeted for ranking; the static informational text
+(FAQ, guide pages, titles) is. The client-side `<select>` language
+switcher keeps working exactly as now on top of whichever pre-rendered
+version a visitor lands on.
+
+Per-sighting indexable pages (e.g. `/noverojums/{id}`) and a `/zinot`
+vanity URL in place of `map.html?report=1` would need the same kind of
+per-route static generation and are blocked on the same build-step
+decision — not scoped further until that's decided.
+
 ## Note
 
 This is a community/hobby project, not an official government tool. For
