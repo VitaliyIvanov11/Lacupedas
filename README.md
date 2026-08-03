@@ -233,17 +233,11 @@ stale or empty content. Neither is worth the added complexity yet.
 
 **Self-service deletion (GDPR, deferred):** privacy.html is honest that
 this isn't available today — deletion happens by email request, which is
-GDPR-compliant, just not self-service. Building real self-service needs
-either a login system (the site is deliberately anonymous/no-login) or a
-per-report secret token: generate a random token at submit time, show it
-once in the success toast (`showReportToast()` in `js/report-form.js`),
-store it in a new `delete_token text` column, and let a visitor who still
-has their token delete that one row later. That last step needs either
-loosening the `sightings` RLS policy to allow anon `DELETE` when the
-token matches (a real security decision — worth a deliberate yes/no, not
-a silent default) or a Supabase Edge Function that checks the token
-server-side before deleting. Not built without that decision being made
-first.
+GDPR-compliant, just not self-service. Full design (schema, grants, RLS
+policy, and — the part easy to miss — actually deleting the uploaded
+photo from Storage too, not just the database row) is in
+`docs/deletion-token-plan.md`. Proposal only; nothing here is built until
+that migration is confirmed applied.
 
 ### Confirm/dispute voting
 

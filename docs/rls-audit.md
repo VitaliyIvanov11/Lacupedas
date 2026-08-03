@@ -14,12 +14,23 @@ Read-only audit. No data was changed. Two sources of evidence, kept separate:
 - **From code** — what `js/storage.js`/`js/photo.js` assume/rely on, which
   is a statement of intent, not proof of the live configuration.
 
-Run date: 2026-08-03.
+Run date: 2026-08-03. Revised 2026-08-04 after review caught that this
+audit's own §5 SQL had the exact class of bug it was meant to be finding
+(R4) — proposing a `CREATE POLICY` without the `GRANT` it depends on. §4's
+query list is now consolidated into one block below so this can be closed
+in a single run.
+
+**Status: not yet closed.** Everything in this file past §1 is either
+inferred from code or is a *proposed* fix — none of it confirms what's
+actually configured on the live database. Closing it needs §4's query
+block run once in the Supabase SQL editor, with the output brought back
+here — that's the only remaining step; nothing else requires more
+investigation first.
 
 ## 1. Tables actually present (empirical)
 
 | Table | `SELECT` via anon key | Notes |
-|---|---|---|
+| --- | --- | --- |
 | `sightings` | `200 OK`, `[]` | Table exists, RLS allows anon `SELECT`, currently **zero rows** (matches Task 5's premise — the map has no historical data yet). |
 | `sighting_votes` | `200 OK`, `[]` | Table exists, RLS allows anon `SELECT`. **This is worth double-checking against intent** — see risk R2 below. |
 | `sighting_vote_counts` | `200 OK`, `[]` | Exists (view or table), anon `SELECT` works, currently no rows (follows from `sighting_votes` being empty). |
@@ -32,6 +43,7 @@ curl -s -o /tmp/resp.json -w "HTTP %{http_code}\n" \
   "https://rhmtifjbnqpikzdwgrre.supabase.co/rest/v1/<table>?select=*&limit=1" \
   -H "apikey: <anon key>" -H "Authorization: Bearer <anon key>"
 ```
+
 (run once per table: `sightings`, `reports`, `sighting_votes`, `sighting_vote_counts`)
 
 ## 2. Findings and risks, by priority
@@ -79,13 +91,33 @@ whether the `sighting-photos` bucket itself has `file_size_limit`/
 dashboard) to check, since `storage.buckets` isn't reachable through the
 same anon-key REST calls used for the table checks above.
 
+### 🔴 R4 — RLS policies alone don't prove anything without checking the base grants
+
+A caught gap in this audit's own methodology, worth stating plainly:
+everything above (and the R1/R2 fixes proposed in §5, in their first
+draft) checked `pg_policies`, but a `CREATE POLICY` is meaningless if the
+role doesn't have the underlying `GRANT` — Postgres checks table/column
+privileges *before* RLS is even evaluated. A policy permitting `DELETE`
+on a role with no `GRANT DELETE` just gets `permission denied` before the
+policy's `USING` clause runs at all. §4 now has queries against
+`information_schema.role_table_grants`/`role_column_grants` to check this
+directly — that's the actual missing piece for confirming "can anon
+physically INSERT/UPDATE/DELETE" (task item 3), not just "is there a
+policy that would allow it if the grant existed."
+
 ### ⚪ Not independently re-verified here (need the SQL in §4 to confirm)
 
 - Whether `UPDATE`/`DELETE` on `sightings` are actually blocked for anon
-  (the code assumes yes; the boundary test that would have confirmed it
-  empirically was blocked by the sandbox's own safety classifier).
-  Same for `sighting_votes` (the unique-constraint-per-device comment in
-  `js/storage.js` is a statement of intent, not a confirmed constraint).
+  **at the grant level**, not just whether a policy exists (see R4) — the
+  boundary test that would have confirmed this empirically was blocked by
+  the sandbox's own safety classifier. Same for `sighting_votes` (the
+  unique-constraint-per-device comment in `js/storage.js` is a statement
+  of intent, not a confirmed constraint).
+- Whether `authenticated` has broader grants on `sightings`/
+  `sighting_votes` than `anon` does — this project never authenticates
+  anyone (no login UI), but Supabase's default project setup sometimes
+  grants both roles together, which would leave a real gap invisible from
+  the app's own behavior. Explicitly check both roles, not just anon.
 - Exact `USING`/`WITH CHECK` clause text for every existing policy.
 - Whether any column beyond what `rowToSighting()` reads
   (`id, lat, lng, date, type, count, description, reporter, photo_url,
@@ -152,6 +184,26 @@ where id = 'sighting-photos';
 select policyname, cmd, roles, qual, with_check
 from pg_policies
 where schemaname = 'storage' and tablename = 'objects';
+
+-- Table-level grants for anon/authenticated -- the piece pg_policies
+-- alone can't show (R4): does the role even have the base privilege a
+-- policy would need to matter at all.
+select grantee, table_name, privilege_type
+from information_schema.role_table_grants
+where table_schema = 'public'
+  and table_name in ('sightings', 'sighting_votes', 'sighting_vote_counts', 'reports')
+  and grantee in ('anon', 'authenticated')
+order by table_name, grantee, privilege_type;
+
+-- Column-level grants -- catches a table-level GRANT SELECT that's
+-- broader than intended (e.g. exposing every column instead of an
+-- explicit allowlist).
+select grantee, table_name, column_name, privilege_type
+from information_schema.role_column_grants
+where table_schema = 'public'
+  and table_name in ('sightings', 'sighting_votes')
+  and grantee in ('anon', 'authenticated')
+order by table_name, grantee, column_name, privilege_type;
 ```
 
 ## 5. Proposed policies (not applied — for review only)
@@ -171,15 +223,34 @@ create table public.reports (
   created_at timestamptz not null default now()
 );
 alter table public.reports enable row level security;
+
+-- A CREATE POLICY alone grants nothing (R4) -- this GRANT is the actual
+-- privilege; the policy below only narrows it. Column-scoped so a
+-- request can't set id/created_at itself.
+grant insert (target_type, target_id, reason) on public.reports to anon;
+
 create policy reports_anon_insert on public.reports
   for insert to anon with check (true);
--- deliberately no SELECT policy for anon — flags are a private queue,
--- readable only via the dashboard (service_role bypasses RLS)
+-- Deliberately nothing else: no SELECT/UPDATE/DELETE grant *or* policy
+-- for anon or authenticated -- flags are a private queue, readable only
+-- via the dashboard (service_role bypasses RLS and grants entirely). A
+-- brand-new table has no privileges for either role until explicitly
+-- granted, so there's no legacy over-grant to worry about here, unlike
+-- R2 below.
 
--- R2: stop anon from reading raw sighting_votes rows; keep INSERT
--- (adjust/drop only if a SELECT policy for anon currently exists —
--- confirm via the pg_policies query in §4 first)
-drop policy if exists <existing_anon_select_policy_name> on public.sighting_votes;
+-- R2: stop anon (and authenticated, if it turns out to have the same
+-- grant -- check via the role_table_grants query in §4 first) from
+-- reading raw sighting_votes rows. Drop the RLS policy AND revoke the
+-- base grant -- a table-level GRANT SELECT with no matching policy would
+-- still return zero rows under RLS, but leaving the unused grant in
+-- place is needless surface, and DELETE-then-DROP-policy without the
+-- REVOKE would leave a client able to see the table shape via an
+-- explicit empty-result query. Fill in the actual policy name(s) found
+-- via the pg_policies query in §4 -- name is a placeholder.
+drop policy if exists <existing_select_policy_name> on public.sighting_votes;
+revoke select on public.sighting_votes from anon, authenticated;
+-- keep INSERT (needed for casting a vote) -- confirm its grant/policy
+-- survives this unchanged, don't run a blanket REVOKE ALL here
 ```
 
 ## 6. What this audit did *not* do
