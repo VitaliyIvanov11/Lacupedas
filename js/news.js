@@ -173,11 +173,6 @@ function renderNewsList() {
     });
     li.appendChild(flagBtn);
 
-    const dot = document.createElement("span");
-    dot.className = "type-dot";
-    dot.style.background = NEWS_MARKER_COLOR;
-    li.appendChild(dot);
-
     // Best-effort preview pulled from the source RSS feed (see
     // extractImageUrl() in scripts/fetch-news.js) — not every feed
     // provides one, and hotlinked images can occasionally fail to load, so
