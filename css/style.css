@@ -1132,6 +1132,15 @@ button {
   margin: 0 auto;
 }
 
+.footer-meta {
+  margin: 4px 0 0;
+  opacity: 0.8;
+}
+
+.footer-meta a {
+  color: inherit;
+}
+
 /* Mobile bottom nav — fixed tab bar replacing the desktop map-pane's
    toolbar as the way to reach the standalone map.html (see
    .mobile-quick-actions near .layout for the other entry point). */
