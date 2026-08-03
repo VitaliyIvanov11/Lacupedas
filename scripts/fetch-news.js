@@ -48,11 +48,6 @@ const FEEDS = [
   { name: "LATMA", url: "https://www.latma.lv/feed/", lang: "lv" },
 ];
 
-// Recovers each item's feed language from its `source` name — needed to
-// pick translation source/target languages, since `lang` itself isn't
-// persisted in data/news.json (only used transiently during matching).
-const SOURCE_LANG = Object.fromEntries(FEEDS.map((f) => [f.name, f.lang]));
-
 // The site's 3 UI languages — every news title gets a version in each, so
 // the list always reads in whatever language the visitor has selected
 // instead of showing whatever language the source portal happened to
@@ -63,11 +58,19 @@ const UI_LANGS = ["lv", "en", "ru"];
 // good quality (same engine as translate.google.com), but undocumented and
 // unsupported: could rate-limit or change shape without notice. Falls back
 // to the original text on any failure rather than leaving a title blank.
-async function translateText(text, sourceLang, targetLang) {
+//
+// Source language is always auto-detected rather than taken from the
+// feed's declared `lang` — some portals mix languages per-article (e.g.
+// gorod.lv is a Russian-language site overall, but several of its bear
+// stories turned out to have Latvian titles), so trusting a per-feed
+// constant silently mistranslated or skipped those. Auto-detect verified
+// safe for the same-language case too: translating LV text with tl=lv
+// returns it byte-for-byte unchanged rather than paraphrasing it.
+async function translateText(text, targetLang) {
   try {
     const url =
       `https://translate.googleapis.com/translate_a/single?client=gtx&dt=t` +
-      `&sl=${encodeURIComponent(sourceLang)}&tl=${encodeURIComponent(targetLang)}` +
+      `&sl=auto&tl=${encodeURIComponent(targetLang)}` +
       `&q=${encodeURIComponent(text)}`;
     const res = await fetch(url, {
       headers: { "User-Agent": "Mozilla/5.0" },
@@ -87,19 +90,13 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Builds { lv, en, ru }: the source language's slot gets the original text
-// verbatim (no point round-tripping it through translation), the other two
-// get machine-translated. A small delay between requests is just good
+// Builds { lv, en, ru }. A small delay between requests is just good
 // manners toward a free, unofficial endpoint — this runs in the background
 // on a schedule, so there's no reason to hammer it.
-async function buildTitleTranslations(text, sourceLang) {
+async function buildTitleTranslations(text) {
   const titles = {};
   for (const lang of UI_LANGS) {
-    if (lang === sourceLang) {
-      titles[lang] = text;
-      continue;
-    }
-    const translated = await translateText(text, sourceLang, lang);
+    const translated = await translateText(text, lang);
     titles[lang] = translated || text;
     await sleep(200);
   }
@@ -415,8 +412,7 @@ async function main() {
   let translatedCount = 0;
   for (const entry of merged) {
     if (typeof entry.title === "string") {
-      const sourceLang = SOURCE_LANG[entry.source] || "lv";
-      entry.title = await buildTitleTranslations(entry.title, sourceLang);
+      entry.title = await buildTitleTranslations(entry.title);
       translatedCount++;
     }
   }

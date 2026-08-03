@@ -1,9 +1,13 @@
 {
-  "generatedAt": "2026-08-03T08:43:20.910Z",
+  "generatedAt": "2026-08-03T09:57:29.994Z",
   "items": [
     {
       "id": "48d36b95b59b46b1",
-      "title": "Haruldane juhtum Rootsis: karu ründas marju korjanud naist",
+      "title": {
+        "lv": "Rets gadījums Zviedrijā: lācis uzbrucis sievietei, kas lasa ogas",
+        "en": "A rare case in Sweden: a bear attacked a woman picking berries",
+        "ru": "Редкий случай в Швеции: медведь напал на женщину, собирающую ягоды"
+      },
       "link": "https://pmo.ee/8520232",
       "source": "Postimees.ee",
       "pubDate": "2026-08-03T08:35:00.000Z",
@@ -14,7 +18,11 @@
     },
     {
       "id": "09f6f13b54b4a83a",
-      "title": "Tiesiog neįtikėtina: užfiksavo, ką lokys padarė priplaukęs prie žvejo",
+      "title": {
+        "lv": "Tas ir vienkārši neticami: viņi ierakstīja, ko lācis darīja, kad piepeldēja pie zvejnieka",
+        "en": "It's just incredible: they recorded what the bear did when it swam to the fisherman",
+        "ru": "Это просто невероятно: зафиксировали, что сделал медведь, когда подплыл к рыбаку"
+      },
       "link": "http://www.lrytas.lt/gamta/fauna/2026/08/03/news/tiesiog-neitiketina-uzfiksavo-ka-lokys-padare-priplaukes-prie-zvejo-43360114/",
       "source": "Lrytas.lt",
       "pubDate": "2026-08-03T07:46:33.000Z",
@@ -25,7 +33,11 @@
     },
     {
       "id": "59050c4a167362db",
-      "title": "DAP izsludinājusi 180 000 eiro vērtu konkursu lāču monitorēšanai",
+      "title": {
+        "lv": "DAP izsludinājusi 180 000 eiro vērtu konkursu lāču monitorēšanai",
+        "en": "DAP has announced a tender worth 180,000 euros for bear monitoring",
+        "ru": "DAP объявила тендер стоимостью 180 000 евро на мониторинг медведей"
+      },
       "link": "https://www.1188.lv/zinas/dap-izsludinajusi-180-000-eiro-vertu-konkursu-lacu-monitoresanai/70787?utm_source=rss&utm_campaign=rss&utm_medium=links",
       "source": "1188.lv",
       "pubDate": "2026-08-03T05:18:00.000Z",
@@ -36,7 +48,11 @@
     },
     {
       "id": "caab2290013f06d4",
-      "title": "Izsludināts 180 000 eiro vērts konkurss lāču monitorēšanai",
+      "title": {
+        "lv": "Izsludināts 180 000 eiro vērts konkurss lāču monitorēšanai",
+        "en": "A 180,000-euro tender for bear monitoring has been announced",
+        "ru": "Объявлен тендер на 180 000 евро на мониторинг медведей"
+      },
       "link": "https://pmo.ee/8520071",
       "source": "Apollo.lv",
       "pubDate": "2026-08-03T05:14:18.000Z",
@@ -47,7 +63,11 @@
     },
     {
       "id": "9d9d8b681e4b5653",
-      "title": "Karusid võib nüüdsest küttida vaid keskkonnaameti eriloal",
+      "title": {
+        "lv": "Turpmāk lāčus drīkst medīt tikai ar speciālu Vides pārvaldes atļauju",
+        "en": "From now on, bears can only be hunted with a special permit from the Environmental Board",
+        "ru": "Отныне охотиться на медведя можно только при наличии специального разрешения Департамента окружающей среды."
+      },
       "link": "https://www.err.ee/1610100946/karusid-voib-nuudsest-kuttida-vaid-keskkonnaameti-eriloal",
       "source": "ERR.ee",
       "pubDate": "2026-08-02T16:06:00.000Z",
@@ -58,7 +78,11 @@
     },
     {
       "id": "326caa5e28c10cea",
-      "title": "Lāču ģimene ieradusies iemēģināt Imantas veloceliņu",
+      "title": {
+        "lv": "Lāču ģimene ieradusies iemēģināt Imantas veloceliņu",
+        "en": "The Laču family has come to try out the Imanta bike path",
+        "ru": "Семья Лачу приехала опробовать велосипедную дорожку Иманта"
+      },
       "link": "https://diena.lv/raksts/sestdiena/tuvplana-116/lacu-gimene-ieradusies-iemeginat-imantas-velocelinu?utm_source=rss&utm_campaign=rss&utm_medium=links",
       "source": "Diena.lv",
       "pubDate": "2026-07-31T08:30:00.000Z",
@@ -68,7 +92,11 @@
     },
     {
       "id": "4bba503a78863c8a",
-      "title": "Ropažu novadā manīts lācis! Ko darīt, ja sastopies ar to aci pret aci?",
+      "title": {
+        "lv": "Ropažu novadā manīts lācis! Ko darīt, ja sastopies ar to aci pret aci?",
+        "en": "A bear has been seen in Ropaži county! What if you come face to face with it?",
+        "ru": "В Ропажском крае видели медведя! Что, если вы столкнетесь с этим лицом к лицу?"
+      },
       "link": "https://kodols.lv/pieriga/ropazi/video-ropazu-novada-manits-lacis-ko-darit-ja-sastopies-ar-to-aci-pret-aci-203464",
       "source": "kodols.lv",
       "pubDate": "2026-07-29T13:27:00.000Z",
@@ -78,7 +106,11 @@
     },
     {
       "id": "f4861bd22de6488b",
-      "title": "Rīgas dome brīdina par Imantā, iespējams, novērotu lāceni ar lācēniem",
+      "title": {
+        "lv": "Rīgas dome brīdina par Imantā, iespējams, novērotu lāceni ar lācēniem",
+        "en": "The Riga City Council warns about a bear with cubs possibly observed in Imanta",
+        "ru": "Рижская дума предупреждает о возможности наблюдения медведицы с медвежатами в Иманте"
+      },
       "link": "https://www.lsm.lv/raksts/zinas/latvija/25.07.2026-rigas-dome-bridina-par-imanta-iespejams-noverotu-laceni-ar-laceniem.a656335/",
       "source": "LSM.lv",
       "pubDate": "2026-07-25T17:56:00.000Z",
@@ -88,7 +120,11 @@
     },
     {
       "id": "12217f586d9181b2",
-      "title": "Lācis iznācis pie dzīvojamās mājas Cēsu apkārtnē",
+      "title": {
+        "lv": "Lācis iznācis pie dzīvojamās mājas Cēsu apkārtnē",
+        "en": "The bear came out to a residential house in the Cēsi area",
+        "ru": "Медведь подошел к жилому дому в Цесском районе."
+      },
       "link": "https://gorod.lv/novosti/367872-medved-vyshel-k-zhilomu-domu-v-okrestnostyah-tsesisa-video",
       "source": "gorod.lv",
       "pubDate": "2026-07-23T13:40:00.000Z",
@@ -98,7 +134,11 @@
     },
     {
       "id": "7849ae2b81b0d204",
-      "title": "Lācis uzbrucis sēņotājam Tukuma novadā",
+      "title": {
+        "lv": "Lācis uzbrucis sēņotājam Tukuma novadā",
+        "en": "A bear attacked a mushroom picker in Tukuma district",
+        "ru": "В Тукумском районе медведь напал на грибника"
+      },
       "link": "https://gorod.lv/novosti/367217-medved-napal-na-gribnika-v-tukumskom-krae",
       "source": "gorod.lv",
       "pubDate": "2026-06-30T02:00:00.000Z",
@@ -108,7 +148,11 @@
     },
     {
       "id": "1dec7d380a08e2cb",
-      "title": "Zvejniekciemā manītais lācis blandījies divos īpašumos un devies tālāk uz Limbažu novadu",
+      "title": {
+        "lv": "Zvejniekciemā manītais lācis blandījies divos īpašumos un devies tālāk uz Limbažu novadu",
+        "en": "The bear seen in Zvejniekciem wandered in two properties and moved on to Limbaži district",
+        "ru": "Медведь, которого видели в Звейниекциеме, забрел в два дома и перебрался в Лимбажский район."
+      },
       "link": "https://www.tvnet.lv/8498307/zvejniekciema-manitais-lacis-blandijies-divos-ipasumos-un-devies-talak-uz-limbazu-novadu",
       "source": "TVNET",
       "pubDate": "2026-06-27T05:55:37.000Z",
@@ -118,7 +162,11 @@
     },
     {
       "id": "c04d5eab430d23e5",
-      "title": "Biologi Latgales zoodārza fiksējuši lāča klātbūtni parkā Silene",
+      "title": {
+        "lv": "Biologi Latgales zoodārza fiksējuši lāča klātbūtni parkā Silene",
+        "en": "Biologists from the Latgale Zoo have recorded the presence of a bear in Silene Park",
+        "ru": "Биологи Латгальского зоопарка зафиксировали присутствие медведя в парке Силене"
+      },
       "link": "https://www.gorod.lv/novosti/366860-biologi-latgalskogo-zoosada-zafiksirovali-prisutstvie-medvedya-v-parke-silene-video",
       "source": "gorod.lv",
       "pubDate": "2026-06-12T13:30:00.000Z",
@@ -128,7 +176,11 @@
     },
     {
       "id": "9d61a73cd7bcc2c9",
-      "title": "Jēkabpilī ieklīdušais lācis pavadīts prom no pilsētas",
+      "title": {
+        "lv": "Jēkabpilī ieklīdušais lācis pavadīts prom no pilsētas",
+        "en": "The bear that wandered into Jēkabpilis was escorted away from the city",
+        "ru": "Забревшего в Екабпилис медведя выпроводили из города"
+      },
       "link": "https://www.lsm.lv/raksts/zinas/latvija/01.06.2026-jekabpili-ieklidusais-lacis-pavadits-prom-no-pilsetas.a649535/",
       "source": "LSM.lv",
       "pubDate": "2026-06-01T07:13:00.000Z",
@@ -138,7 +190,11 @@
     },
     {
       "id": "450fd6df2fa76221",
-      "title": "Lācis skrējis pa Lietuvas pilsētiņas Turmantas ielām, nokļuvis video",
+      "title": {
+        "lv": "Lācis skrējis pa Lietuvas pilsētiņas Turmantas ielām, nokļuvis video",
+        "en": "The bear ran through the streets of the Lithuanian town of Turmantas, caught on video",
+        "ru": "Медведь бегал по улицам литовского города Турмантас, попал на видео"
+      },
       "link": "https://gorod.lv/novosti/366429-medved-probezhal-po-ulitsam-litovskogo-turmantasa-i-popal-na-video",
       "source": "gorod.lv",
       "pubDate": "2026-05-28T06:10:00.000Z",
@@ -148,7 +204,11 @@
     },
     {
       "id": "0ee102e7e3337333",
-      "title": "Lācis uzbrucis biškopības saimniecībai Ļaudonā, Madonas novadā",
+      "title": {
+        "lv": "Lācis uzbrucis biškopības saimniecībai Ļaudonā, Madonas novadā",
+        "en": "A bear has attacked a beekeeping farm in Laudon, Madona county",
+        "ru": "Медведь напал на пчеловодческую ферму в Лаудоне Мадонского уезда"
+      },
       "link": "https://gorod.lv/novosti/366059-medved-napal-na-paseku-v-madonskom-krae",
       "source": "gorod.lv",
       "pubDate": "2026-05-15T02:00:00.000Z",
@@ -158,7 +218,11 @@
     },
     {
       "id": "5fd4cda71fb70d01",
-      "title": "Kaplavas robežsargi nofilmējuši lāci, kas mēģinājis apiet žogu",
+      "title": {
+        "lv": "Kaplavas robežsargi nofilmējuši lāci, kas mēģinājis apiet žogu",
+        "en": "Kaplava border guards filmed a bear that tried to bypass the fence",
+        "ru": "Пограничники Каплавы засняли медведя, который пытался обойти забор"
+      },
       "link": "https://gorod.lv/novosti/365549-pogranichniki-kaplavskogo-otdeleniya-zasnyali-medvedya-pytavshegosya-oboiti-ograzhdenie-video",
       "source": "gorod.lv",
       "pubDate": "2026-04-23T11:50:00.000Z",
@@ -168,7 +232,11 @@
     },
     {
       "id": "e039660060415cc2",
-      "title": "Ogres novadā aizturēts malumednieks, kurš nošāvis brūno lāci",
+      "title": {
+        "lv": "Ogres novadā aizturēts malumednieks, kurš nošāvis brūno lāci",
+        "en": "A poacher who shot a brown bear was arrested in Ogre region",
+        "ru": "В Огрском районе задержан браконьер, застреливший бурого медведя"
+      },
       "link": "https://gorod.lv/novosti/361415-v-ogrskom-krae-zaderzhan-brakoner-zastrelivshii-burogo-medvedya",
       "source": "gorod.lv",
       "pubDate": "2025-11-03T10:00:00.000Z",
@@ -178,7 +246,11 @@
     },
     {
       "id": "a57ca88f6e5caee4",
-      "title": "No meža līdz robežai: lāči nonākuši līdz Zarasai, netālu no Daugavpils",
+      "title": {
+        "lv": "No meža līdz robežai: lāči nonākuši līdz Zarasai, netālu no Daugavpils",
+        "en": "From the forest to the border: the bears have reached Zarasa, near Daugavpils",
+        "ru": "От леса до границы: медведи добрались до Зарасы под Даугавпилсом"
+      },
       "link": "https://gorod.lv/novosti/358597-iz-lesa-k-granitse-medvedi-dobralis-do-zarasaya-ryadom-s-daugavpilsom",
       "source": "gorod.lv",
       "pubDate": "2025-07-03T02:00:00.000Z",
@@ -188,7 +260,11 @@
     },
     {
       "id": "fb62a41f9aecfdcc",
-      "title": "Latvijā pirmo reizi fiksēts brūnā lāča uzbrukums zirgam Beļavā, Gulbenes novadā",
+      "title": {
+        "lv": "Latvijā pirmo reizi fiksēts brūnā lāča uzbrukums zirgam Beļavā, Gulbenes novadā",
+        "en": "For the first time in Latvia, a brown bear attack on a horse was recorded in Beļava, Gulbene district",
+        "ru": "Впервые в Латвии зафиксировано нападение бурого медведя на лошадь в Беляве Гулбенского района."
+      },
       "link": "https://gorod.lv/novosti/357769-v-latvii-vpervye-zafiksirovali-napadenie-burogo-medvedya-na-loshad",
       "source": "gorod.lv",
       "pubDate": "2025-05-26T14:00:00.000Z",
