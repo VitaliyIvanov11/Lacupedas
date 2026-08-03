@@ -81,6 +81,21 @@
   color: var(--series-1);
 }
 
+/* .stat-label is shared with the narrow compact stat boxes elsewhere
+   (index.html's home feed, this page's own community-stats row above),
+   where a tight max-width/centered-flex layout makes sense for a 1-2 word
+   caption. This card's label is a full descriptive sentence next to a big
+   number in a wide row, so it needs to read as normal wrapping text
+   instead — the shared max-width:7ch was squeezing it into a single
+   vertical column of one word per line. */
+.research-figure .stat-label {
+  max-width: none;
+  min-height: 0;
+  display: block;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
 .research-desc {
   margin: 0 0 10px;
   font-size: 0.85rem;
