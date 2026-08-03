@@ -27,6 +27,19 @@ function formatDate(dateStr) {
   });
 }
 
+function formatStatDate(dateStr) {
+  const lang = getLang();
+  const d = new Date(dateStr + "T00:00:00");
+  if (isNaN(d)) return dateStr;
+
+  const isCurrentYear = d.getFullYear() === new Date().getFullYear();
+  return d.toLocaleDateString(localeForLang(lang), {
+    day: "numeric",
+    month: "short",
+    ...(isCurrentYear ? {} : { year: "numeric" }),
+  });
+}
+
 function typeLabel(type) {
   if (type === "tracks") return t("typeTracks");
   if (type === "damage") return t("typeDamage");
@@ -80,7 +93,7 @@ function renderStatsAndChart() {
     spEl.statLast.textContent = t("noneYet");
   } else {
     const latest = [...combined].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
-    spEl.statLast.textContent = formatDate(latest.date);
+    spEl.statLast.textContent = formatStatDate(latest.date);
   }
   renderMonthlyChart(spEl.chartContainer, combined);
 }

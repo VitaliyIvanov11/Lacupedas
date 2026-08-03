@@ -452,6 +452,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  margin-bottom: 14px;
 }
 
 /* Points at stats.html, the mobile detail page the chart/list moved to
@@ -464,14 +465,24 @@ button {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 12px;
+  align-items: stretch;
 }
 
 .stat {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
   min-width: 0;
+  min-height: 180px;
+  height: 100%;
+  padding: 18px 14px 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(11, 11, 11, 0.04);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 @media (max-width: 900px) {
@@ -487,20 +498,16 @@ button {
   }
 
   .stats-grid {
-    gap: 6px;
+    gap: 10px;
   }
 
   /* Compact single-row pill per stat — same height class as
      .mobile-quick-btn above it, no icon (see .stat-icon below). */
   .stat {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 2px;
-    min-height: 40px;
-    padding: 8px 6px;
-    border-radius: 10px;
+    gap: 10px;
+    min-height: 170px;
+    padding: 16px 12px 14px;
+    border-radius: 20px;
   }
 
   .stat-text {
@@ -508,15 +515,15 @@ button {
   }
 
   .stat-value {
-    font-size: 1.1rem;
+    font-size: 2.15rem;
   }
 
   .stat-value-small {
-    font-size: 0.8rem;
+    font-size: 1.15rem;
   }
 
   .stat-label {
-    font-size: 0.68rem;
+    font-size: 0.82rem;
   }
 
   .stat-total {
@@ -534,14 +541,19 @@ button {
 
 .stat-icon {
   flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
+  font-size: 1rem;
   background: var(--gridline);
+}
+
+.stat-icon svg {
+  width: 22px;
+  height: 22px;
 }
 
 .stat-total .stat-icon {
@@ -559,33 +571,58 @@ button {
   color: var(--brand-accent);
 }
 
-@media (max-width: 900px) {
-  .stat-icon {
-    display: none;
-  }
-}
-
 .stat-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 8px;
   min-width: 0;
+  align-items: center;
+  text-align: center;
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: clamp(2.25rem, 3.2vw, 3rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .stat-value-small {
-  font-size: 0.95rem;
+  font-size: clamp(1.15rem, 1.8vw, 1.5rem);
   font-weight: 600;
+  line-height: 1.15;
+}
+
+.stat-value-date {
+  max-width: 8ch;
+  min-height: 2.4em;
+  text-wrap: balance;
 }
 
 .stat-label {
-  font-size: 0.72rem;
+  max-width: 10ch;
+  font-size: 0.88rem;
   color: var(--text-muted);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.stats-card h2 {
+  font-size: 0.98rem;
+  margin-bottom: 0;
+}
+
+.stat-total {
+  background: linear-gradient(180deg, rgba(137, 135, 129, 0.08), rgba(137, 135, 129, 0.03));
+}
+
+.stat-year {
+  background: linear-gradient(180deg, rgba(12, 163, 12, 0.1), rgba(12, 163, 12, 0.04));
+}
+
+.stat-recent {
+  background: linear-gradient(180deg, rgba(217, 123, 41, 0.11), rgba(217, 123, 41, 0.04));
 }
 
 .chart-container svg {
