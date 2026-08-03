@@ -113,6 +113,29 @@ Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
 constraint (`sightings_type_check`) — adding a new type means an `ALTER
 TABLE ... DROP/ADD CONSTRAINT` in Supabase, not just a front-end change.
 
+### Historical/official data (not yet imported)
+
+`js/storage.js`'s `rowToSighting()` and the front end already understand a
+`source` column (`"community"` by default, `"silava"` or `"dap"` shown as a
+small badge next to the sighting — see `sourceLabel()` in
+`js/sightings-panel.js`) — but the column doesn't exist in the live table
+yet, since this repo has no direct database access to run the migration
+(Supabase schema changes go through the dashboard's SQL editor, by hand):
+
+```sql
+ALTER TABLE sightings ADD COLUMN source text NOT NULL DEFAULT 'community';
+ALTER TABLE sightings ADD CONSTRAINT sightings_source_check
+  CHECK (source IN ('community', 'silava', 'dap'));
+```
+
+Until that's run (and actual historical points from LVMI Silava's "Lāču
+monitorings 2023.–2025." report or DAP's ~827 2025 observation reports are
+hand-imported with the matching `source` value), every row is implicitly
+`"community"` and no badge appears — this is groundwork, not a populated
+feature. Import only real, verifiable points — see the "verify the specific
+claim" note under News auto-collection for why a plausible-looking but
+unverified data point is worse than no data point.
+
 ### Confirm/dispute voting
 
 A second table, `sighting_votes` (`id uuid`, `sighting_id uuid` references

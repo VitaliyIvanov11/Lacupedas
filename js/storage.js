@@ -24,6 +24,14 @@ function rowToSighting(row) {
     reporter: row.reporter || "",
     photoUrl: row.photo_url || "",
     createdAt: row.created_at,
+    // Defaults to "community" for both existing rows and any table that
+    // doesn't have this column yet (select * just omits it, so row.source
+    // is undefined) — every row in the table today came through the
+    // report form, so that default is accurate, not a guess. Only rows
+    // hand-imported from official monitoring data (see README's
+    // "Historical/official data" section) would ever carry "silava" or
+    // "dap" instead.
+    source: row.source || "community",
   };
 }
 

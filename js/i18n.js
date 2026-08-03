@@ -265,6 +265,9 @@ const translations = {
     newsToggleLabel: "Rādīt kartē",
     newsEmpty: "Pagaidām nav neviena ziņu pieminējuma.",
     newsDisclaimer: "Automātiski apkopots ik pēc pāris stundām no publiskiem ziņu portāliem (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv, kā arī pierobežas ziņas no Igaunijas — ERR.ee — un Lietuvas — 15min.lt) pēc atslēgvārda \"lācis\"/\"karu\"/\"lokys\"/\"медведь\". Papildus reizi pa reizei manuāli pārbaudīti un pievienoti vecāki (līdz 2 gadiem) apstiprināti gadījumi. Nav pārbaudīts cilvēka reāllaikā — precīza atrašanās vieta nezināma, kartē redzamā atzīme ir tikai tuvākā zināmā pilsēta/novads. Autortiesības uz rakstiem pieder to izdevējiem.",
+    sourceSilava: "LVMI Silava",
+    sourceDap: "DAP",
+    newsUpdatedAt: "Dati atjaunināti: {date}",
     newsNewCount: "Jauni pieminējumi: {n}",
 
     aboutTitle: "Par projektu",
@@ -575,6 +578,9 @@ const translations = {
     newsToggleLabel: "Show on map",
     newsEmpty: "No news mentions yet.",
     newsDisclaimer: "Automatically collected every couple of hours from public news portals (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv, plus border-area news from Estonia — ERR.ee — and Lithuania — 15min.lt) by keyword match on \"bear\" in each language. Older confirmed cases (up to 2 years back) are occasionally added by hand after manual verification. Not verified by a human in real time — exact location is unknown, the map pin is only the nearest known town/municipality. Article copyright belongs to the original publishers.",
+    sourceSilava: "LVMI Silava",
+    sourceDap: "DAP",
+    newsUpdatedAt: "Data updated: {date}",
     newsNewCount: "New mentions: {n}",
 
     aboutTitle: "About this project",
@@ -885,6 +891,9 @@ const translations = {
     newsToggleLabel: "Показать на карте",
     newsEmpty: "Пока нет упоминаний в новостях.",
     newsDisclaimer: "Автоматически собирается каждые несколько часов из публичных новостных порталов (LSM.lv, Apollo.lv, TVNET, gorod.lv, kodols.lv), а также приграничные новости из Эстонии (ERR.ee) и Литвы (15min.lt) по ключевым словам «lācis»/«karu»/«lokys»/«медведь». Иногда вручную добавляются старые (до 2 лет) проверенные случаи. Не проверяется человеком в реальном времени — точное место неизвестно, метка на карте — лишь ближайший известный город/край. Авторские права на статьи принадлежат их издателям.",
+    sourceSilava: "LVMI Silava",
+    sourceDap: "DAP",
+    newsUpdatedAt: "Данные обновлены: {date}",
     newsNewCount: "Новых упоминаний: {n}",
 
     aboutTitle: "О проекте",

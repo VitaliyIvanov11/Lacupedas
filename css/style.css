@@ -775,6 +775,16 @@ button {
   color: var(--text-secondary);
 }
 
+.sighting-source-badge {
+  flex: 0 0 auto;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(42, 120, 214, 0.14);
+  color: var(--series-1);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
 .sighting-desc {
   margin: 4px 0 0;
   font-size: 0.8rem;
@@ -947,6 +957,20 @@ button {
   line-height: 1.4;
   max-height: 4.5em;
   overflow-y: auto;
+}
+
+/* Freshness signal for the auto-scraper's output — empty (and takes no
+   space) until the first successful fetch, so it never shows a stale/wrong
+   placeholder. See renderNewsUpdatedAt() in js/news.js. */
+.news-updated-at {
+  flex: 0 0 auto;
+  margin: 4px 0 0;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.news-updated-at:empty {
+  display: none;
 }
 
 .news-marker-diamond {

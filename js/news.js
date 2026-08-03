@@ -15,6 +15,7 @@ let newsMap = null;
 let newsSeenIds = new Set();
 let newsDataChangeCallback = null;
 let newsShownCount = NEWS_PAGE_SIZE;
+let newsGeneratedAt = null;
 
 // title is { lv, en, ru } — machine-translated at scrape time (see
 // buildTitleTranslations() in scripts/fetch-news.js) so the list always
@@ -96,10 +97,41 @@ async function fetchNewsData() {
     const res = await fetch(`data/news.json?t=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) return null;
     const data = await res.json();
-    return Array.isArray(data.items) ? data.items : [];
+    return {
+      items: Array.isArray(data.items) ? data.items : [],
+      generatedAt: data.generatedAt || null,
+    };
   } catch {
     return null;
   }
+}
+
+// Surfaces data/news.json's own generatedAt timestamp — the news scanner
+// runs on a schedule (see .github/workflows/news-scan.yml) and could go
+// silently stale if that Action ever broke, so this is a visible freshness
+// signal rather than a silent assumption that "no error" means "up to
+// date". No-ops if #news-updated-at isn't on the current page.
+function renderNewsUpdatedAt(generatedAt) {
+  const el = document.getElementById("news-updated-at");
+  if (!el) return;
+  if (!generatedAt) {
+    el.textContent = "";
+    return;
+  }
+  const d = new Date(generatedAt);
+  if (isNaN(d)) {
+    el.textContent = "";
+    return;
+  }
+  const lang = getLang();
+  const formatted = d.toLocaleString(localeForLang(lang), {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  el.textContent = t("newsUpdatedAt").replace("{date}", formatted);
 }
 
 function renderNewsMarkers() {
@@ -144,6 +176,7 @@ function formatNewsDate(iso) {
 }
 
 function renderNewsList() {
+  renderNewsUpdatedAt(newsGeneratedAt);
   const list = document.getElementById("news-list");
   if (!list) return;
   list.innerHTML = "";
@@ -251,8 +284,9 @@ function updateNewsToast(newCount) {
 }
 
 async function pollNews() {
-  const fresh = await fetchNewsData();
-  if (fresh === null) return; // fetch failed — keep showing whatever we had
+  const result = await fetchNewsData();
+  if (result === null) return; // fetch failed — keep showing whatever we had
+  const fresh = result.items;
 
   const isFirstLoad = newsSeenIds.size === 0;
   const freshIds = new Set(fresh.map((n) => n.id));
@@ -260,8 +294,10 @@ async function pollNews() {
 
   newsItems = fresh;
   newsSeenIds = freshIds;
+  newsGeneratedAt = result.generatedAt;
 
   updateSourceFilterOptions();
+  renderNewsUpdatedAt(newsGeneratedAt);
   renderNewsMarkers();
   renderNewsList();
   if (newCount > 0) updateNewsToast(newCount);

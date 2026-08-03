@@ -61,6 +61,12 @@ function typeLabel(type) {
   return t("typeSighting");
 }
 
+function sourceLabel(source) {
+  if (source === "silava") return t("sourceSilava");
+  if (source === "dap") return t("sourceDap");
+  return "";
+}
+
 function matchesTimeFilter(dateStr, filterValue) {
   if (filterValue === "all") return true;
   const d = new Date(dateStr);
@@ -160,6 +166,15 @@ function renderList(filtered) {
     typeSpan.textContent = typeLabel(s.type) + " · 🐻×" + (s.count || 1);
     top.appendChild(dateSpan);
     top.appendChild(typeSpan);
+    // Community reports (the overwhelming majority) get no badge at all —
+    // only rows hand-imported from official monitoring data are marked, so
+    // the badge itself signals "this one's official," not just metadata.
+    if (s.source && s.source !== "community") {
+      const sourceBadge = document.createElement("span");
+      sourceBadge.className = "sighting-source-badge";
+      sourceBadge.textContent = sourceLabel(s.source);
+      top.appendChild(sourceBadge);
+    }
     body.appendChild(top);
 
     if (s.description) {
