@@ -102,3 +102,49 @@
   color: var(--text-secondary);
   line-height: 1.5;
 }
+
+/* A deliberately abstract 2x2 layout (Kurzeme/Vidzeme top,
+   Zemgale/Latgale bottom) — a rough compass-position approximation, not a
+   geographic outline of Latvia. Levels come straight from the same
+   regional description already cited on biology.html ("visvairāk lāču
+   sastopami Vidzemē un Latgalē... arvien biežāk arī Kurzemē un Zemgalē"),
+   just visualized instead of only stated as a sentence. */
+.region-card {
+  border-left: 3px solid var(--brand-forest);
+}
+
+.region-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "kurzeme vidzeme"
+    "zemgale latgale";
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.region-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 12px;
+  border-radius: 10px;
+}
+
+.region-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.region-level {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.region-level-highest {
+  background: rgba(47, 93, 63, 0.14);
+}
+
+.region-level-high {
+  background: rgba(47, 93, 63, 0.06);
+}
