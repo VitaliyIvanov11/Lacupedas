@@ -92,13 +92,7 @@
     initReportForm(leafletMap, { onSaved: refreshMapView });
     initNews(leafletMap, () => buildRecencyPanel());
 
-    document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        setLang(btn.getAttribute("data-lang-btn"));
-        applyTranslations();
-        render();
-      });
-    });
+    initLangSwitcher(render);
 
     el.typeFilter.addEventListener("change", render);
     el.timeFilter.addEventListener("change", render);

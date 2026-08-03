@@ -7,7 +7,6 @@
   const SIGHTINGS_POLL_MS = 2 * 60 * 1000; // 2 minutes
 
   const el = {
-    langBtns: document.querySelectorAll("[data-lang-btn]"),
     typeFilter: document.getElementById("sightings-type-filter"),
     timeFilter: document.getElementById("sightings-time-filter"),
     photoFilter: document.getElementById("sightings-photo-filter"),
@@ -16,14 +15,6 @@
   async function refreshAll() {
     await refreshSightingsPanel();
     renderMarkers(getFilteredSightings(), (s) => openDetailsFromMarker(s));
-  }
-
-  function switchLang(lang) {
-    setLang(lang);
-    applyTranslations();
-    renderList(getFilteredSightings());
-    renderStatsAndChart();
-    if (typeof renderNewsList === "function") renderNewsList();
   }
 
   function init() {
@@ -43,8 +34,10 @@
     }
     initSightingsPanel();
 
-    el.langBtns.forEach((btn) => {
-      btn.addEventListener("click", () => switchLang(btn.getAttribute("data-lang-btn")));
+    initLangSwitcher(() => {
+      renderList(getFilteredSightings());
+      renderStatsAndChart();
+      if (typeof renderNewsList === "function") renderNewsList();
     });
 
     // The list/stats side of these filters is wired inside

@@ -2,15 +2,12 @@
 const translations = {
   lv: {
     appTitle: "Lāču Novērojumi Latvijā",
-    appSubtitle: "Kopienas veidota lāču novērojumu karte",
     mapHint: "Noklikšķiniet uz kartes, lai pievienotu novērojumu",
     mapHintPicking: "Noklikšķiniet uz kartes vietā, kur redzējāt lāci",
     legendToggle: "🗺️ Leģenda",
     legendNews: "Ziņu pieminējums",
     mapPageTitle: "Lāču karte",
-    mapPageSubtitle: "Visi novērojumi un ziņu pieminējumi vienā kartē",
     statsPageTitle: "Statistika",
-    statsPageSubtitle: "Novērojumi grafikos un pilns saraksts",
     researchTitle: "📊 Oficiālie pētījumu dati",
     researchPopLabel: "brūno lāču Latvijā (2025. g. aplēse)",
     researchNote: "Šis skaitlis ir zinātnisks novērtējums, nevis šajā lapā redzamo novērojumu summa — tas balstās uz LVMI Silava monitoringu (pēdu nospiedumi, kameru attēli, ekspertu aplēses) visā Latvijā.",
@@ -103,7 +100,6 @@ const translations = {
     faqA4: "Jā. Pēc 2025. gada monitoringa datiem Latvijā mīt aptuveni 190 brūno lāču — piecu gadu laikā populācija ir gandrīz dubultojusies. Šo skaitu apstiprina gan LVMI Silava monitorings, gan Latvijas Mednieku asociācijas (LATMA) publicētie dati, kas balstīti uz pēdu nospiedumiem, kameru attēliem, kā arī medniekiem un sabiedrības ziņotajiem novērojumiem. Arvien biežāk tiek konstatētas arī lācenes ar mazuļiem, kas apstiprina, ka lāči Latvijā veiksmīgi vairojas.",
 
     guideTitle: "Ko darīt, ja satiec lāci?",
-    guideSubtitle: "Praktiski padomi, balstīti uz Dabas aizsardzības pārvaldes ieteikumiem",
     guideBackToMap: "← Atpakaļ uz karti",
     backToHub: "← Atpakaļ uz noderīgo informāciju",
     guideCityTitle: "🏘️ Ja lācis apdzīvotā vietā",
@@ -133,7 +129,6 @@ const translations = {
     guideSourceNote: "Šī lapa balstīta uz Dabas aizsardzības pārvaldes publiski pieejamiem ieteikumiem un LVMI Silava pētījumu \"Lāču monitorings 2023–2025\".",
 
     hubTitle: "Noderīga informācija",
-    hubSubtitle: "Praktiski padomi un fakti par lāčiem Latvijā",
     hubCardLink: "Lasīt →",
     hubCatPractical: "Praktiski padomi",
     hubCatAbout: "Par lāci Latvijā",
@@ -145,7 +140,6 @@ const translations = {
     hubTracksCardDesc: "Priekšķepas un pakaļķepas izmēri, atšķirība no citiem dzīvniekiem, citas pazīmes.",
 
     tracksTitle: "Kā atpazīt lāča pēdas un citas pazīmes",
-    tracksSubtitle: "Priekšķepas un pakaļķepas izmēri, atšķirība no citiem dzīvniekiem, citas klātbūtnes pazīmes",
     tracksIntro: "Lāča pēdu nospiedumus mežā var sajaukt ar citu dzīvnieku pēdām, taču ir vairākas skaidras pazīmes, kas palīdz tos atpazīt droši.",
     tracksFrontTitle: "🐾 Priekšķepa",
     tracksFront1: "Garums: apmēram 25 cm",
@@ -175,7 +169,6 @@ const translations = {
     hubBiologyCardDesc: "Cik lāču dzīvo Latvijā, kur tie sastopami, kad visaktīvāk un kāds ir to tiesiskais statuss.",
 
     biologyTitle: "Lāča bioloģija un statuss Latvijā",
-    biologySubtitle: "Populācija, izplatība, sezonalitāte un tiesiskā aizsardzība",
     biologyPopTitle: "📊 Populācija un tendence",
     biologyPop1: "Pēc 2025. gada monitoringa datiem Latvijā mīt aptuveni 190 brūno lāču",
     biologyPop2: "Piecu gadu laikā populācija ir gandrīz dubultojusies",
@@ -207,7 +200,6 @@ const translations = {
     hubHuntersCardDesc: "Kā medību laikā neizprovocēt lāci un kur ziņot par pēdām vai migu.",
 
     adviceTitle: "Padomi pēc jomas",
-    adviceSubtitle: "Sēņotājiem un tūristiem, biškopjiem un lauksaimniekiem, autovadītājiem un medniekiem",
     adviceForagersTitle: "Sēņotājiem un tūristiem",
     adviceForagers1: "Ejot mežā, radi troksni — runā, dziedi vai izmanto zvaniņu, lai lācis tevi pamana laikus un pats izvairās",
     adviceForagers2: "Esi īpaši uzmanīgs rudenī ogu un sēņu vietās — arī lāči tur meklē barību",
@@ -239,7 +231,6 @@ const translations = {
 
     storiesTitle: "Novērojumu stāsti",
     relatedTitle: "Saistītās lapas",
-    storiesSubtitle: "Īsi, patiesi stāsti par lāču novērojumiem Latvijā pēdējo divu gadu laikā",
     storiesIntro: "Katrs no šiem gadījumiem ir apstiprināts pēc publiski pieejamām ziņu publikācijām — bez precīzām privātmāju adresēm.",
     story1Place: "Imanta, Rīga",
     story1Date: "2026. gada jūlijs",
@@ -273,7 +264,6 @@ const translations = {
     newsNewCount: "Jauni pieminējumi: {n}",
 
     aboutTitle: "Par projektu",
-    aboutSubtitle: "Kas, kāpēc un kā šī karte tiek uzturēta",
     aboutWhoTitle: "Kas veido šo lapu?",
     aboutWho1: "Lacupedas ir neatkarīgs, brīvprātīgs projekts — to neveido un neuztur neviena valsts iestāde, pētniecības institūcija vai uzņēmums. Tā ir sabiedrības ierosināta karte ar mērķi apkopot vienuviet publiski pieejamo informāciju par lāču novērojumiem Latvijā.",
     aboutWho2: "Šī lapa nav Dabas aizsardzības pārvaldes, Valsts meža dienesta vai LVMI Silava oficiāls rīks, un tā nav saistīta ar šīm iestādēm.",
@@ -293,7 +283,6 @@ const translations = {
     aboutPrivacyLinkText: "privātuma politiku",
 
     privacyTitle: "Privātuma politika",
-    privacySubtitle: "Kādus datus mēs apkopojam un kādas ir tavas tiesības",
     privacyControllerTitle: "Datu pārzinis",
     privacyController1: "Šo vietni uztur privātpersona, nevis reģistrēts uzņēmums. Jautājumos par saviem datiem raksti:",
     privacyWhatTitle: "Kādus datus mēs apkopojam",
@@ -319,15 +308,12 @@ const translations = {
   },
   en: {
     appTitle: "Bear Sightings in Latvia",
-    appSubtitle: "A community-built bear sighting map",
     mapHint: "Click on the map to add a sighting",
     mapHintPicking: "Click on the map where you saw the bear",
     legendToggle: "🗺️ Legend",
     legendNews: "News mention",
     mapPageTitle: "Bear Map",
-    mapPageSubtitle: "All sightings and news mentions on one map",
     statsPageTitle: "Statistics",
-    statsPageSubtitle: "Sightings in charts, plus the full list",
     researchTitle: "📊 Official research data",
     researchPopLabel: "brown bears in Latvia (2025 estimate)",
     researchNote: "This figure is a scientific estimate, not a sum of the sightings shown on this page — it comes from LVMI Silava's monitoring (tracks, camera-trap images, expert estimates) across Latvia.",
@@ -420,7 +406,6 @@ const translations = {
     faqA4: "Yes. According to 2025 monitoring data, Latvia is home to roughly 190 brown bears — the population has nearly doubled over five years. That figure is confirmed both by LVMI Silava's monitoring and by data published by the Latvian Hunters' Association (LATMA), based on tracks, camera-trap images, and observations reported by hunters and the public. Females with cubs are also being spotted more often, confirming that bears are successfully reproducing in Latvia.",
 
     guideTitle: "What to do if you meet a bear",
-    guideSubtitle: "Practical advice based on Nature Conservation Agency recommendations",
     guideBackToMap: "← Back to the map",
     backToHub: "← Back to useful information",
     guideCityTitle: "🏘️ If the bear is in a populated area",
@@ -450,7 +435,6 @@ const translations = {
     guideSourceNote: "This page is based on publicly available recommendations from the Nature Conservation Agency and the LVMI Silava research project \"Bear Monitoring 2023–2025\".",
 
     hubTitle: "Useful Information",
-    hubSubtitle: "Practical tips and facts about bears in Latvia",
     hubCardLink: "Read →",
     hubCatPractical: "Practical advice",
     hubCatAbout: "About the bear in Latvia",
@@ -462,7 +446,6 @@ const translations = {
     hubTracksCardDesc: "Front and hind paw sizes, telling them apart from other animals, other signs.",
 
     tracksTitle: "How to recognize bear tracks and other signs",
-    tracksSubtitle: "Front and hind paw sizes, telling them apart from other animals, other signs of presence",
     tracksIntro: "Bear tracks in the forest can be mixed up with other animals' tracks, but there are several clear signs that help identify them reliably.",
     tracksFrontTitle: "🐾 Front paw",
     tracksFront1: "Length: about 25 cm",
@@ -492,7 +475,6 @@ const translations = {
     hubBiologyCardDesc: "How many bears live in Latvia, where they're found, when they're most active, and their legal status.",
 
     biologyTitle: "Bear biology and status in Latvia",
-    biologySubtitle: "Population, distribution, seasonality, and legal protection",
     biologyPopTitle: "📊 Population and trend",
     biologyPop1: "According to 2025 monitoring data, about 190 brown bears live in Latvia",
     biologyPop2: "The population has nearly doubled over the past five years",
@@ -524,7 +506,6 @@ const translations = {
     hubHuntersCardDesc: "How to avoid provoking a bear while hunting, and where to report tracks or a den.",
 
     adviceTitle: "Advice by audience",
-    adviceSubtitle: "For mushroom-pickers and hikers, beekeepers and farmers, drivers, and hunters",
     adviceForagersTitle: "Mushroom-pickers and hikers",
     adviceForagers1: "Make noise as you walk — talk, sing, or use a bell, so a bear notices you early and avoids you on its own",
     adviceForagers2: "Be extra alert in autumn in berry and mushroom areas — bears forage there too",
@@ -556,7 +537,6 @@ const translations = {
 
     storiesTitle: "Sighting stories",
     relatedTitle: "Related pages",
-    storiesSubtitle: "Short, real stories of bear sightings in Latvia over the past two years",
     storiesIntro: "Each of these cases is confirmed from publicly available news coverage — no exact private-home addresses.",
     story1Place: "Imanta, Rīga",
     story1Date: "July 2026",
@@ -590,7 +570,6 @@ const translations = {
     newsNewCount: "New mentions: {n}",
 
     aboutTitle: "About this project",
-    aboutSubtitle: "Who, why, and how this map is maintained",
     aboutWhoTitle: "Who makes this?",
     aboutWho1: "Lacupedas is an independent, volunteer-run project — it is not built or maintained by any government agency, research institution, or company. It's a community-initiated map with the goal of bringing publicly available information about bear sightings in Latvia together in one place.",
     aboutWho2: "This site is not an official tool of the Nature Conservation Agency, the State Forest Service, or LVMI Silava, and is not affiliated with them.",
@@ -610,7 +589,6 @@ const translations = {
     aboutPrivacyLinkText: "privacy policy",
 
     privacyTitle: "Privacy Policy",
-    privacySubtitle: "What data we collect and what your rights are",
     privacyControllerTitle: "Data controller",
     privacyController1: "This site is maintained by a private individual, not a registered company. For questions about your data, write to:",
     privacyWhatTitle: "What data we collect",
@@ -636,15 +614,12 @@ const translations = {
   },
   ru: {
     appTitle: "Наблюдения медведей в Латвии",
-    appSubtitle: "Карта наблюдений медведей, созданная сообществом",
     mapHint: "Нажмите на карту, чтобы добавить наблюдение",
     mapHintPicking: "Нажмите на карту в месте, где вы видели медведя",
     legendToggle: "🗺️ Легенда",
     legendNews: "Упоминание в новостях",
     mapPageTitle: "Карта медведей",
-    mapPageSubtitle: "Все наблюдения и упоминания в новостях на одной карте",
     statsPageTitle: "Статистика",
-    statsPageSubtitle: "Наблюдения на графиках и полный список",
     researchTitle: "📊 Официальные данные исследований",
     researchPopLabel: "бурых медведей в Латвии (оценка на 2025 г.)",
     researchNote: "Это научная оценка, а не сумма наблюдений с этой страницы — она основана на мониторинге LVMI Silava (следы, снимки фотоловушек, экспертные оценки) по всей Латвии.",
@@ -737,7 +712,6 @@ const translations = {
     faqA4: "Да. По данным мониторинга 2025 года, в Латвии обитает около 190 бурых медведей — за пять лет популяция почти удвоилась. Эту цифру подтверждают и мониторинг LVMI Silava, и данные, опубликованные Латвийской ассоциацией охотников (LATMA), основанные на отпечатках лап, снимках с фотоловушек, а также наблюдениях охотников и общественности. Всё чаще фиксируются и самки с медвежатами, что подтверждает: медведи в Латвии успешно размножаются.",
 
     guideTitle: "Что делать при встрече с медведем",
-    guideSubtitle: "Практические советы на основе рекомендаций Управления охраны природы",
     guideBackToMap: "← Назад к карте",
     backToHub: "← Назад к полезной информации",
     guideCityTitle: "🏘️ Если медведь в населённом пункте",
@@ -767,7 +741,6 @@ const translations = {
     guideSourceNote: "Эта страница основана на общедоступных рекомендациях Управления охраны природы и исследовательском проекте LVMI Silava «Мониторинг медведей 2023–2025».",
 
     hubTitle: "Полезная информация",
-    hubSubtitle: "Практические советы и факты о медведях в Латвии",
     hubCardLink: "Читать →",
     hubCatPractical: "Практические советы",
     hubCatAbout: "О медведе в Латвии",
@@ -779,7 +752,6 @@ const translations = {
     hubTracksCardDesc: "Размеры передней и задней лапы, отличие от других животных, другие признаки.",
 
     tracksTitle: "Как распознать следы медведя и другие признаки",
-    tracksSubtitle: "Размеры передней и задней лапы, отличие от других животных, другие признаки присутствия",
     tracksIntro: "Следы медведя в лесу можно спутать со следами других животных, но есть несколько чётких признаков, которые помогают распознать их надёжно.",
     tracksFrontTitle: "🐾 Передняя лапа",
     tracksFront1: "Длина: около 25 см",
@@ -809,7 +781,6 @@ const translations = {
     hubBiologyCardDesc: "Сколько медведей живёт в Латвии, где они встречаются, когда наиболее активны и каков их правовой статус.",
 
     biologyTitle: "Биология и статус медведя в Латвии",
-    biologySubtitle: "Популяция, распространение, сезонность и правовая защита",
     biologyPopTitle: "📊 Популяция и тенденция",
     biologyPop1: "По данным мониторинга 2025 года, в Латвии обитает около 190 бурых медведей",
     biologyPop2: "За последние пять лет популяция почти удвоилась",
@@ -841,7 +812,6 @@ const translations = {
     hubHuntersCardDesc: "Как не спровоцировать медведя во время охоты и куда сообщать о следах или берлоге.",
 
     adviceTitle: "Советы по аудиториям",
-    adviceSubtitle: "Для грибников и туристов, пасечников и фермеров, водителей и охотников",
     adviceForagersTitle: "Грибникам и туристам",
     adviceForagers1: "Идя по лесу, создавайте шум — разговаривайте, пойте или используйте колокольчик, чтобы медведь заметил вас заранее и сам избежал встречи",
     adviceForagers2: "Будьте особенно внимательны осенью в местах сбора ягод и грибов — медведи тоже ищут там пищу",
@@ -873,7 +843,6 @@ const translations = {
 
     storiesTitle: "Истории наблюдений",
     relatedTitle: "Похожие страницы",
-    storiesSubtitle: "Короткие, реальные истории наблюдений медведей в Латвии за последние два года",
     storiesIntro: "Каждый из этих случаев подтверждён по общедоступным новостным публикациям — без точных адресов частных домов.",
     story1Place: "Иманта, Рига",
     story1Date: "июль 2026",
@@ -907,7 +876,6 @@ const translations = {
     newsNewCount: "Новых упоминаний: {n}",
 
     aboutTitle: "О проекте",
-    aboutSubtitle: "Кто, зачем и как поддерживается эта карта",
     aboutWhoTitle: "Кто делает эту страницу?",
     aboutWho1: "Lacupedas — независимый волонтёрский проект: его не создаёт и не поддерживает ни одно государственное учреждение, научное учреждение или компания. Это карта, созданная по инициативе сообщества, с целью собрать в одном месте общедоступную информацию о наблюдениях медведей в Латвии.",
     aboutWho2: "Этот сайт не является официальным инструментом Управления охраны природы, Государственной лесной службы или LVMI Silava и не связан с этими учреждениями.",
@@ -927,7 +895,6 @@ const translations = {
     aboutPrivacyLinkText: "политику конфиденциальности",
 
     privacyTitle: "Политика конфиденциальности",
-    privacySubtitle: "Какие данные мы собираем и какие у тебя права",
     privacyControllerTitle: "Оператор данных",
     privacyController1: "Этот сайт поддерживается частным лицом, а не зарегистрированной компанией. По вопросам о своих данных пиши:",
     privacyWhatTitle: "Какие данные мы собираем",
@@ -986,7 +953,21 @@ function applyTranslations() {
     const key = el.getAttribute("data-i18n-placeholder");
     el.setAttribute("placeholder", t(key));
   });
-  document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
-    btn.classList.toggle("active", btn.getAttribute("data-lang-btn") === lang);
+  const select = document.getElementById("lang-select");
+  if (select) select.value = lang;
+}
+
+// Wires the header's language <select> — shared by every page instead of
+// each one duplicating this. `onChange`, if given, runs after setLang() +
+// applyTranslations() so the caller can re-render whatever else depends on
+// the current language (a rendered list, chart, map popups, ...).
+function initLangSwitcher(onChange) {
+  const select = document.getElementById("lang-select");
+  if (!select) return;
+  select.value = getLang();
+  select.addEventListener("change", () => {
+    setLang(select.value);
+    applyTranslations();
+    if (onChange) onChange();
   });
 }

@@ -17,13 +17,9 @@
       initNews(null, (newsItems) => setSightingsPanelNews(newsItems));
     }
 
-    document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        setLang(btn.getAttribute("data-lang-btn"));
-        applyTranslations();
-        renderList(getFilteredSightings());
-        renderStatsAndChart();
-      });
+    initLangSwitcher(() => {
+      renderList(getFilteredSightings());
+      renderStatsAndChart();
     });
 
     refresh();

@@ -3,12 +3,7 @@
 (function () {
   function init() {
     applyTranslations();
-    document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        setLang(btn.getAttribute("data-lang-btn"));
-        applyTranslations();
-      });
-    });
+    initLangSwitcher();
   }
   document.addEventListener("DOMContentLoaded", init);
 })();

@@ -35,16 +35,13 @@
   <header class="app-header">
     <div class="brand">
       <span class="brand-icon" aria-hidden="true">🐻</span>
-      <div>
-        <h1 data-i18n="guideTitle">Ko darīt, ja satiec lāci?</h1>
-        <p class="subtitle" data-i18n="guideSubtitle">Praktiski padomi, balstīti uz Dabas aizsardzības pārvaldes ieteikumiem</p>
-      </div>
+      <h1 data-i18n="guideTitle">Ko darīt, ja satiec lāci?</h1>
     </div>
-    <div class="lang-switch" role="group" aria-label="Language / Valoda / Язык">
-      <button type="button" data-lang-btn="lv">LV</button>
-      <button type="button" data-lang-btn="en">EN</button>
-      <button type="button" data-lang-btn="ru">RU</button>
-    </div>
+    <select id="lang-select" class="lang-select" aria-label="Language / Valoda / Язык">
+      <option value="lv">LV</option>
+      <option value="en">EN</option>
+      <option value="ru">RU</option>
+    </select>
   </header>
 
   <main class="guide-main">
