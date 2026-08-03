@@ -99,7 +99,10 @@ function combinedForStats() {
 
 function renderStatsAndChart() {
   const combined = combinedForStats();
-  spEl.statTotal.textContent = combined.length;
+  // #stat-total is absent on index.html (only "this year" and "latest"
+  // show there — see #stats-section's markup) but still present on
+  // stats.html's fuller detail view.
+  if (spEl.statTotal) spEl.statTotal.textContent = combined.length;
   const year = new Date().getFullYear();
   spEl.statYear.textContent = combined.filter((s) => new Date(s.date).getFullYear() === year).length;
   if (combined.length === 0) {

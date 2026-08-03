@@ -474,6 +474,14 @@ button {
   padding-top: 2px;
 }
 
+/* index.html's home-feed card only shows 2 of the 3 stats (see
+   #stats-section's markup) — stats.html keeps all 3 in its own
+   .stats-grid (no #stats-section id there), so this is scoped rather
+   than changed on the shared rule above. */
+#stats-section .stats-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
 .stat {
   display: flex;
   flex-direction: column;
@@ -570,6 +578,15 @@ button {
   max-width: 5ch;
   min-height: 1em;
   text-wrap: balance;
+}
+
+/* index.html's home-feed boxes are wider now (2 columns instead of 3 —
+   see #stats-section .stats-grid above), so the narrower 5ch cap (needed
+   for stats.html's tighter 3-column box) just forces an unnecessary wrap
+   here — worst in RU, where "30 июл." no longer fits it. */
+#stats-section .stat-value-date {
+  max-width: none;
+  white-space: nowrap;
 }
 
 .stat-label {
