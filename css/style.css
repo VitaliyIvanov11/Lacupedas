@@ -855,6 +855,17 @@ button {
   margin-bottom: 0;
 }
 
+.list-export-row {
+  flex: 0 0 auto;
+  text-align: right;
+  margin-top: 8px;
+}
+
+.list-export-row .btn {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
 .filter-group {
   flex: 0 0 auto;
   max-width: 100%;

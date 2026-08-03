@@ -214,6 +214,16 @@ Editor (same place the 🚩 `reports` queue is already reviewed — see
 display nicety, not access control, since the anon key can read the raw
 table directly regardless of what this JS does with the result.
 
+### Public data export
+
+stats.html's sightings list has a "⬇ CSV" button
+(`downloadSightingsCsv()` in `js/sightings-panel.js`) that exports the
+currently-loaded community sightings as a CSV file, client-side, no
+server involved. This isn't new data exposure — it's the same fields
+`rowToSighting()` already returns from the public (anon-key) Supabase
+REST endpoint, just packaged as a convenient bulk download instead of
+requiring someone to script against the API themselves.
+
 ### Confirm/dispute voting
 
 A second table, `sighting_votes` (`id uuid`, `sighting_id uuid` references

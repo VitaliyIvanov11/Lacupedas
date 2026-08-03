@@ -79,6 +79,7 @@ const translations = {
     chartNoData: "Šogad vēl nav datu",
 
     listTitle: "Novērojumu saraksts",
+    exportCsvBtn: "⬇ CSV",
     emptyList: "Neviens kopienas novērojums vēl nav pievienots — pievieno pirmo! Kartē redzamie punkti pašlaik nāk no ziņu portāliem (skaties \"Ziņu pieminējumi\" zemāk).",
     submitError: "Neizdevās saglabāt — pārbaudiet interneta savienojumu un mēģiniet vēlreiz.",
     reportCooldownError: "Pagaidiet nedaudz pirms nākamā novērojuma iesniegšanas.",
@@ -396,6 +397,7 @@ const translations = {
     chartNoData: "No data yet this year",
 
     listTitle: "Sightings list",
+    exportCsvBtn: "⬇ CSV",
     emptyList: "No community sightings reported yet — add the first one! The points on the map right now come from news portals (see \"News mentions\" below).",
     submitError: "Couldn't save — check your internet connection and try again.",
     reportCooldownError: "Please wait a moment before submitting another report.",
@@ -713,6 +715,7 @@ const translations = {
     chartNoData: "В этом году пока нет данных",
 
     listTitle: "Список наблюдений",
+    exportCsvBtn: "⬇ CSV",
     emptyList: "Пока никто не добавил наблюдение через сайт — добавьте первое! Точки на карте сейчас — это упоминания в новостях (см. «Упоминания в новостях» ниже).",
     submitError: "Не удалось сохранить — проверьте интернет-соединение и попробуйте снова.",
     reportCooldownError: "Подождите немного перед отправкой следующего наблюдения.",

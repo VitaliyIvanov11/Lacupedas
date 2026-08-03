@@ -307,6 +307,32 @@ async function refreshSightingsPanel() {
   return spSightings;
 }
 
+// Quotes any cell containing a comma, quote, or newline; doubles internal
+// quotes — the standard CSV escaping rule (RFC 4180).
+function csvCell(value) {
+  const str = value === null || value === undefined ? "" : String(value);
+  if (/[",\n]/.test(str)) return `"${str.replace(/"/g, '""')}"`;
+  return str;
+}
+
+// Exports exactly what's already public via the site (same fields as
+// rowToSighting()) — this isn't new data exposure, just a convenient
+// bulk-download of data the anon Supabase key already serves to anyone.
+function downloadSightingsCsv() {
+  const columns = ["id", "date", "type", "count", "lat", "lng", "description", "reporter", "source", "photoUrl", "createdAt"];
+  const rows = [columns.join(",")];
+  for (const s of spSightings) {
+    rows.push(columns.map((col) => csvCell(s[col])).join(","));
+  }
+  const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `lacupedas-noverojumi-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function initSightingsPanel() {
   spEl = {
     list: document.getElementById("sightings-list"),
@@ -320,6 +346,7 @@ function initSightingsPanel() {
     statLabelYear: document.getElementById("stat-label-year"),
     statLabelLast: document.getElementById("stat-label-last"),
     chartContainer: document.getElementById("chart-container"),
+    exportCsvBtn: document.getElementById("export-csv-btn"),
   };
   if (!spEl.list) return;
 
@@ -331,4 +358,6 @@ function initSightingsPanel() {
       renderList(getFilteredSightings());
     });
   });
+
+  if (spEl.exportCsvBtn) spEl.exportCsvBtn.addEventListener("click", downloadSightingsCsv);
 }
