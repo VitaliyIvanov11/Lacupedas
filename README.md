@@ -113,6 +113,14 @@ Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
 constraint (`sightings_type_check`) — adding a new type means an `ALTER
 TABLE ... DROP/ADD CONSTRAINT` in Supabase, not just a front-end change.
 
+Exact coordinates are stored and shown for every type. That's normally a
+concern for location-sensitive reports (e.g. a den/burrow, which poachers
+could target), but none of the current five types represent a fixed,
+revisitable location like that — `sighting`/`tracks`/`damage`/`dead` are
+one-off encounters, and `dna_sample` is a collected sample, not a site. If
+a den/migas-type report is ever added, its coordinates should be rounded
+(e.g. to ~1km) before display, same reasoning as the EXIF stripping above.
+
 ### Historical/official data (not yet imported)
 
 `js/storage.js`'s `rowToSighting()` and the front end already understand a
@@ -181,6 +189,21 @@ round-tripping a JPEG with injected GPS EXIF through the actual
 matters specifically because a reporter's photo could otherwise leak where
 *they* were standing (e.g. their home) via GPS EXIF, which has nothing to
 do with the sighting's own location field.
+
+`processAndUploadPhoto()`'s type/size checks (`file.type.startsWith("image/")`,
+`PHOTO_MAX_SOURCE_BYTES`) are client-side only, since uploads go straight
+from the browser to Storage using the public anon key — there's no server
+of ours in the path to add a second check to. A visitor could bypass the
+JS entirely and `POST` an arbitrary file straight to the Storage REST
+endpoint. The actual enforcement point for that is the bucket's own
+settings, not app code — set a **file size limit** and **allowed MIME
+types** on the `sighting-photos` bucket itself (Supabase dashboard →
+Storage → bucket → Edit bucket → "Restrict file upload size" and "Allowed
+MIME types", or equivalently `update storage.buckets set
+file_size_limit = 8388608, allowed_mime_types = array['image/jpeg',
+'image/png', 'image/webp'] where id = 'sighting-photos';` in the SQL
+editor). This isn't configured yet — same manual-dashboard-step caveat as
+the `source` column above.
 
 ### Reported issues (fake/duplicate flags)
 
