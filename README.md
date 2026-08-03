@@ -102,9 +102,15 @@ public role to `SELECT` and `INSERT` only — no `UPDATE`/`DELETE` — so:
 - Because the anon key is public by design, the table is technically
   writable by anyone who extracts it from the page source, not only through
   this UI. That's an accepted trade-off for a keyless, no-login community
-  tool — if spam becomes a real problem, options include adding a CAPTCHA
-  challenge before insert, or a Supabase Edge Function that validates
-  submissions server-side instead of inserting directly from the client.
+  tool. The report form has two client-side anti-spam measures — a hidden
+  honeypot field (`name="website"` on `#sighting-form`; a filled-in value
+  makes the submit silently no-op instead of inserting) and a 30-second
+  per-browser submit cooldown (`REPORT_COOLDOWN_MS` in `js/report-form.js`,
+  tracked via `localStorage`) — but neither stops someone hitting the
+  Supabase REST API directly. If spam becomes a real problem, the next
+  steps are a real CAPTCHA challenge (e.g. Cloudflare Turnstile) verified
+  by a Supabase Edge Function before insert, or turning on the moderation
+  queue described below.
 
 Table schema (`sightings`): `id uuid`, `lat float8`, `lng float8`,
 `date date`, `type text` (`sighting`/`tracks`/`damage`/`dead`/`dna_sample`),
@@ -143,6 +149,29 @@ hand-imported with the matching `source` value), every row is implicitly
 feature. Import only real, verifiable points — see the "verify the specific
 claim" note under News auto-collection for why a plausible-looking but
 unverified data point is worse than no data point.
+
+### Moderation (groundwork only — queue not active)
+
+`rowToSighting()` also already understands a `status` column
+(`"pending"`/`"approved"`/`"rejected"`) and `loadSightings()` only returns
+rows where `status === "approved"`. Like `source` above, the column
+doesn't exist in the live table yet, so `row.status` is always `undefined`
+and defaults to `"approved"` — every existing and new row stays instantly
+visible, exactly like today. Nothing changes until the column is added:
+
+```sql
+ALTER TABLE sightings ADD COLUMN status text NOT NULL DEFAULT 'approved';
+ALTER TABLE sightings ADD CONSTRAINT sightings_status_check
+  CHECK (status IN ('pending', 'approved', 'rejected'));
+```
+
+To actually turn moderation on later: change that column's `DEFAULT` to
+`'pending'`, then approve/reject new reports by hand in the Supabase Table
+Editor (same place the 🚩 `reports` queue is already reviewed — see
+"Reported issues" below). Also tighten the public `SELECT` RLS policy to
+`status = 'approved'` at the same time — the client-side filter above is a
+display nicety, not access control, since the anon key can read the raw
+table directly regardless of what this JS does with the result.
 
 ### Confirm/dispute voting
 

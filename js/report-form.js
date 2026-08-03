@@ -9,6 +9,14 @@ let reportFormPendingLatLng = null;
 let reportFormOnSaved = null;
 let reportFormEl = null;
 
+// Lightweight, no-signup anti-spam: a hidden honeypot field (real visitors
+// never fill it in; simple bots that auto-fill every input do) plus a
+// per-browser cooldown between submissions. Neither stops a determined
+// attacker hitting the Supabase REST API directly — see README's
+// "Moderation" section for why that's an accepted trade-off here.
+const REPORT_COOLDOWN_MS = 30 * 1000;
+const REPORT_COOLDOWN_KEY = "lacupedas.lastReportSubmitAt";
+
 function reportFormResetPhotoField() {
   if (reportFormEl.photoPreview.src) URL.revokeObjectURL(reportFormEl.photoPreview.src);
   reportFormEl.photoPreview.hidden = true;
@@ -84,6 +92,24 @@ async function submitReportForm(e) {
   e.preventDefault();
   if (!reportFormPendingLatLng) return;
   const fd = new FormData(reportFormEl.form);
+
+  const honeypot = (fd.get("website") || "").trim();
+  if (honeypot) {
+    // Don't reveal the honeypot to whatever filled it in — a visible
+    // "spam detected" error just teaches a bot to leave the field blank.
+    // Pretend success instead; nothing gets inserted.
+    closeReportForm();
+    showReportToast();
+    return;
+  }
+
+  const lastSubmit = parseInt(localStorage.getItem(REPORT_COOLDOWN_KEY) || "0", 10);
+  if (Date.now() - lastSubmit < REPORT_COOLDOWN_MS) {
+    reportFormEl.formError.hidden = false;
+    reportFormEl.formError.textContent = t("reportCooldownError");
+    return;
+  }
+
   const date = fd.get("date");
   const type = fd.get("type");
   const count = Math.max(1, parseInt(fd.get("count"), 10) || 1);
@@ -120,6 +146,7 @@ async function submitReportForm(e) {
       }
     }
     await addSighting(sighting);
+    localStorage.setItem(REPORT_COOLDOWN_KEY, String(Date.now()));
     closeReportForm();
     if (reportFormOnSaved) await reportFormOnSaved();
     showReportToast();

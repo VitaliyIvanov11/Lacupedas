@@ -32,6 +32,11 @@ function rowToSighting(row) {
     // "Historical/official data" section) would ever carry "silava" or
     // "dap" instead.
     source: row.source || "community",
+    // Same "column may not exist yet" default as source above. Defaults to
+    // "approved" so behavior is unchanged (instant publish) until a real
+    // moderation queue is turned on by changing this column's DEFAULT in
+    // Supabase — see README's "Moderation" section.
+    status: row.status || "approved",
   };
 }
 
@@ -42,7 +47,11 @@ async function loadSightings() {
     });
     if (!res.ok) return [];
     const rows = await res.json();
-    return rows.map(rowToSighting);
+    // Filtered client-side rather than via a `status=eq.approved` query
+    // param because the column doesn't exist in the live table yet — a
+    // server-side filter on a nonexistent column would break loading
+    // entirely instead of degrading gracefully.
+    return rows.map(rowToSighting).filter((s) => s.status === "approved");
   } catch {
     return [];
   }
