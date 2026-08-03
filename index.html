@@ -52,6 +52,27 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "Lāču novērojumi Latvijā (Lacupedas)",
+    "description": "Kopienas ziņoti brūnā lāča novērojumi, pēdas, postījumi un citi ar lāčiem saistīti dati Latvijā — ar atrašanās vietu, datumu un novērojuma veidu.",
+    "url": "https://lacupedas.lv/map.html",
+    "keywords": ["brūnais lācis", "Latvija", "dzīvnieku novērojumi", "citizen science"],
+    "spatialCoverage": {
+      "@type": "Place",
+      "name": "Latvija"
+    },
+    "variableMeasured": ["atrašanās vieta", "datums", "novērojuma veids", "skaits"],
+    "creator": {
+      "@type": "Organization",
+      "name": "Lacupedas",
+      "url": "https://lacupedas.lv/"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
       {
@@ -247,6 +268,11 @@
           arī medniekiem un sabiedrības ziņotajiem novērojumiem. Arvien biežāk tiek konstatētas arī lācenes ar
           mazuļiem, kas apstiprina, ka lāči Latvijā veiksmīgi vairojas.
         </p>
+        <p class="faq-sources">
+          <span data-i18n="biologySourcesLabel">Avoti:</span>
+          <a href="https://www.silava.lv/petnieciba/petijumi/lacu-monitorings-2023-2025" target="_blank" rel="noopener">LVMI Silava</a> ·
+          <a href="https://www.latma.lv/latvija-lacu-klust-vairak-ko-rada-jaunakie-monitoringa-dati/" target="_blank" rel="noopener">LATMA</a>
+        </p>
       </div>
     </details>
   </footer>
@@ -331,7 +357,7 @@
   </div>
 
   <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
-    <a href="index.html" class="mobile-nav-item mobile-nav-active">
+    <a href="/" class="mobile-nav-item mobile-nav-active">
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
       <span data-i18n="navHome">Sākums</span>
     </a>

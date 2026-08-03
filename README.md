@@ -30,19 +30,22 @@ interactive map.
   rather than a hardcoded list. Filters are purely client-side (re-filter
   already-loaded data, no re-fetch) and don't affect the stats panel/chart,
   which stay totals-over-everything.
-- A "🔥 density map" toggle in the map toolbar overlays a
-  [Leaflet.heat](https://github.com/Leaflet/Leaflet.heat) heatmap built from
-  every community sighting + news mention's coordinates (weighted by bear
-  count for sightings). It's additive over the pins, not a replacement, and
-  always reflects the full dataset regardless of the list filters — it
-  answers "where overall," not "where in my current filter view."
-- Basic SEO: keyword-targeted title/description, Open Graph tags, a
-  `WebSite` JSON-LD block, `robots.txt`/`sitemap.xml`, and a collapsed-by-
-  default FAQ (`<details>`, real static text, capped-height + internally
-  scrollable so it can't blow out the no-scroll desktop layout) answering
-  the exact queries this is meant to rank for ("kur dzīvo lācis", "lāča
-  pēdas"). Submitting the site to Google Search Console itself is a manual,
-  account-owner-only step — not something committed here.
+- Sighting and news markers cluster on the map (`leaflet.markercluster`) as
+  independent groups per layer (brand green for sightings, indigo for news)
+  so a cluster bubble's count and color never blend the two meanings.
+- Basic SEO: keyword-targeted title/description, Open Graph tags,
+  `WebSite`/`Organization`/`Dataset`/`FAQPage` JSON-LD blocks,
+  `robots.txt`/`sitemap.xml`, and a collapsed-by-default FAQ (`<details>`,
+  real static text with source citations linked inline, capped-height +
+  internally scrollable so it can't blow out the no-scroll desktop layout)
+  answering the exact queries this is meant to rank for ("kur dzīvo lācis",
+  "lāča pēdas"). There's deliberately no `SearchAction` JSON-LD — the site
+  has no real text-search endpoint (only the report-form's `?report=1`
+  query param), and Google's guidance is explicit that the action must
+  correspond to something the site actually does; a non-functional
+  `SearchAction` is worse than none. Submitting the site to Google Search
+  Console itself is a manual, account-owner-only step — not something
+  committed here.
 
 ## Run locally
 

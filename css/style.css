@@ -1213,6 +1213,14 @@ button {
   line-height: 1.5;
 }
 
+.faq-sources {
+  color: var(--text-muted);
+}
+
+.faq-sources a {
+  color: var(--brand-accent);
+}
+
 /* Modal */
 
 .modal-overlay {

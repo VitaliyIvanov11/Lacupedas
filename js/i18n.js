@@ -108,7 +108,6 @@ const translations = {
     faqA4: "Jā. Pēc 2025. gada monitoringa datiem Latvijā mīt aptuveni 190 brūno lāču — piecu gadu laikā populācija ir gandrīz dubultojusies. Šo skaitu apstiprina gan LVMI Silava monitorings, gan Latvijas Mednieku asociācijas (LATMA) publicētie dati, kas balstīti uz pēdu nospiedumiem, kameru attēliem, kā arī medniekiem un sabiedrības ziņotajiem novērojumiem. Arvien biežāk tiek konstatētas arī lācenes ar mazuļiem, kas apstiprina, ka lāči Latvijā veiksmīgi vairojas.",
 
     guideTitle: "Ko darīt, ja satiec lāci?",
-    guideBackToMap: "← Atpakaļ uz karti",
     backToHub: "← Atpakaļ uz noderīgo informāciju",
     guideCityTitle: "🏘️ Ja lācis apdzīvotā vietā",
     guideCityLead: "Ziņas par lāčiem pilsētās un ciemos kļūst arvien biežākas. Mazāks stress dzīvniekam nozīmē lielāku iespēju, ka tas pats aties prom.",
@@ -425,7 +424,6 @@ const translations = {
     faqA4: "Yes. According to 2025 monitoring data, Latvia is home to roughly 190 brown bears — the population has nearly doubled over five years. That figure is confirmed both by LVMI Silava's monitoring and by data published by the Latvian Hunters' Association (LATMA), based on tracks, camera-trap images, and observations reported by hunters and the public. Females with cubs are also being spotted more often, confirming that bears are successfully reproducing in Latvia.",
 
     guideTitle: "What to do if you meet a bear",
-    guideBackToMap: "← Back to the map",
     backToHub: "← Back to useful information",
     guideCityTitle: "🏘️ If the bear is in a populated area",
     guideCityLead: "Reports of bears in towns and villages are becoming more common. Less stress on the animal means a better chance it moves on by itself.",
@@ -742,7 +740,6 @@ const translations = {
     faqA4: "Да. По данным мониторинга 2025 года, в Латвии обитает около 190 бурых медведей — за пять лет популяция почти удвоилась. Эту цифру подтверждают и мониторинг LVMI Silava, и данные, опубликованные Латвийской ассоциацией охотников (LATMA), основанные на отпечатках лап, снимках с фотоловушек, а также наблюдениях охотников и общественности. Всё чаще фиксируются и самки с медвежатами, что подтверждает: медведи в Латвии успешно размножаются.",
 
     guideTitle: "Что делать при встрече с медведем",
-    guideBackToMap: "← Назад к карте",
     backToHub: "← Назад к полезной информации",
     guideCityTitle: "🏘️ Если медведь в населённом пункте",
     guideCityLead: "Сообщения о медведях в городах и посёлках становятся всё чаще. Чем меньше стресса у животного, тем больше шанс, что оно уйдёт само.",
