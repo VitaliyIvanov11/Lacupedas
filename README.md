@@ -171,6 +171,17 @@ a generic RLS "row violates policy" error that gives no hint the actual
 cause is a bucket-name mismatch. If a photo fails to upload, the sighting
 still saves without it — a bad photo shouldn't lose the whole report.
 
+The canvas resize step also strips EXIF as a side effect, not just an
+optimization — `canvas.toBlob()` re-encodes from the decoded pixel buffer
+only, so metadata from the original file (GPS coordinates, camera
+make/model, timestamp) never makes it into the uploaded copy. There's no
+separate stripping step because there doesn't need to be one; verified by
+round-tripping a JPEG with injected GPS EXIF through the actual
+`compressImage()` function and confirming the output has none. This
+matters specifically because a reporter's photo could otherwise leak where
+*they* were standing (e.g. their home) via GPS EXIF, which has nothing to
+do with the sighting's own location field.
+
 ### Reported issues (fake/duplicate flags)
 
 A third table, `reports` (`id uuid`, `target_type text` —

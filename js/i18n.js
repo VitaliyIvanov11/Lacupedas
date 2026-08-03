@@ -56,6 +56,9 @@ const translations = {
     requiredError: "Lūdzu, aizpildiet visus obligātos laukus.",
     formPrivacyNote: "Iesniegtie dati (tostarp vārds un foto) ir publiski redzami visiem apmeklētājiem.",
     privacyLinkText: "Privātuma politika",
+    formEmergencyTitle: "⚠️ Ja apdraudēta dzīvība vai veselība — nekavējoties zvani 112.",
+    formEmergencyBody: "Šī ir sabiedrības uzturēta karte, nevis oficiāls reģistrs. Nopietnos gadījumos ziņo arī Dabas aizsardzības pārvaldei",
+    formEmergencyOr: "vai portālā",
 
     reportIssueBtnTitle: "Ziņot par kļūdu šajā ierakstā",
     reportIssueTitle: "Ziņot par kļūdu",
@@ -369,6 +372,9 @@ const translations = {
     requiredError: "Please fill in all required fields.",
     formPrivacyNote: "Submitted data (including your name and photo) is publicly visible to every visitor.",
     privacyLinkText: "Privacy policy",
+    formEmergencyTitle: "⚠️ If life or health is in danger — call 112 immediately.",
+    formEmergencyBody: "This is a community-maintained map, not an official register. For serious cases, also report to the Nature Conservation Agency",
+    formEmergencyOr: "or via the portal",
 
     reportIssueBtnTitle: "Report an issue with this entry",
     reportIssueTitle: "Report an issue",
@@ -682,6 +688,9 @@ const translations = {
     requiredError: "Пожалуйста, заполните все обязательные поля.",
     formPrivacyNote: "Отправленные данные (включая имя и фото) публично видны всем посетителям.",
     privacyLinkText: "Политика конфиденциальности",
+    formEmergencyTitle: "⚠️ Если под угрозой жизнь или здоровье — немедленно звоните 112.",
+    formEmergencyBody: "Это карта, которую ведёт сообщество, а не официальный реестр. О серьёзных случаях также сообщайте в Управление охраны природы",
+    formEmergencyOr: "или на портале",
 
     reportIssueBtnTitle: "Сообщить об ошибке в этой записи",
     reportIssueTitle: "Сообщить об ошибке",
