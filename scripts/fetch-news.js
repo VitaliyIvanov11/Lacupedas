@@ -163,20 +163,36 @@ function mentionsBear(text, lang) {
 // ...) — spelled identically to "lācis" (bear) in every case form, so the
 // case-insensitive keyword match can't tell a person from the animal by
 // spelling alone (first caught on "Treneris Lācis: Fināls ..." — a sports
-// article about a coach). Two shapes cover the large majority of real
-// surname mentions in LV news: a capitalized word right before it (a first
-// name or title — "Jānis Lācis", "Treneris Lācis") and a headline-style
-// attribution right after it ("Lācis: ..."). A lowercase "lācis" mid-
-// sentence is unambiguous — always the animal — so this only ever
-// suppresses a match that was already capitalized to begin with, which
-// keeps the risk of hiding a genuine capitalized-but-sentence-initial bear
-// headline ("Lācis iznācis pie ...", no leading name/title, no colon) low.
-const LACIS_SURNAME_RE =
-  /\p{Lu}\p{Ll}+\s+(Lācis|Lāča|Lācim|Lāci|Lāču|Lāce|Lāces|Lācei|Lācē)\b|\b(Lācis|Lāča|Lācim|Lāci|Lāču|Lāce|Lāces|Lācei|Lācē)\s*:/u;
+// article about a coach). Estonian has the same collision: "Karu" ("bear")
+// is also a common Estonian surname (caught on "... Jüri Luik ja kolonel
+// Fredi Karu ..." — a named colonel in ERR.ee's Ukraine-war coverage, no
+// bear involved). Two shapes cover the large majority of real surname
+// mentions: a capitalized word right before it (a first name or title —
+// "Jānis Lācis", "Fredi Karu") and a headline-style attribution right
+// after it ("Lācis: ..."). A lowercase match mid-sentence is unambiguous —
+// always the animal — so this only ever suppresses a match that was
+// already capitalized to begin with, which keeps the risk of hiding a
+// genuine capitalized-but-sentence-initial bear headline ("Lācis iznācis
+// pie ...", no leading name/title, no colon) low.
+const SURNAME_COLLISION_FORMS_BY_LANG = {
+  lv: ["Lācis", "Lāča", "Lācim", "Lāci", "Lāču", "Lāce", "Lāces", "Lācei", "Lācē"],
+  // Case forms an Estonian surname would actually appear in running text —
+  // not the full BEAR_WORD_FORMS_ET list, which also includes plural/object
+  // forms ("karud", "karusid", ...) a surname wouldn't take.
+  et: ["Karu", "Karul", "Karule", "Karult", "Karuga", "Karus", "Karuks"],
+};
 
-function looksLikeLacisSurname(item) {
-  if (item.lang !== "lv") return false;
-  return LACIS_SURNAME_RE.test(item.title) || LACIS_SURNAME_RE.test(item.description);
+const SURNAME_COLLISION_RE_BY_LANG = Object.fromEntries(
+  Object.entries(SURNAME_COLLISION_FORMS_BY_LANG).map(([lang, forms]) => {
+    const alt = forms.join("|");
+    return [lang, new RegExp(`\\p{Lu}\\p{Ll}+\\s+(${alt})\\b|\\b(${alt})\\s*:`, "u")];
+  })
+);
+
+function looksLikeSurnameCollision(item) {
+  const re = SURNAME_COLLISION_RE_BY_LANG[item.lang];
+  if (!re) return false;
+  return re.test(item.title) || re.test(item.description);
 }
 
 // Articles that genuinely contain a whole-word bear match but aren't about
@@ -200,10 +216,14 @@ const EXCLUDED_LINKS = new Set([
   // sighting, and wrongly placed a map pin on Jēkabpils for a funding story.
   "https://www.la.lv/ar-lacu-petisanu-nu-iespejams-ari-pavisam-labs-bizness-izsludinats-180-000-eiro-verts-iepirkums",
   // LSM.lv sports piece about athletics coach *Lācis* — the surname
-  // collision (see looksLikeLacisSurname() above), kept here too as a
+  // collision (see looksLikeSurnameCollision() above), kept here too as a
   // guaranteed removal of this specific already-cached item regardless of
   // how the general heuristic evolves.
   "https://www.lsm.lv/raksts/sports/vieglatletika/03.08.2026-treneris-lacis-finals-minimalakais-sprintera-gravas-merkis-eiropas-cempionata.a657261/?utm_source=rss&utm_campaign=rss&utm_medium=links",
+  // ERR.ee: "... Jüri Luik ja kolonel Fredi Karu ..." — Estonian surname
+  // collision (colonel named Karu, not a bear), same shape as the LSM.lv
+  // entry above but for "Karu" instead of "Lācis".
+  "https://www.err.ee/1610101585/ukraina-stuudios-kell-21-35-juri-luik-ja-kolonel-fredi-karu",
 ]);
 
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
@@ -447,7 +467,7 @@ async function main() {
   const matched = allItems
     .filter((item) => !EXCLUDED_LINKS.has(item.link))
     .filter((item) => mentionsBear(item.title, item.lang) || mentionsBear(item.description, item.lang))
-    .filter((item) => !looksLikeLacisSurname(item))
+    .filter((item) => !looksLikeSurnameCollision(item))
     .map((item) => {
       const place = findPlace(item.title + " " + item.description);
       const pubDate = new Date(item.pubDate);
