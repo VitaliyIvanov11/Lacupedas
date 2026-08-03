@@ -27,7 +27,8 @@ body.guide-body {
 .guide-card {
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   padding: 20px 24px;
   margin-bottom: 20px;
 }
@@ -58,7 +59,7 @@ body.guide-body {
 
 .guide-do,
 .guide-dont {
-  border-radius: 8px;
+  border-radius: var(--radius-btn);
   padding: 14px 16px;
 }
 
@@ -127,7 +128,7 @@ body.guide-body {
 }
 
 .guide-info {
-  border-radius: 8px;
+  border-radius: var(--radius-btn);
   padding: 14px 16px;
   background: rgba(42, 120, 214, 0.08);
   border: 1px solid rgba(42, 120, 214, 0.25);
@@ -182,16 +183,18 @@ body.guide-body {
   display: block;
   background: var(--surface-1);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   padding: 20px 24px;
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.15s, border-color 0.15s;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
 .hub-card:hover {
   border-color: var(--brand-accent);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
 }
 
 .hub-card h3 {
@@ -220,7 +223,8 @@ body.guide-body {
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-left: 4px solid var(--brand-accent);
-  border-radius: 10px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   padding: 16px 20px;
   margin-bottom: 14px;
 }
