@@ -4,7 +4,7 @@ const translations = {
     appTitle: "Lāču Novērojumi Latvijā",
     mapHint: "Noklikšķiniet uz kartes, lai pievienotu novērojumu",
     mapHintPicking: "Noklikšķiniet uz kartes vietā, kur redzējāt lāci",
-    legendToggle: "🗺️ Leģenda",
+    legendToggle: "🗺️ Apzīmējumi",
     locateMeBtn: "Mana atrašanās vieta",
     legendNews: "Ziņu pieminējums",
     legendNewsVerified: "Ziņa (pārbaudīta)",
