@@ -259,7 +259,22 @@ const EXCLUDED_LINKS = new Set([
 // entries (see README's "verify the specific claim" note). Applied to the
 // full merged set below, not just this run's freshly-matched items, so
 // marking an older already-published article works too, not only new ones.
-const VERIFIED_LINKS = new Set([]);
+const VERIFIED_LINKS = new Set([
+  // Ropaži/Garkalne, 29.07.2026 — kodols.lv article confirms the sighting
+  // was reported by Ropažu novada pašvaldība, specifically in Garkalnes
+  // pagasts (a parish inside Ropažu novads) — the RSS title/description
+  // only names the broader district ("Ropažu novadā"), which is what the
+  // scanner matched on; the more specific parish name only appears in the
+  // article body. District-level claim confirmed, pin stays at the
+  // district-level gazetteer entry, not narrowed to the parish.
+  "https://kodols.lv/pieriga/ropazi/video-ropazu-novada-manits-lacis-ko-darit-ja-sastopies-ar-to-aci-pret-aci-203464",
+  // Kaplava, ~23.04.2026 — gorod.lv article names the exact border-guard
+  // post ("Kaplavas robežsargu punkts") that filmed the bear.
+  "https://gorod.lv/novosti/365549-pogranichniki-kaplavskogo-otdeleniya-zasnyali-medvedya-pytavshegosya-oboiti-ograzhdenie-video",
+  // Beļava, Gulbenes novads, ~May 2025 — gorod.lv article names the exact
+  // parish ("Belavas pagasts, Gulbenes novads").
+  "https://gorod.lv/novosti/357769-v-latvii-vpervye-zafiksirovali-napadenie-burogo-medvedya-na-loshad",
+]);
 
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
 const MAX_ITEMS = 150;
