@@ -84,6 +84,12 @@ function matchesTimeFilter(dateStr, filterValue) {
   return true;
 }
 
+// Sightings only, unfiltered by verification — this is also what feeds the
+// sightings marker LAYER on the map (renderMarkers() in app.js/map-page.js),
+// which must stay sightings-only: verified media items already have their
+// own marker on the separate news layer (green-ringed diamond, see
+// buildLocateControl()'s sibling newsIcon() in js/news.js) — blending them
+// in here too would double-render the same item as two different pins.
 function getFilteredSightings() {
   const type = spEl.typeFilter.value;
   const time = spEl.timeFilter.value;
@@ -94,6 +100,47 @@ function getFilteredSightings() {
       matchesTimeFilter(s.date, time) &&
       (!photoOnly || !!s.photoUrl)
   );
+}
+
+// Verified media entries (VERIFIED_LINKS in scripts/fetch-news.js) reshaped
+// to fit the same list-row rendering as a real sighting — see
+// renderList()'s "news_verified" branch. Kept out of getFilteredSightings()
+// itself (see the comment there) since that function also feeds the map's
+// sightings layer, not just the list.
+function verifiedNewsAsListEntries() {
+  return geotaggedNews()
+    .filter((n) => n.verified)
+    .map((n) => ({
+      id: n.id,
+      date: n.pubDate.slice(0, 10),
+      type: null,
+      count: null,
+      description: newsTitleFor(n),
+      reporter: null,
+      photoUrl: null,
+      source: "news_verified",
+      mediaSource: n.source,
+      link: n.link,
+      lat: n.lat,
+      lng: n.lng,
+    }));
+}
+
+// "Kopienas novērojumi" (the *count* on the stats card) stays community-
+// submissions-only on purpose — see renderStatsAndChart()'s comment on why
+// blending in news there was misleading. The browsable *list* is different:
+// it's a reasonable place to surface data that's actually reliable while
+// real community submissions are still at zero, as long as each row is
+// clearly badged with where it came from (which renderList() does). Media
+// entries have no `type` of their own to match a type-filter against, and
+// never have a photo, so they only show under "all types" with the photo
+// filter off — matching the sightings list's own logic for either exactly.
+function getFilteredListEntries() {
+  const sightings = getFilteredSightings();
+  if (spEl.typeFilter.value !== "all" || spEl.photoFilter.checked) return sightings;
+  const time = spEl.timeFilter.value;
+  const media = verifiedNewsAsListEntries().filter((n) => matchesTimeFilter(n.date, time));
+  return sightings.concat(media);
 }
 
 // Stats/chart reflect both community reports and news-collected mentions
@@ -174,6 +221,8 @@ function renderList(filtered) {
     li.className = "sighting-item";
     li.dataset.id = s.id;
 
+    const isMedia = s.source === "news_verified";
+
     const flagBtn = document.createElement("button");
     flagBtn.type = "button";
     flagBtn.className = "report-issue-btn";
@@ -182,13 +231,13 @@ function renderList(filtered) {
     flagBtn.setAttribute("aria-label", t("reportIssueBtnTitle"));
     flagBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      openReportIssueModal("sighting", s.id);
+      openReportIssueModal(isMedia ? "news" : "sighting", s.id);
     });
     li.appendChild(flagBtn);
 
     const dot = document.createElement("span");
     dot.className = "type-dot";
-    dot.style.background = TYPE_COLORS[s.type] || TYPE_COLORS.sighting;
+    dot.style.background = isMedia ? NEWS_MARKER_COLOR : TYPE_COLORS[s.type] || TYPE_COLORS.sighting;
     li.appendChild(dot);
 
     const body = document.createElement("div");
@@ -199,26 +248,50 @@ function renderList(filtered) {
     const dateSpan = document.createElement("span");
     dateSpan.className = "sighting-date";
     dateSpan.textContent = formatDate(s.date);
-    const typeSpan = document.createElement("span");
-    typeSpan.className = "sighting-type";
-    typeSpan.textContent = typeLabel(s.type) + " · 🐻×" + (s.count || 1);
     top.appendChild(dateSpan);
-    top.appendChild(typeSpan);
-    // Community reports (the overwhelming majority) get no badge at all —
-    // only rows hand-imported from official monitoring data are marked, so
-    // the badge itself signals "this one's official," not just metadata.
-    if (s.source && s.source !== "community") {
-      const sourceBadge = document.createElement("span");
-      sourceBadge.className = "sighting-source-badge";
-      sourceBadge.textContent = sourceLabel(s.source);
-      top.appendChild(sourceBadge);
+
+    if (isMedia) {
+      // No sighting `type`/`count` to show — the portal name + the same
+      // verified badge the news list itself uses stand in for it.
+      const portalSpan = document.createElement("span");
+      portalSpan.className = "sighting-type";
+      portalSpan.textContent = s.mediaSource || "";
+      top.appendChild(portalSpan);
+      const verifiedBadge = document.createElement("span");
+      verifiedBadge.className = "news-verified-badge";
+      verifiedBadge.textContent = t("newsVerifiedBadge");
+      top.appendChild(verifiedBadge);
+    } else {
+      const typeSpan = document.createElement("span");
+      typeSpan.className = "sighting-type";
+      typeSpan.textContent = typeLabel(s.type) + " · 🐻×" + (s.count || 1);
+      top.appendChild(typeSpan);
+      // Community reports (the overwhelming majority) get no badge at all —
+      // only rows hand-imported from official monitoring data are marked,
+      // so the badge itself signals "this one's official," not just
+      // metadata.
+      if (s.source && s.source !== "community") {
+        const sourceBadge = document.createElement("span");
+        sourceBadge.className = "sighting-source-badge";
+        sourceBadge.textContent = sourceLabel(s.source);
+        top.appendChild(sourceBadge);
+      }
     }
     body.appendChild(top);
 
     if (s.description) {
-      const desc = document.createElement("p");
+      // Media entries: the headline itself links out to the source article
+      // (same as the news list) — stopPropagation so it doesn't also
+      // trigger the row's own fly-to-it-on-the-map click below.
+      const desc = document.createElement(isMedia ? "a" : "p");
       desc.className = "sighting-desc";
       desc.textContent = s.description;
+      if (isMedia) {
+        desc.href = s.link;
+        desc.target = "_blank";
+        desc.rel = "noopener";
+        desc.addEventListener("click", (e) => e.stopPropagation());
+      }
       body.appendChild(desc);
     }
 
@@ -242,7 +315,13 @@ function renderList(filtered) {
       body.appendChild(thumb);
     }
 
-    body.appendChild(buildVoteRow(s));
+    // Voting is a community-credibility signal for unverified, self-
+    // reported submissions — redundant (and semantically wrong; there's no
+    // sightings-table row for a news item's id to attach a vote to) once
+    // something's already been human-verified.
+    if (!isMedia) {
+      body.appendChild(buildVoteRow(s));
+    }
 
     li.appendChild(body);
 
@@ -311,7 +390,7 @@ function buildVoteRow(s) {
         return;
       }
       spVoteCounts = await loadVoteCounts();
-      renderList(getFilteredSightings());
+      renderList(getFilteredListEntries());
     });
   });
 
@@ -335,13 +414,18 @@ function setSightingsPanelNews(newsItems) {
   spLatestNewsItems = newsItems;
   spNewsLoadedOnce = true;
   renderStatsAndChart();
+  // News (and any verified-media rows it feeds into the list — see
+  // getFilteredListEntries()) loads asynchronously, after the list's own
+  // first render — without this, verified media wouldn't appear until some
+  // unrelated re-render (a filter change, a vote) happened to trigger one.
+  if (spEl && spEl.list) renderList(getFilteredListEntries());
 }
 
 async function refreshSightingsPanel() {
   const [freshSightings, freshVoteCounts] = await Promise.all([loadSightings(), loadVoteCounts()]);
   spSightings = freshSightings;
   spVoteCounts = freshVoteCounts;
-  renderList(getFilteredSightings());
+  renderList(getFilteredListEntries());
   renderStatsAndChart();
   return spSightings;
 }
@@ -398,7 +482,7 @@ function initSightingsPanel() {
   [spEl.typeFilter, spEl.timeFilter, spEl.photoFilter].forEach((field) => {
     field.addEventListener("change", () => {
       spShownCount = LIST_PAGE_SIZE;
-      renderList(getFilteredSightings());
+      renderList(getFilteredListEntries());
     });
   });
 

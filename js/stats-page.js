@@ -18,7 +18,7 @@
     }
 
     initLangSwitcher(() => {
-      renderList(getFilteredSightings());
+      renderList(getFilteredListEntries());
       renderStatsAndChart();
     });
 

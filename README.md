@@ -481,6 +481,21 @@ other news mention gets), a "✓ Pārbaudīts" badge in the news list, and a
 count on stats.html's "Ziņu pieminējumi" box. Empty by default — nothing
 is verified until a human actually does the work.
 
+Verified items also appear in the "Novērojumu saraksts" (sightings list)
+itself, not just the separate news list —
+`verifiedNewsAsListEntries()`/`getFilteredListEntries()` in
+`js/sightings-panel.js` reshape them to fit the same row rendering as a
+real sighting, badged and linking out to the source article instead of
+showing a vote row. Deliberately kept out of `getFilteredSightings()`
+itself, which also feeds the map's sightings marker layer — a verified
+item already has its own marker on the news layer, so blending it into
+sightings there too would double-render the same item as two pins. The
+"Kopienas novērojumi" *count* on the stats card stays community-
+submissions-only regardless (see `renderStatsAndChart()`'s own comment on
+why blending news into that number was misleading in the first place) —
+only the browsable list blends in reliable non-community data, not the
+headline number, which would repeat the exact problem being avoided there.
+
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
 in the "News mentions" list without a page reload. Only the headline, source,

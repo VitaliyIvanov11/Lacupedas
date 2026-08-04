@@ -36,7 +36,7 @@
 
     initLangSwitcher(() => {
       if (typeof applyCompactStatLabels === "function") applyCompactStatLabels();
-      renderList(getFilteredSightings());
+      renderList(getFilteredListEntries());
       renderStatsAndChart();
       if (typeof renderNewsList === "function") renderNewsList();
     });
