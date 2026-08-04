@@ -998,22 +998,6 @@ button {
   text-decoration: underline;
 }
 
-.news-thumb-link {
-  flex: 0 0 auto;
-  display: block;
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.news-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
 .news-disclaimer {
   flex: 0 0 auto;
   margin: 10px 0 0;

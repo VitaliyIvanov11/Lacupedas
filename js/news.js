@@ -207,30 +207,6 @@ function renderNewsList() {
     });
     li.appendChild(flagBtn);
 
-    // Best-effort preview pulled from the source RSS feed (see
-    // extractImageUrl() in scripts/fetch-news.js) — not every feed
-    // provides one, and hotlinked images can occasionally fail to load, so
-    // this is hidden rather than left as a broken-image icon.
-    if (n.imageUrl) {
-      const thumbLink = document.createElement("a");
-      thumbLink.href = n.link;
-      thumbLink.target = "_blank";
-      thumbLink.rel = "noopener";
-      thumbLink.className = "news-thumb-link";
-      thumbLink.addEventListener("click", (e) => e.stopPropagation());
-
-      const thumb = document.createElement("img");
-      thumb.className = "news-thumb";
-      thumb.src = n.imageUrl;
-      thumb.alt = "";
-      thumb.loading = "lazy";
-      thumb.referrerPolicy = "no-referrer";
-      thumb.addEventListener("error", () => (thumbLink.hidden = true), { once: true });
-
-      thumbLink.appendChild(thumb);
-      li.appendChild(thumbLink);
-    }
-
     const body = document.createElement("div");
     body.className = "sighting-body";
 

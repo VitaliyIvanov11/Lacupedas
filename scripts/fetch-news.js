@@ -364,27 +364,6 @@ function extractTag(block, tag) {
   return decodeEntities(val.replace(/<[^>]+>/g, " ").trim());
 }
 
-// Best-effort preview image, tried in this order since feeds vary in how
-// (or whether) they attach one: a plain <enclosure>, the Media RSS
-// namespace's <media:thumbnail>/<media:content>, or — for feeds with
-// neither (LRT.lt, 15min.lt) — the first <img> inside the raw item block
-// (usually embedded in the description's HTML). Quote style varies too
-// (single vs double), hence the character class instead of a fixed quote.
-const IMAGE_URL_PATTERNS = [
-  /<enclosure[^>]*\burl=["']([^"']+)["']/i,
-  /<media:thumbnail[^>]*\burl=["']([^"']+)["']/i,
-  /<media:content[^>]*\burl=["']([^"']+)["']/i,
-  /<img[^>]*\bsrc=["']([^"']+)["']/i,
-];
-
-function extractImageUrl(block) {
-  for (const re of IMAGE_URL_PATTERNS) {
-    const m = block.match(re);
-    if (m && /^https?:\/\//i.test(m[1])) return decodeEntities(m[1]);
-  }
-  return null;
-}
-
 function parseRss(xml) {
   const items = [];
   const itemBlocks = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
@@ -394,7 +373,6 @@ function parseRss(xml) {
       link: extractTag(block, "link"),
       pubDate: extractTag(block, "pubDate"),
       description: extractTag(block, "description"),
-      imageUrl: extractImageUrl(block),
     });
   }
   return items;
@@ -505,7 +483,6 @@ async function main() {
         placeName: place.placeName,
         lat: place.lat,
         lng: place.lng,
-        imageUrl: item.imageUrl,
       };
     });
 

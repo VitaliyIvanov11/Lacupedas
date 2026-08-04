@@ -470,6 +470,17 @@ in the "News mentions" list without a page reload. Only the headline, source,
 date, and a link back to the original article are shown — never the full
 article text — since copyright stays with the original publisher.
 
+An earlier version also showed a small preview thumbnail, pulled from
+whatever `<enclosure>`/`<media:thumbnail>`/first-`<img>` a feed happened to
+provide and hotlinked directly (the visitor's browser fetched it straight
+from the publisher's server, not ours). Removed: that's real bandwidth cost
+landing on the original publisher with no benefit to them, a broken-image
+risk the moment they reorganize their media, and a rights question sitting
+right next to the "never show the full article text" line above — caching a
+copy on our own server instead would only trade the hotlinking problem for
+a stronger one (re-publishing their photo file rather than linking to it).
+Text-only is the version worth keeping.
+
 To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
 `data/news.json`; no API keys or dependencies required, Node 18+).
 

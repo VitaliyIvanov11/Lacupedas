@@ -20,6 +20,15 @@ let spVoteCounts = {};
 let spShownCount = LIST_PAGE_SIZE;
 let spLatestNewsItems = [];
 let spEl = null;
+// The chart combines sightings + news (see combinedForStats()), but news
+// loads asynchronously via its own poll (initNews()'s fire-and-forget
+// pollNews() call) — refreshAll()'s first renderStatsAndChart() call
+// always runs before that fetch resolves. Without this flag, that first
+// render genuinely computes zero everywhere (spLatestNewsItems is still
+// its initial []), showing a flat empty chart for real bear activity
+// until the second, news-included render arrives moments later — not
+// wrong for that instant, but misleading to glance at.
+let spNewsLoadedOnce = false;
 
 function formatDate(dateStr) {
   const lang = getLang();
@@ -138,7 +147,11 @@ function renderStatsAndChart() {
   if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
   if (spEl.statNewsMentions) spEl.statNewsMentions.textContent = geotaggedNews().length;
 
-  renderMonthlyChart(spEl.chartContainer, combinedForStats());
+  if (spNewsLoadedOnce) {
+    renderMonthlyChart(spEl.chartContainer, combinedForStats());
+  } else {
+    spEl.chartContainer.innerHTML = `<p class="viz-empty">${t("chartLoading")}</p>`;
+  }
 }
 
 function renderList(filtered) {
@@ -316,6 +329,7 @@ function openDetailsFromMarker(s) {
 // each page's initNews(..., onDataChange) callback.
 function setSightingsPanelNews(newsItems) {
   spLatestNewsItems = newsItems;
+  spNewsLoadedOnce = true;
   renderStatsAndChart();
 }
 

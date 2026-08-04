@@ -83,6 +83,7 @@ const translations = {
     chartTitle: "Aktivitāte pa mēnešiem",
     chartCombinedNote: "Ietver gan kopienas novērojumus, gan ziņu pieminējumus.",
     chartNoData: "Šogad vēl nav datu",
+    chartLoading: "Ielādē...",
 
     listTitle: "Novērojumu saraksts",
     exportCsvBtn: "⬇ CSV",
@@ -407,6 +408,7 @@ const translations = {
     chartTitle: "Activity by month",
     chartCombinedNote: "Includes both community sightings and news mentions.",
     chartNoData: "No data yet this year",
+    chartLoading: "Loading...",
 
     listTitle: "Sightings list",
     exportCsvBtn: "⬇ CSV",
@@ -731,6 +733,7 @@ const translations = {
     chartTitle: "Активность по месяцам",
     chartCombinedNote: "Включает и наблюдения сообщества, и упоминания в новостях.",
     chartNoData: "В этом году пока нет данных",
+    chartLoading: "Загрузка...",
 
     listTitle: "Список наблюдений",
     exportCsvBtn: "⬇ CSV",

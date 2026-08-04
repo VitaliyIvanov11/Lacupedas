@@ -24,6 +24,17 @@ body.guide-body {
   text-decoration: underline;
 }
 
+/* padomi.html only (id-scoped, not the shared .back-link class — every
+   other content page's back-link points *up* to padomi.html itself, a
+   different relationship than this one's "back to home"). Redundant with
+   .mobile-bottom-nav's "Sākums" at the same width that nav appears
+   (900px, style.css) — kept on desktop, where there's no bottom nav. */
+@media (max-width: 900px) {
+  #hub-back-link {
+    display: none;
+  }
+}
+
 .guide-card {
   background: var(--surface-1);
   border: 1px solid var(--border);
