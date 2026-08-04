@@ -26,6 +26,10 @@ const LEGEND_ROWS = [
   { color: TYPE_COLORS.dna_sample, shape: "dot", key: "typeDnaSample" },
   { color: TYPE_COLORS.dead, shape: "dot", key: "typeDead" },
   { color: NEWS_MARKER_COLOR, shape: "diamond", key: "legendNews" },
+  // Same diamond/color as legendNews — the green ring is the only
+  // difference (see .news-marker-diamond.verified in style.css), so it
+  // gets its own swatch class instead of a different color.
+  { color: NEWS_MARKER_COLOR, shape: "diamond", extraClass: "legend-verified", key: "legendNewsVerified" },
 ];
 
 function buildLegend() {
@@ -38,7 +42,8 @@ function buildLegend() {
     rowEl.className = "legend-row";
 
     const swatch = document.createElement("span");
-    swatch.className = "legend-swatch " + (row.shape === "diamond" ? "legend-diamond" : "legend-dot");
+    swatch.className =
+      "legend-swatch " + (row.shape === "diamond" ? "legend-diamond" : "legend-dot") + (row.extraClass ? " " + row.extraClass : "");
     swatch.style.background = row.color;
     rowEl.appendChild(swatch);
 

@@ -66,10 +66,14 @@ function newsEscapeHtml(str) {
   return div.innerHTML;
 }
 
-function newsIcon() {
+// verified (see VERIFIED_LINKS in scripts/fetch-news.js) gets a small
+// white ring — a human has personally confirmed this specific item's
+// place/date match the article, not just that every merged item already
+// passed the "is this really a bear story" bar via the PR review.
+function newsIcon(verified) {
   return L.divIcon({
     className: "news-marker",
-    html: '<span class="news-marker-diamond"></span>',
+    html: `<span class="news-marker-diamond${verified ? " verified" : ""}"></span>`,
     iconSize: [16, 16],
     iconAnchor: [8, 8],
     popupAnchor: [0, -8],
@@ -148,11 +152,12 @@ function renderNewsMarkers() {
   getFilteredNews()
     .filter((n) => n.lat != null && n.lng != null)
     .forEach((n) => {
-      const marker = L.marker([n.lat, n.lng], { icon: newsIcon() });
+      const marker = L.marker([n.lat, n.lng], { icon: newsIcon(n.verified) });
       marker.bindPopup(
         `<a href="${newsEscapeHtml(n.link)}" target="_blank" rel="noopener"><strong>${newsEscapeHtml(newsTitleFor(n))}</strong></a>` +
           `<br><span class="popup-meta">${newsEscapeHtml(n.source)}</span>` +
-          `<br><span class="popup-meta popup-approx">${newsEscapeHtml(t("newsApproxLocation"))}</span>`
+          `<br><span class="popup-meta popup-approx">${newsEscapeHtml(t("newsApproxLocation"))}</span>` +
+          (n.verified ? `<br><span class="popup-meta news-verified-badge">${newsEscapeHtml(t("newsVerifiedBadge"))}</span>` : "")
       );
       marker.on("mouseover", () => marker.openPopup());
       marker.on("mouseout", () => marker.closePopup());
@@ -220,6 +225,16 @@ function renderNewsList() {
     sourceSpan.textContent = n.source + (n.placeName ? " · " + n.placeName : "");
     top.appendChild(dateSpan);
     top.appendChild(sourceSpan);
+    // Manually curated (VERIFIED_LINKS in scripts/fetch-news.js) — a human
+    // has personally confirmed the place/date genuinely match the article,
+    // not just that it's a real bear story (every merged item already
+    // passed that bar via the PR review). Most items won't have this.
+    if (n.verified) {
+      const verifiedBadge = document.createElement("span");
+      verifiedBadge.className = "news-verified-badge";
+      verifiedBadge.textContent = t("newsVerifiedBadge");
+      top.appendChild(verifiedBadge);
+    }
     body.appendChild(top);
 
     const link = document.createElement("a");

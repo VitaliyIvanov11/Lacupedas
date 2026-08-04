@@ -250,6 +250,17 @@ const EXCLUDED_LINKS = new Set([
   "https://www.lsm.lv/raksts/zinas/latvija/04.08.2026-aiztur-hokeja-treneri-par-seksuala-rakstura-darbibam-pret-mazgadigo-aicina-atsaukties-iespejamos-cietusos.a657389/?utm_source=rss&utm_campaign=rss&utm_medium=links",
 ]);
 
+// Manually curated, mirroring EXCLUDED_LINKS's shape: a link goes here only
+// after a human has actually opened the article and personally confirmed
+// the auto-matched place name and date genuinely appear in the text — not
+// just "this is a real bear story" (which the PR review process already
+// checks for every item before it ever reaches main) but "this specific
+// claim checks out." Same bar already used for hand-backfilled historical
+// entries (see README's "verify the specific claim" note). Applied to the
+// full merged set below, not just this run's freshly-matched items, so
+// marking an older already-published article works too, not only new ones.
+const VERIFIED_LINKS = new Set([]);
+
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
 const MAX_ITEMS = 150;
 const OUTPUT_PATH = path.join(__dirname, "..", "data", "news.json");
@@ -495,6 +506,17 @@ async function main() {
     .filter((i) => new Date(i.pubDate).getTime() >= cutoff)
     .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
     .slice(0, MAX_ITEMS);
+
+  // Applied to the full merged set (not just freshly-matched items) so
+  // adding a link to VERIFIED_LINKS works for any already-published item,
+  // old or new — and removing one un-verifies it on the next run too.
+  for (const entry of merged) {
+    if (VERIFIED_LINKS.has(entry.link)) {
+      entry.verified = true;
+    } else {
+      delete entry.verified;
+    }
+  }
 
   // Translate once per item, the run it first appears (or, for items saved
   // before this field existed, the next run after this deploy) — title is

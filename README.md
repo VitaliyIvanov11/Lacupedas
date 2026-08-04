@@ -464,6 +464,23 @@ reject — same git workflow already used for every other change to this
 repo, no new tooling. Rejecting a specific article permanently still goes
 through `EXCLUDED_LINKS` in `fetch-news.js`, same as before.
 
+### Manual verification (separate from the review queue)
+
+Merging the PR above only confirms "this is genuinely a bear story, not a
+false positive" — it doesn't confirm the auto-matched place name and date
+actually appear in the article text rather than being a plausible-looking
+coincidence (see the "verify the specific claim" note above, the same bar
+already used for hand-backfilled historical entries). `VERIFIED_LINKS` in
+`fetch-news.js` mirrors `EXCLUDED_LINKS`'s shape for this stronger,
+separate check: add a link there only after actually opening the article
+and confirming the specific claim, and the next scan run stamps
+`verified: true` onto that item (works for any already-published item, not
+just new ones — removing a link un-verifies it again too). Verified items
+get a green ring on their map marker (vs. the plain indigo diamond every
+other news mention gets), a "✓ Pārbaudīts" badge in the news list, and a
+count on stats.html's "Ziņu pieminējumi" box. Empty by default — nothing
+is verified until a human actually does the work.
+
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
 in the "News mentions" list without a page reload. Only the headline, source,

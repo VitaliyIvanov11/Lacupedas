@@ -146,6 +146,10 @@ function renderStatsAndChart() {
   if (spEl.toolbarStatYear) spEl.toolbarStatYear.textContent = yearCount;
   if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
   if (spEl.statNewsMentions) spEl.statNewsMentions.textContent = geotaggedNews().length;
+  if (spEl.statNewsVerified) {
+    const verifiedCount = geotaggedNews().filter((n) => n.verified).length;
+    spEl.statNewsVerified.textContent = verifiedCount > 0 ? t("newsVerifiedCount").replace("{n}", verifiedCount) : "";
+  }
 
   if (spNewsLoadedOnce) {
     renderMonthlyChart(spEl.chartContainer, combinedForStats());
@@ -385,6 +389,7 @@ function initSightingsPanel() {
     toolbarStatYear: document.getElementById("toolbar-stat-year"),
     toolbarStatLast: document.getElementById("toolbar-stat-last"),
     statNewsMentions: document.getElementById("stat-news-mentions"),
+    statNewsVerified: document.getElementById("stat-news-verified"),
   };
   if (!spEl.list) return;
 

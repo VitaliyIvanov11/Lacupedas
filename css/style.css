@@ -408,6 +408,10 @@ button {
   margin-top: 3px;
 }
 
+.legend-verified {
+  box-shadow: 0 0 0 2px rgba(12, 163, 12, 0.55);
+}
+
 .bear-marker-dot {
   display: block;
   width: 16px;
@@ -650,6 +654,14 @@ button {
   justify-content: center;
 }
 
+.stat-sublabel {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--success);
+  font-weight: 700;
+  margin-top: 1px;
+}
+
 .stats-card h2 {
   font-size: 0.88rem;
   margin-bottom: 0;
@@ -835,6 +847,16 @@ button {
   border-radius: 999px;
   background: rgba(42, 120, 214, 0.14);
   color: var(--series-1);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.news-verified-badge {
+  flex: 0 0 auto;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(12, 163, 12, 0.14);
+  color: var(--success);
   font-size: 0.68rem;
   font-weight: 700;
 }
@@ -1046,6 +1068,15 @@ button {
 
 .leaflet-marker-icon:hover .news-marker-diamond {
   transform: rotate(45deg) scale(1.35);
+}
+
+/* A human has personally confirmed this specific item's place/date match
+   the article (VERIFIED_LINKS in scripts/fetch-news.js) — a green glow
+   ring on top of the same diamond, not a different shape/color, since
+   it's still a news marker either way. */
+.news-marker-diamond.verified {
+  border-color: var(--success);
+  box-shadow: 0 0 0 2px rgba(12, 163, 12, 0.55), 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Sighting clusters (leaflet.markercluster's default divIcon markup/classes)
