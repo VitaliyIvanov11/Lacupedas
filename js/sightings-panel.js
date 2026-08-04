@@ -193,6 +193,7 @@ function renderStatsAndChart() {
   if (spEl.toolbarStatYear) spEl.toolbarStatYear.textContent = yearCount;
   if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
   if (spEl.statNewsMentions) spEl.statNewsMentions.textContent = geotaggedNews().length;
+  if (spEl.toolbarStatNews) spEl.toolbarStatNews.textContent = geotaggedNews().length;
   if (spEl.statNewsVerified) {
     const verifiedCount = geotaggedNews().filter((n) => n.verified).length;
     spEl.statNewsVerified.textContent = verifiedCount > 0 ? t("newsVerifiedCount").replace("{n}", verifiedCount) : "";
@@ -472,6 +473,7 @@ function initSightingsPanel() {
     exportCsvBtn: document.getElementById("export-csv-btn"),
     toolbarStatYear: document.getElementById("toolbar-stat-year"),
     toolbarStatLast: document.getElementById("toolbar-stat-last"),
+    toolbarStatNews: document.getElementById("toolbar-stat-news"),
     statNewsMentions: document.getElementById("stat-news-mentions"),
     statNewsVerified: document.getElementById("stat-news-verified"),
   };
