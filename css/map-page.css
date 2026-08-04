@@ -157,3 +157,19 @@
   padding: 10px 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
+
+/* Leaflet's attribution control (bottom-right, OSM-license-required, can't
+   be hidden or covered) sits at bottom:0 with no offset of its own — at
+   phone width its text is wide enough to reach under both .map-legend
+   (bottom-left) and .map-recency (bottom-right), which both defaulted to
+   the same bottom:10px band. Lift them clear of it instead of touching
+   the attribution itself. Placed after both buttons' base rules (this
+   file and style.css load in that order via map.html's <link> tags, and
+   .map-recency's own base rule is above, in this same file) so this wins
+   the cascade tie on mobile without needing !important. */
+@media (max-width: 900px) {
+  .map-legend,
+  .map-recency {
+    bottom: 36px;
+  }
+}

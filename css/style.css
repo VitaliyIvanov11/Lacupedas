@@ -320,6 +320,31 @@ button {
   cursor: crosshair;
 }
 
+/* Leaflet's stock .leaflet-bar/.leaflet-control give this the same boxy
+   white-button look as the zoom control it sits next to — this just sizes
+   the emoji glyph to fill that box (Leaflet's default line-height assumes
+   a "+"/"−" text glyph, not an emoji) and adds a waiting state. */
+.locate-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.locate-control-btn.locating {
+  animation: locate-pulse 1s ease-in-out infinite;
+}
+
+@keyframes locate-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
 .map-legend {
   position: absolute;
   left: 10px;

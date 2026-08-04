@@ -57,6 +57,65 @@ function buildLegend() {
   });
 }
 
+// "Where am I" map orientation only — flies/zooms the view to the visitor's
+// current position with a marker, nothing more. Deliberately NOT wired into
+// the report flow: a sighting is reported after the fact, so "where the
+// phone is right now" isn't "where the bear was" — placing the pin still
+// always requires an explicit map click (see js/report-form.js).
+function buildLocateControl(mapInstance) {
+  let locateMarker = null;
+  let locating = false;
+
+  const LocateControl = L.Control.extend({
+    options: { position: "topleft" },
+    onAdd: function () {
+      const container = L.DomUtil.create("div", "leaflet-bar leaflet-control locate-control");
+      const button = L.DomUtil.create("a", "locate-control-btn", container);
+      button.href = "#";
+      button.setAttribute("role", "button");
+      const label = t("locateMeBtn");
+      button.title = label;
+      button.setAttribute("aria-label", label);
+      button.innerHTML = "📍";
+
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.on(button, "click", (e) => {
+        L.DomEvent.preventDefault(e);
+        if (locating || !navigator.geolocation) return;
+        locating = true;
+        button.classList.add("locating");
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            locating = false;
+            button.classList.remove("locating");
+            const { latitude, longitude } = pos.coords;
+            if (locateMarker) mapInstance.removeLayer(locateMarker);
+            locateMarker = L.circleMarker([latitude, longitude], {
+              radius: 8,
+              color: "#fff",
+              weight: 2,
+              fillColor: "#2a78d6",
+              fillOpacity: 1,
+            }).addTo(mapInstance);
+            mapInstance.flyTo([latitude, longitude], Math.max(mapInstance.getZoom(), 13), { duration: 0.6 });
+          },
+          () => {
+            // Denied/unavailable/timed out — the browser's own permission
+            // UI already told the visitor why; nothing more to add here.
+            locating = false;
+            button.classList.remove("locating");
+          },
+          { enableHighAccuracy: true, timeout: 10000 }
+        );
+      });
+
+      return container;
+    },
+  });
+
+  new LocateControl().addTo(mapInstance);
+}
+
 let map;
 let markersLayer;
 let pickingMode = false;
@@ -104,6 +163,7 @@ function initMap() {
   }).addTo(map);
 
   buildLegend();
+  buildLocateControl(map);
 
   // A raw DOM listener, not map.on("click", ...): Leaflet marker/cluster
   // clicks don't call stopPropagation(), so this also fires when clicking a
