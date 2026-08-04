@@ -96,34 +96,49 @@ function getFilteredSightings() {
 // specific incident rather than population stats, hunting policy, or a
 // passing mention. The news list itself still shows every bear-related
 // article regardless (see renderNewsList()).
+function geotaggedNews() {
+  return spLatestNewsItems.filter((n) => n.lat != null && n.lng != null);
+}
+
+// Only used for the chart, which stays a single combined series for now
+// (see renderStatsAndChart()'s comment on why the *numbers* no longer
+// blend the two) — a real dual-series chart is a bigger redesign than
+// this pass covers, so the chart keeps combined data but is now labeled
+// honestly instead (chartTitle/chartCombinedNote in js/i18n.js).
 function combinedForStats() {
-  const newsAsEntries = spLatestNewsItems
-    .filter((n) => n.lat != null && n.lng != null)
-    .map((n) => ({ date: n.pubDate.slice(0, 10) }));
+  const newsAsEntries = geotaggedNews().map((n) => ({ date: n.pubDate.slice(0, 10) }));
   return spSightings.concat(newsAsEntries);
 }
 
 function renderStatsAndChart() {
-  const combined = combinedForStats();
+  // Every number labeled "novērojumi" (sightings) now means literally
+  // that — community-submitted reports only. Previously these blended in
+  // geotagged news mentions too, so a visitor could see e.g. "15 total
+  // sightings" while the list right below correctly said "no community
+  // sightings yet" — the numbers and the list contradicted each other.
+  // News mentions get their own, separately labeled count instead
+  // (#stat-news-mentions, stats.html only — no room on index.html's
+  // compact card/toolbar echo).
+  const year = new Date().getFullYear();
+  const yearCount = spSightings.filter((s) => new Date(s.date).getFullYear() === year).length;
+  const lastText =
+    spSightings.length === 0
+      ? t("noneYet")
+      : formatStatDate([...spSightings].sort((a, b) => (a.date < b.date ? 1 : -1))[0].date);
+
   // #stat-total is absent on index.html (only "this year" and "latest"
   // show there — see #stats-section's markup) but still present on
   // stats.html's fuller detail view.
-  if (spEl.statTotal) spEl.statTotal.textContent = combined.length;
-  const year = new Date().getFullYear();
-  const yearCount = combined.filter((s) => new Date(s.date).getFullYear() === year).length;
-  const lastText =
-    combined.length === 0
-      ? t("noneYet")
-      : formatStatDate([...combined].sort((a, b) => (a.date < b.date ? 1 : -1))[0].date);
-
+  if (spEl.statTotal) spEl.statTotal.textContent = spSightings.length;
   spEl.statYear.textContent = yearCount;
   spEl.statLast.textContent = lastText;
   // Desktop-only compact echo in the map toolbar (see .toolbar-stats in
   // css/style.css) — absent on stats.html/map.html, hence the guards.
   if (spEl.toolbarStatYear) spEl.toolbarStatYear.textContent = yearCount;
   if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
+  if (spEl.statNewsMentions) spEl.statNewsMentions.textContent = geotaggedNews().length;
 
-  renderMonthlyChart(spEl.chartContainer, combined);
+  renderMonthlyChart(spEl.chartContainer, combinedForStats());
 }
 
 function renderList(filtered) {
@@ -355,6 +370,7 @@ function initSightingsPanel() {
     exportCsvBtn: document.getElementById("export-csv-btn"),
     toolbarStatYear: document.getElementById("toolbar-stat-year"),
     toolbarStatLast: document.getElementById("toolbar-stat-last"),
+    statNewsMentions: document.getElementById("stat-news-mentions"),
   };
   if (!spEl.list) return;
 

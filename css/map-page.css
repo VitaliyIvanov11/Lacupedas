@@ -23,6 +23,14 @@
     height: 100vh;
     height: 100dvh;
     overflow: hidden;
+    /* style.css's shared mobile query gives every other page's <body> a
+       64px padding-bottom to clear the fixed .mobile-bottom-nav — this
+       override replaces that rule (fixed height/hidden overflow instead
+       of scrolling) without carrying the padding over, so the map (and
+       Leaflet's own bottom-right attribution control, plus our
+       .map-legend/.map-recency buttons) extended under the nav bar
+       instead of stopping above it. Reserve the same 64px here too. */
+    padding-bottom: 64px;
   }
 
   .map-page-main .map-wrap {

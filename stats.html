@@ -65,7 +65,16 @@
           </span>
           <div class="stat-text">
             <span class="stat-value" id="stat-total">0</span>
-            <span class="stat-label" data-i18n="totalLabel">Kopā novērojumu</span>
+            <span class="stat-label" data-i18n="totalLabel">Kopienas novērojumi</span>
+          </div>
+        </div>
+        <div class="stat stat-news-mentions">
+          <span class="stat-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+          </span>
+          <div class="stat-text">
+            <span class="stat-value" id="stat-news-mentions">0</span>
+            <span class="stat-label" data-i18n="newsSectionTitle">Ziņu pieminējumi</span>
           </div>
         </div>
         <div class="stat stat-year">
@@ -87,6 +96,9 @@
           </div>
         </div>
       </div>
+      <p class="stats-grid-note" data-i18n="statsGridNote">
+        Šogad un Pēdējais attiecas tikai uz kopienas novērojumiem — ziņu pieminējumi skaitīti atsevišķi.
+      </p>
     </section>
 
     <section class="card research-card">
@@ -138,8 +150,9 @@
     </section>
 
     <section class="card chart-card">
-      <h2 data-i18n="chartTitle">Novērojumi pa mēnešiem</h2>
+      <h2 data-i18n="chartTitle">Aktivitāte pa mēnešiem</h2>
       <div id="chart-container" class="chart-container"></div>
+      <p class="chart-combined-note" data-i18n="chartCombinedNote">Ietver gan kopienas novērojumus, gan ziņu pieminējumus.</p>
     </section>
 
     <section class="card list-card">

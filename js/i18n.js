@@ -72,12 +72,14 @@ const translations = {
 
     statsTitle: "Statistika",
     statsDetailLink: "Skatīt detalizēti ›",
-    totalLabel: "Kopā novērojumu",
+    totalLabel: "Kopienas novērojumi",
     yearLabel: "Šogad",
     lastLabel: "Pēdējais",
     noneYet: "Vēl nav",
+    statsGridNote: "Šogad un Pēdējais attiecas tikai uz kopienas novērojumiem — ziņu pieminējumi skaitīti atsevišķi.",
 
-    chartTitle: "Novērojumi pa mēnešiem",
+    chartTitle: "Aktivitāte pa mēnešiem",
+    chartCombinedNote: "Ietver gan kopienas novērojumus, gan ziņu pieminējumus.",
     chartNoData: "Šogad vēl nav datu",
 
     listTitle: "Novērojumu saraksts",
@@ -392,12 +394,14 @@ const translations = {
 
     statsTitle: "Statistics",
     statsDetailLink: "View details ›",
-    totalLabel: "Total sightings",
+    totalLabel: "Community sightings",
     yearLabel: "This year",
     lastLabel: "Latest sighting",
     noneYet: "None yet",
+    statsGridNote: "This year and Latest sighting cover community sightings only — news mentions are counted separately.",
 
-    chartTitle: "Sightings by month",
+    chartTitle: "Activity by month",
+    chartCombinedNote: "Includes both community sightings and news mentions.",
     chartNoData: "No data yet this year",
 
     listTitle: "Sightings list",
@@ -712,12 +716,14 @@ const translations = {
 
     statsTitle: "Статистика",
     statsDetailLink: "Подробнее ›",
-    totalLabel: "Всего",
+    totalLabel: "Наблюдения сообщества",
     yearLabel: "В этом году",
     lastLabel: "Последнее",
     noneYet: "Пока нет",
+    statsGridNote: "«В этом году» и «Последнее» — только по наблюдениям сообщества, упоминания в новостях считаются отдельно.",
 
-    chartTitle: "Наблюдения по месяцам",
+    chartTitle: "Активность по месяцам",
+    chartCombinedNote: "Включает и наблюдения сообщества, и упоминания в новостях.",
     chartNoData: "В этом году пока нет данных",
 
     listTitle: "Список наблюдений",

@@ -648,6 +648,12 @@ button {
   display: block;
 }
 
+.chart-combined-note {
+  margin: 4px 0 0;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
 .viz-grid {
   stroke: var(--gridline);
   stroke-width: 1;
