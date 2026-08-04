@@ -19,6 +19,12 @@ const TYPE_COLORS = {
 // items aren't classified into a sighting/tracks/damage/etc. type.
 const NEWS_MARKER_COLOR = "#4a3aa7";
 
+// eventCountry EE/LT ("border area" — see classifyLocation() in
+// scripts/fetch-news.js) gets its own color instead of the default indigo:
+// still worth showing (bears don't know borders), but visually not a
+// Latvia-side item. Distinct from every TYPE_COLORS/NEWS_MARKER_COLOR hue.
+const NEWS_BORDER_COLOR = "#5f7a8f";
+
 const LEGEND_ROWS = [
   { color: TYPE_COLORS.sighting, shape: "dot", key: "typeSighting" },
   { color: TYPE_COLORS.tracks, shape: "dot", key: "typeTracks" },
@@ -26,6 +32,7 @@ const LEGEND_ROWS = [
   { color: TYPE_COLORS.dna_sample, shape: "dot", key: "typeDnaSample" },
   { color: TYPE_COLORS.dead, shape: "dot", key: "typeDead" },
   { color: NEWS_MARKER_COLOR, shape: "diamond", key: "legendNews" },
+  { color: NEWS_BORDER_COLOR, shape: "diamond", key: "legendNewsBorder" },
   // Same diamond/color as legendNews — the green ring is the only
   // difference (see .news-marker-diamond.verified in style.css), so it
   // gets its own swatch class instead of a different color.

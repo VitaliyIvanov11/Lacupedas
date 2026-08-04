@@ -120,6 +120,7 @@ function verifiedNewsAsListEntries() {
       photoUrl: null,
       source: "news_verified",
       mediaSource: n.source,
+      eventCountry: n.eventCountry,
       link: n.link,
       lat: n.lat,
       lng: n.lng,
@@ -238,7 +239,12 @@ function renderList(filtered) {
 
     const dot = document.createElement("span");
     dot.className = "type-dot";
-    dot.style.background = isMedia ? NEWS_MARKER_COLOR : TYPE_COLORS[s.type] || TYPE_COLORS.sighting;
+    const isBorderMedia = isMedia && (s.eventCountry === "EE" || s.eventCountry === "LT");
+    dot.style.background = isBorderMedia
+      ? NEWS_BORDER_COLOR
+      : isMedia
+        ? NEWS_MARKER_COLOR
+        : TYPE_COLORS[s.type] || TYPE_COLORS.sighting;
     li.appendChild(dot);
 
     const body = document.createElement("div");

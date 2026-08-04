@@ -401,6 +401,97 @@ function findPlace(text) {
   return { placeName: null, lat: null, lng: null };
 }
 
+// A Baltic-language portal reporting on a bear story doesn't mean the bear
+// was in the Baltics — e.g. an Estonian outlet covering a Swedish attack.
+// GAZETTEER above only contains Latvian/border place names, so it can never
+// place a pin inside e.g. Sweden — but it COULD wrongly latch onto a
+// coincidental substring match (a stem like "krievij"/"soom" is short) in an
+// article that is actually about one of these countries. Checked first, per
+// the article's own language, and wins over any gazetteer match: naming one
+// of these countries is a much stronger location signal than a short stem
+// coincidence. Not an exhaustive list of every country bears live in —
+// covers the ones that actually turn up in Baltic bear-news coverage today;
+// extend as new cases are found, same spirit as EXCLUDED_LINKS/VERIFIED_LINKS.
+const FOREIGN_COUNTRIES = [
+  {
+    code: "SE",
+    name: { lv: "Zviedrija", en: "Sweden", ru: "Швеция" },
+    markers: { lv: ["zviedrij"], et: ["rootsi"], lt: ["švedij"], ru: ["швеци"] },
+  },
+  {
+    code: "NO",
+    name: { lv: "Norvēģija", en: "Norway", ru: "Норвегия" },
+    markers: { lv: ["norvēģij"], et: ["norra"], lt: ["norvegij"], ru: ["норвег"] },
+  },
+  {
+    code: "FI",
+    name: { lv: "Somija", en: "Finland", ru: "Финляндия" },
+    markers: { lv: ["somij"], et: ["soome"], lt: ["suomij"], ru: ["финлянди"] },
+  },
+  {
+    code: "RU",
+    name: { lv: "Krievija", en: "Russia", ru: "Россия" },
+    markers: { lv: ["krievij"], et: ["venemaa"], lt: ["rusij"], ru: ["росси"] },
+  },
+  {
+    code: "BY",
+    name: { lv: "Baltkrievija", en: "Belarus", ru: "Беларусь" },
+    markers: { lv: ["baltkrievij"], et: ["valgevene"], lt: ["baltarusij"], ru: ["беларус"] },
+  },
+  {
+    code: "PL",
+    name: { lv: "Polija", en: "Poland", ru: "Польша" },
+    markers: { lv: ["polij"], et: ["poola"], lt: ["lenkij"], ru: ["польш"] },
+  },
+  {
+    code: "DE",
+    name: { lv: "Vācija", en: "Germany", ru: "Германия" },
+    markers: { lv: ["vācij"], et: ["saksamaa"], lt: ["vokietij"], ru: ["герман"] },
+  },
+  {
+    code: "RO",
+    name: { lv: "Rumānija", en: "Romania", ru: "Румыния" },
+    markers: { lv: ["rumānij"], et: ["rumeenia"], lt: ["rumunij"], ru: ["румыни"] },
+  },
+  {
+    code: "SK",
+    name: { lv: "Slovākija", en: "Slovakia", ru: "Словакия" },
+    markers: { lv: ["slovākij"], et: ["slovakkia"], lt: ["slovakij"], ru: ["словaki"] },
+  },
+];
+
+function findForeignCountry(text, lang) {
+  const lower = text.toLowerCase();
+  for (const country of FOREIGN_COUNTRIES) {
+    const stems = country.markers[lang];
+    if (!stems) continue;
+    for (const stem of stems) {
+      if (lower.includes(stem.toLowerCase())) return country;
+    }
+  }
+  return null;
+}
+
+// Single entry point tying findForeignCountry() and findPlace() together:
+// eventCountry is the country the SIGHTING happened in, not the country the
+// portal publishes from — "LV" is the default (matches today's implicit
+// assumption for untagged text), "EE"/"LT" come from GAZETTEER's border
+// entries (their names already end in "(Igaunija)"/"(Lietuva)"), and a
+// FOREIGN_COUNTRIES match short-circuits both placeName and lat/lng to null
+// so a coincidental stem match can never plant a pin on the Latvia map for a
+// story that isn't about Latvia at all.
+function classifyLocation(text, lang) {
+  const foreign = findForeignCountry(text, lang);
+  if (foreign) {
+    return { placeName: null, lat: null, lng: null, eventCountry: foreign.code, eventCountryName: foreign.name };
+  }
+  const place = findPlace(text);
+  let eventCountry = "LV";
+  if (place.placeName && place.placeName.endsWith("(Igaunija)")) eventCountry = "EE";
+  else if (place.placeName && place.placeName.endsWith("(Lietuva)")) eventCountry = "LT";
+  return { ...place, eventCountry, eventCountryName: null };
+}
+
 function makeId(link) {
   return crypto.createHash("sha1").update(link).digest("hex").slice(0, 16);
 }
@@ -483,7 +574,7 @@ async function main() {
     .filter((item) => !looksLikeProperNounCollision(item))
     .filter((item) => !looksLikeBreadBrand(item))
     .map((item) => {
-      const place = findPlace(item.title + " " + item.description);
+      const loc = classifyLocation(item.title + " " + item.description, item.lang);
       const pubDate = new Date(item.pubDate);
       return {
         id: makeId(item.link),
@@ -491,9 +582,11 @@ async function main() {
         link: item.link,
         source: item.source,
         pubDate: isNaN(pubDate) ? new Date().toISOString() : pubDate.toISOString(),
-        placeName: place.placeName,
-        lat: place.lat,
-        lng: place.lng,
+        placeName: loc.placeName,
+        lat: loc.lat,
+        lng: loc.lng,
+        eventCountry: loc.eventCountry,
+        eventCountryName: loc.eventCountryName,
       };
     });
 
@@ -515,6 +608,28 @@ async function main() {
       entry.verified = true;
     } else {
       delete entry.verified;
+    }
+  }
+
+  // Backfill for items saved before eventCountry existed. Only reachable
+  // here for OLD items — freshly matched items above already got a proper
+  // per-source-language classification. By this point an old item's title
+  // is already a {lv,en,ru} object (translated on a prior run), so the
+  // original source language is gone; fall back to scanning the Latvian
+  // translation with the lv-language markers, which is a reasonable
+  // approximation since machine translation preserves country names.
+  for (const entry of merged) {
+    if (entry.eventCountry) continue;
+    if (entry.placeName && entry.placeName.endsWith("(Igaunija)")) {
+      entry.eventCountry = "EE";
+    } else if (entry.placeName && entry.placeName.endsWith("(Lietuva)")) {
+      entry.eventCountry = "LT";
+    } else {
+      const titleLv =
+        typeof entry.title === "string" ? entry.title : entry.title.lv || entry.title.en || entry.title.ru || "";
+      const foreign = findForeignCountry(titleLv, "lv");
+      entry.eventCountry = foreign ? foreign.code : "LV";
+      entry.eventCountryName = foreign ? foreign.name : null;
     }
   }
 

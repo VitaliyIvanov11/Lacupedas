@@ -989,6 +989,40 @@ button {
   white-space: nowrap;
 }
 
+/* Local (Latvia + EE/LT border) vs. Pasaulē (everything else — see
+   isForeignNews() in news.js) — foreign stories never carry lat/lng, so
+   this is the only place they're browsable at all. */
+.news-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.news-tab {
+  flex: 1 1 0;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--page-plane);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.news-tab:hover {
+  border-color: var(--brand-accent);
+}
+
+.news-tab.active {
+  color: #fff;
+  background: var(--brand-forest);
+  border-color: var(--brand-forest);
+}
+
 .news-link {
   display: block;
   margin-top: 4px;
@@ -1060,6 +1094,15 @@ button {
 .news-marker-diamond.verified {
   border-color: var(--success);
   box-shadow: 0 0 0 2px rgba(12, 163, 12, 0.55), 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* eventCountry EE/LT ("border area" — see classifyLocation() in
+   scripts/fetch-news.js): still shown on the map since bears don't know
+   borders, just not indigo/Latvia-colored. Combines fine with .verified
+   above — that rule only touches border-color/box-shadow, this one only
+   touches background. */
+.news-marker-diamond.border {
+  background: #5f7a8f;
 }
 
 /* Sighting clusters (leaflet.markercluster's default divIcon markup/classes)

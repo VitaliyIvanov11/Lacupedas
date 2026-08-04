@@ -16,6 +16,7 @@ let newsSeenIds = new Set();
 let newsDataChangeCallback = null;
 let newsShownCount = NEWS_PAGE_SIZE;
 let newsGeneratedAt = null;
+let newsScope = "local"; // "local" (Latvia + EE/LT border) or "world" — see getScopedNewsList()
 
 // title is { lv, en, ru } — machine-translated at scrape time (see
 // buildTitleTranslations() in scripts/fetch-news.js) so the list always
@@ -25,6 +26,37 @@ let newsGeneratedAt = null;
 function newsTitleFor(n) {
   if (typeof n.title === "string") return n.title;
   return n.title[getLang()] || n.title.lv || n.title.en || n.title.ru || "";
+}
+
+// eventCountry (see classifyLocation() in scripts/fetch-news.js) is the
+// country the sighting happened in, not the country the portal publishes
+// from. "LV"/"EE"/"LT" stay in the main local list (EE/LT still get a map
+// pin, just a different color — see newsIcon()); anything else is a
+// foreign story with no map pin, surfaced only in the "Pasaulē" tab.
+function isForeignNews(n) {
+  const country = n.eventCountry || "LV";
+  return country !== "LV" && country !== "EE" && country !== "LT";
+}
+
+function isBorderCountryNews(n) {
+  return n.eventCountry === "EE" || n.eventCountry === "LT";
+}
+
+function newsCountryNameFor(n) {
+  if (!n.eventCountryName) return "";
+  return n.eventCountryName[getLang()] || n.eventCountryName.lv || n.eventCountryName.en || n.eventCountryName.ru || "";
+}
+
+// Local tab: everything that isn't tagged as a foreign country (includes
+// items saved before eventCountry existed, via isForeignNews()'s "LV"
+// default). World tab: only foreign-country items — these never carry
+// lat/lng (see classifyLocation()), so they only ever show up here, never
+// on the map. Layered on top of getFilteredNews()'s existing source/time
+// filters rather than folded into it, so map-marker rendering (which also
+// calls getFilteredNews()) is unaffected by which list tab is active.
+function getScopedNewsList() {
+  const base = getFilteredNews();
+  return base.filter((n) => (newsScope === "world" ? isForeignNews(n) : !isForeignNews(n)));
 }
 
 function matchesNewsTimeFilter(iso, filterValue) {
@@ -70,10 +102,15 @@ function newsEscapeHtml(str) {
 // white ring — a human has personally confirmed this specific item's
 // place/date match the article, not just that every merged item already
 // passed the "is this really a bear story" bar via the PR review.
-function newsIcon(verified) {
+// borderCountry (eventCountry EE/LT) gets a distinct fill color — bears
+// don't know borders, so a sighting just across it is still shown on the
+// map, but visually marked as not-Latvia (see .news-marker-diamond.border
+// in style.css).
+function newsIcon(verified, borderCountry) {
+  const cls = "news-marker-diamond" + (borderCountry ? " border" : "") + (verified ? " verified" : "");
   return L.divIcon({
     className: "news-marker",
-    html: `<span class="news-marker-diamond${verified ? " verified" : ""}"></span>`,
+    html: `<span class="${cls}"></span>`,
     iconSize: [16, 16],
     iconAnchor: [8, 8],
     popupAnchor: [0, -8],
@@ -152,10 +189,11 @@ function renderNewsMarkers() {
   getFilteredNews()
     .filter((n) => n.lat != null && n.lng != null)
     .forEach((n) => {
-      const marker = L.marker([n.lat, n.lng], { icon: newsIcon(n.verified) });
+      const marker = L.marker([n.lat, n.lng], { icon: newsIcon(n.verified, isBorderCountryNews(n)) });
       marker.bindPopup(
         `<a href="${newsEscapeHtml(n.link)}" target="_blank" rel="noopener"><strong>${newsEscapeHtml(newsTitleFor(n))}</strong></a>` +
           `<br><span class="popup-meta">${newsEscapeHtml(n.source)}</span>` +
+          (n.placeName ? `<br><span class="popup-meta popup-place">${newsEscapeHtml(n.placeName)}</span>` : "") +
           `<br><span class="popup-meta popup-approx">${newsEscapeHtml(t("newsApproxLocation"))}</span>` +
           (n.verified ? `<br><span class="popup-meta news-verified-badge">${newsEscapeHtml(t("newsVerifiedBadge"))}</span>` : "")
       );
@@ -181,13 +219,24 @@ function formatNewsDate(iso) {
   });
 }
 
+function updateNewsTabButtons() {
+  const localBtn = document.getElementById("news-tab-local");
+  const worldBtn = document.getElementById("news-tab-world");
+  if (!localBtn || !worldBtn) return;
+  localBtn.setAttribute("aria-selected", String(newsScope === "local"));
+  worldBtn.setAttribute("aria-selected", String(newsScope === "world"));
+  localBtn.classList.toggle("active", newsScope === "local");
+  worldBtn.classList.toggle("active", newsScope === "world");
+}
+
 function renderNewsList() {
   renderNewsUpdatedAt(newsGeneratedAt);
+  updateNewsTabButtons();
   const list = document.getElementById("news-list");
   if (!list) return;
   list.innerHTML = "";
 
-  const filtered = getFilteredNews();
+  const filtered = getScopedNewsList();
   if (filtered.length === 0) {
     const empty = document.createElement("li");
     empty.className = "list-empty";
@@ -222,7 +271,8 @@ function renderNewsList() {
     dateSpan.textContent = formatNewsDate(n.pubDate);
     const sourceSpan = document.createElement("span");
     sourceSpan.className = "sighting-type";
-    sourceSpan.textContent = n.source + (n.placeName ? " · " + n.placeName : "");
+    const locationBit = n.placeName ? " · " + n.placeName : isForeignNews(n) ? " · 🌍 " + newsCountryNameFor(n) : "";
+    sourceSpan.textContent = n.source + locationBit;
     top.appendChild(dateSpan);
     top.appendChild(sourceSpan);
     // Manually curated (VERIFIED_LINKS in scripts/fetch-news.js) — a human
@@ -316,6 +366,16 @@ function initNews(map, onDataChange) {
         renderNewsList();
       });
     }
+  });
+  const localTabBtn = document.getElementById("news-tab-local");
+  const worldTabBtn = document.getElementById("news-tab-world");
+  [localTabBtn, worldTabBtn].forEach((btn) => {
+    if (!btn) return;
+    btn.addEventListener("click", () => {
+      newsScope = btn.id === "news-tab-world" ? "world" : "local";
+      newsShownCount = NEWS_PAGE_SIZE;
+      renderNewsList();
+    });
   });
   pollNews();
   setInterval(pollNews, NEWS_POLL_MS);

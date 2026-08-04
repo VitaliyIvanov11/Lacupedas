@@ -496,6 +496,47 @@ why blending news into that number was misleading in the first place) —
 only the browsable list blends in reliable non-community data, not the
 headline number, which would repeat the exact problem being avoided there.
 
+### Event country (Latvia / border / world)
+
+`GAZETTEER` only contains Latvian and EE/LT border-town names, so it can
+never place a pin *inside* e.g. Sweden — but it could still latch onto a
+short stem (like "krievij"/"soom") that coincidentally appears in an article
+that isn't about the Baltics at all, since a source portal's language says
+nothing about where the story is set (see the "an Estonian portal covering
+Romania's bear problem" example above — the exact same shape of story
+applies to Sweden, Norway, Finland, Russia, Belarus, Poland, Germany,
+Romania, and Slovakia, the countries `FOREIGN_COUNTRIES` in `fetch-news.js`
+currently knows to name explicitly). `classifyLocation()` checks
+`FOREIGN_COUNTRIES` first, per the article's own source language — if any of
+those countries is named, that wins over any gazetteer stem match: no
+`placeName`/`lat`/`lng` gets attached at all, however coincidental the stem
+match would have been. Every matched item gets an `eventCountry` field this
+way: `"LV"` (default), `"EE"`/`"LT"` (derived from which `GAZETTEER` entry
+matched — those entries' names already end in "(Igaunija)"/"(Lietuva)"), or
+a specific country code (`"SE"`, `"NO"`, ...) for anything else. Items saved
+before this field existed get a one-time best-effort backfill from their
+already-translated Latvian title (the original source-language text isn't
+kept past the run it was matched in) — see the backfill loop in `main()`.
+
+The front end treats `"LV"`/`"EE"`/`"LT"` as "local": shown on the map same
+as before, with EE/LT getting a distinct marker color
+(`.news-marker-diamond.border` in `style.css`) and the matched place name
+(already including its "(Igaunija)"/"(Lietuva)" suffix) surfaced as a popup
+line — bears don't know borders, so a sighting just across one is still
+worth showing, just visibly marked as not-Latvia. Anything else never gets a
+pin (`lat`/`lng` are always null for a `FOREIGN_COUNTRIES` match) and only
+shows up in the news card's "Pasaulē" tab (`newsScope`/`getScopedNewsList()`
+in `js/news.js`), separate from the default "Tuvumā" (local) tab — so a
+foreign story is still browsable (with its country named, e.g. "🌍
+Zviedrija") without ever implying it happened near Latvia.
+
+This is still a best-effort keyword classifier, not a resolved "where did
+this happen" — the same class of limitation `EXCLUDED_LINKS`/proper-noun
+collision handling above already lives with. A story that merely *compares*
+to a named country in passing (rather than being set there) would be
+misclassified as foreign; extend `FOREIGN_COUNTRIES` the same incremental
+way as everything else in this file when a new case turns up.
+
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
 in the "News mentions" list without a page reload. Only the headline, source,
