@@ -18,14 +18,46 @@ Run date: 2026-08-03. Revised 2026-08-04 after review caught that this
 audit's own §5 SQL had the exact class of bug it was meant to be finding
 (R4) — proposing a `CREATE POLICY` without the `GRANT` it depends on. §4's
 query list is now consolidated into one block below so this can be closed
-in a single run.
+in a single run. Revised again 2026-08-04 with the user's actual query
+results (§1b) — the core question (task item 3: can anon actually
+INSERT/UPDATE/DELETE) is now empirically answered.
 
-**Status: not yet closed.** Everything in this file past §1 is either
-inferred from code or is a *proposed* fix — none of it confirms what's
-actually configured on the live database. Closing it needs §4's query
-block run once in the Supabase SQL editor, with the output brought back
-here — that's the only remaining step; nothing else requires more
-investigation first.
+**Status: core findings closed.** §1b below has real output for the
+table/policy/column shape of `sightings`/`sighting_votes`. Still open,
+lower priority (doesn't block Task 5): `sighting_votes`' exact column
+list/unique-constraint text, and the Storage bucket/object-policy queries
+in §4 — nobody has run those yet.
+
+## 1b. Empirical results (from the user's own SQL Editor run, 2026-08-04)
+
+**RLS is enabled** on both tables (`rowsecurity = true`). Only 4 policies
+exist in the entire `public` schema:
+
+| Table | Command | Roles | Condition |
+| --- | --- | --- | --- |
+| `sightings` | INSERT | public | unrestricted (`with_check = true`) |
+| `sightings` | SELECT | public | unrestricted (`qual = true`) |
+| `sighting_votes` | INSERT | public | unrestricted (`with_check = true`) |
+| `sighting_votes` | SELECT | public | unrestricted (`qual = true`) |
+
+**No UPDATE or DELETE policy exists for either table.** This resolves the
+open question this audit flagged earlier: yes, `anon`/`authenticated` both
+hold a table-level `UPDATE` *grant* on every column of both tables (see §1
+below) — but with RLS enabled and zero UPDATE policies, Postgres denies
+the command entirely regardless of the grant (a non-owner role with RLS
+on gets zero rows for any command with no matching policy). **So UPDATE
+is not actually exploitable today** — sloppy (the unused grant should
+still be revoked, defense in depth), but not a live hole. Correcting the
+alarm raised earlier in this same conversation before this data came in.
+
+**`sightings`' real, live column list** (confirms/updates R1's context):
+`id, lat, lng, date, type, count, description, reporter, created_at,
+photo_url` — nine columns. **`source` and `status` do not exist.**
+`js/storage.js`'s `rowToSighting()` already anticipated this (`row.source
+|| "community"`, `row.status || "approved"`, with a comment explaining
+exactly why), so nothing is broken today — but it does mean **Task 5
+(historical Silava/DAP import) cannot mark anything as non-community
+without a migration first** — see §5 R5 below for the proposed one.
 
 ## 1. Tables actually present (empirical)
 
@@ -107,23 +139,22 @@ policy that would allow it if the grant existed."
 
 ### ⚪ Not independently re-verified here (need the SQL in §4 to confirm)
 
-- Whether `UPDATE`/`DELETE` on `sightings` are actually blocked for anon
-  **at the grant level**, not just whether a policy exists (see R4) — the
-  boundary test that would have confirmed this empirically was blocked by
-  the sandbox's own safety classifier. Same for `sighting_votes` (the
-  unique-constraint-per-device comment in `js/storage.js` is a statement
-  of intent, not a confirmed constraint).
-- Whether `authenticated` has broader grants on `sightings`/
-  `sighting_votes` than `anon` does — this project never authenticates
-  anyone (no login UI), but Supabase's default project setup sometimes
-  grants both roles together, which would leave a real gap invisible from
-  the app's own behavior. Explicitly check both roles, not just anon.
-- Exact `USING`/`WITH CHECK` clause text for every existing policy.
-- Whether any column beyond what `rowToSighting()` reads
-  (`id, lat, lng, date, type, count, description, reporter, photo_url,
-  created_at, source, status`) exists on `sightings` and gets exposed via
-  `select=*` — the table being empty means there's no live row to inspect
-  the shape of; `information_schema.columns` (§4) answers this directly.
+Resolved by §1b: whether UPDATE/DELETE are actually blocked (yes, by RLS
+default-deny), exact policy `qual`/`with_check` text (all unrestricted —
+see table in §1b), and `sightings`' real column list (confirmed, no
+`source`/`status`). `authenticated` was confirmed to hold the identical
+grants to `anon` on every column checked — moot either way since this
+project never authenticates anyone, but worth having confirmed rather
+than assumed.
+
+Still open, lower priority (doesn't block Task 5's prerequisite):
+
+- `sighting_votes`' exact column list and whether a real `UNIQUE
+  (sighting_id, device_id)` constraint backs the "already voted" `409`
+  handling in `js/storage.js`, or whether that's just an assumption.
+- Storage bucket config (`file_size_limit`/`allowed_mime_types` on
+  `sighting-photos`) and Storage object policies — nobody's run those two
+  queries from §4 yet.
 
 ## 3. Vote-counter integrity (task item 4)
 
@@ -208,9 +239,11 @@ order by table_name, grantee, column_name, privilege_type;
 
 ## 5. Proposed policies (not applied — for review only)
 
-Two separate things bundled here: creating the missing `reports` table
-(R1), and tightening `sighting_votes` (R2). Apply as separate migrations,
-one at a time, per the task's own instruction — not run yet.
+Three separate things bundled here: creating the missing `reports` table
+(R1), tightening `sighting_votes` (R2), and adding `source`/`status` to
+`sightings` (R5, the actual prerequisite Task 5 is blocked on). Apply as
+separate migrations, one at a time, per the task's own instruction — not
+run yet.
 
 ```sql
 -- R1: create the missing reports table (write-only from anon's side,
@@ -238,19 +271,43 @@ create policy reports_anon_insert on public.reports
 -- granted, so there's no legacy over-grant to worry about here, unlike
 -- R2 below.
 
--- R2: stop anon (and authenticated, if it turns out to have the same
--- grant -- check via the role_table_grants query in §4 first) from
+-- R2: stop anon/authenticated (§1b confirmed both hold the grant) from
 -- reading raw sighting_votes rows. Drop the RLS policy AND revoke the
 -- base grant -- a table-level GRANT SELECT with no matching policy would
 -- still return zero rows under RLS, but leaving the unused grant in
--- place is needless surface, and DELETE-then-DROP-policy without the
--- REVOKE would leave a client able to see the table shape via an
--- explicit empty-result query. Fill in the actual policy name(s) found
--- via the pg_policies query in §4 -- name is a placeholder.
-drop policy if exists <existing_select_policy_name> on public.sighting_votes;
+-- place is needless surface, and DROP-policy-only without the REVOKE
+-- would leave a client able to see the table shape via an explicit
+-- empty-result query. Policy name confirmed via §1b's pg_policies run.
+drop policy if exists "Public can read votes" on public.sighting_votes;
 revoke select on public.sighting_votes from anon, authenticated;
 -- keep INSERT (needed for casting a vote) -- confirm its grant/policy
 -- survives this unchanged, don't run a blanket REVOKE ALL here
+
+-- R5 (task 5's prerequisite): sightings has no source/status columns at
+-- all yet (§1b) -- js/storage.js already defaults to "community"/
+-- "approved" when they're absent, so adding them is additive, not a
+-- behavior change for existing rows. The risk is what happens right
+-- after: the existing "Public can insert sightings" policy has
+-- with_check = true (unrestricted), and §1b's grants look table-level
+-- (identical privilege set across every existing column) -- a
+-- table-level GRANT auto-extends to columns added later, so without the
+-- explicit revoke below, the report form's public INSERT would
+-- immediately be able to set source='silava'/status='verified' on its
+-- own submission, indistinguishable from a real import. Defaults still
+-- make every *existing* insert path (the report form) keep working
+-- unchanged; it just can no longer touch these two columns itself.
+alter table public.sightings
+  add column source text not null default 'community',
+  add column status text not null default 'approved';
+
+revoke insert (source, status) on public.sightings from anon, authenticated;
+revoke update (source, status) on public.sightings from anon, authenticated;
+-- No explicit grant select needed -- §1b shows SELECT is already a
+-- table-level grant for both roles, which auto-extends to these new
+-- columns the same way INSERT/UPDATE would have without the revokes
+-- above. Confirm after running: SELECT still returns source/status,
+-- and a normal report-form submission (a plain INSERT with only the
+-- 8 form columns) still succeeds unchanged.
 ```
 
 ## 6. What this audit did *not* do
