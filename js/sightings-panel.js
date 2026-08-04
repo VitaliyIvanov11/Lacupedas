@@ -157,6 +157,18 @@ function geotaggedNews() {
   return spLatestNewsItems.filter((n) => n.lat != null && n.lng != null);
 }
 
+// "Kopienas novērojumi"/Šogad/Pēdējais are community-submissions-only (see
+// renderStatsAndChart()'s comment below) — spSightings itself stays
+// unfiltered by source, since it also feeds the map's sightings marker
+// layer and the browsable list, where a source:"silava"/"dap" row is
+// legitimate and gets its own badge (see sourceLabel(), renderList()).
+// This exists so the headline numbers can filter it back out without
+// duplicating the "!s.source || s.source === 'community'" check at every
+// call site.
+function communitySightings() {
+  return spSightings.filter((s) => !s.source || s.source === "community");
+}
+
 // Only used for the chart, which stays a single combined series for now
 // (see renderStatsAndChart()'s comment on why the *numbers* no longer
 // blend the two) — a real dual-series chart is a bigger redesign than
@@ -175,18 +187,23 @@ function renderStatsAndChart() {
   // sightings yet" — the numbers and the list contradicted each other.
   // News mentions get their own, separately labeled count instead
   // (#stat-news-mentions, stats.html only — no room on index.html's
-  // compact card/toolbar echo).
+  // compact card/toolbar echo). Same reasoning now also applies to a
+  // source:"silava"/"dap" row in `sightings` itself — real bug hit in
+  // practice: the first such row (a hand-imported Silava case) bumped
+  // "Kopienas novērojumi" to 1 before this filter existed, exactly the
+  // same honesty problem this comment already describes for news.
+  const community = communitySightings();
   const year = new Date().getFullYear();
-  const yearCount = spSightings.filter((s) => new Date(s.date).getFullYear() === year).length;
+  const yearCount = community.filter((s) => new Date(s.date).getFullYear() === year).length;
   const lastText =
-    spSightings.length === 0
+    community.length === 0
       ? t("noneYet")
-      : formatStatDate([...spSightings].sort((a, b) => (a.date < b.date ? 1 : -1))[0].date);
+      : formatStatDate([...community].sort((a, b) => (a.date < b.date ? 1 : -1))[0].date);
 
   // #stat-total is absent on index.html (only "this year" and "latest"
   // show there — see #stats-section's markup) but still present on
   // stats.html's fuller detail view.
-  if (spEl.statTotal) spEl.statTotal.textContent = spSightings.length;
+  if (spEl.statTotal) spEl.statTotal.textContent = community.length;
   spEl.statYear.textContent = yearCount;
   spEl.statLast.textContent = lastText;
   // Desktop-only compact echo in the map toolbar (see .toolbar-stats in
