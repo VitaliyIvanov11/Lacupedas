@@ -22,11 +22,14 @@ in a single run. Revised again 2026-08-04 with the user's actual query
 results (§1b) — the core question (task item 3: can anon actually
 INSERT/UPDATE/DELETE) is now empirically answered.
 
-**Status: core findings closed.** §1b below has real output for the
-table/policy/column shape of `sightings`/`sighting_votes`. Still open,
-lower priority (doesn't block Task 5): `sighting_votes`' exact column
-list/unique-constraint text, and the Storage bucket/object-policy queries
-in §4 — nobody has run those yet.
+**Status: core findings closed, R5 applied.** §1b below has real output
+for the table/policy/column shape of `sightings`/`sighting_votes`. The
+user ran R5's migration (§5) on 2026-08-04 — `source`/`status` now exist
+on `sightings`, confirmed empirically (`select=source,status` returns
+`200 []`, not a column-does-not-exist error). Task 5 is now unblocked.
+Still open, lower priority (doesn't block Task 5): `sighting_votes`'
+exact column list/unique-constraint text, and the Storage bucket/
+object-policy queries in §4 — nobody has run those yet.
 
 ## 1b. Empirical results (from the user's own SQL Editor run, 2026-08-04)
 
