@@ -198,6 +198,19 @@ function looksLikeProperNounCollision(item) {
   return re.test(item.title) || re.test(item.description);
 }
 
+// "Lāči" is also a real, well-known Latvian bread/bakery brand (laci.lv,
+// founded 1993 — "Unikālākais zīmols Latvijā" 2009) that can lead a
+// sentence as its own subject ("Lāči prezentē jauno klāstu ...") with no
+// word before it at all — the proper-noun-collision check above requires
+// a preceding word, so this specific case would slip past it. A genuine
+// bear-sighting article essentially never discusses bread, so this is a
+// clean, low-risk companion check rather than a broad topic denylist.
+function looksLikeBreadBrand(item) {
+  if (item.lang !== "lv") return false;
+  const text = `${item.title} ${item.description}`.toLowerCase();
+  return /\blāč/.test(text) && /\bmaiz/.test(text);
+}
+
 // Articles that genuinely contain a whole-word bear match but aren't about
 // a sighting/encounter at all — a keyword hit alone can't tell "someone saw
 // a bear" apart from "a bear was mentioned in passing" (a restaurant review
@@ -479,6 +492,7 @@ async function main() {
     .filter((item) => !EXCLUDED_LINKS.has(item.link))
     .filter((item) => mentionsBear(item.title, item.lang) || mentionsBear(item.description, item.lang))
     .filter((item) => !looksLikeProperNounCollision(item))
+    .filter((item) => !looksLikeBreadBrand(item))
     .map((item) => {
       const place = findPlace(item.title + " " + item.description);
       const pubDate = new Date(item.pubDate);

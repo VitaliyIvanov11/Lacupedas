@@ -372,7 +372,10 @@ create policy "Public can insert reports"
    extracted from article text, so this is a "nearest known town/region"
    pin, not the precise location.
 4. Merges the result into `data/news.json` (dedup by article link, 2-year
-   window, capped at 150 items) and commits it if it changed.
+   window, capped at 150 items). If that changed anything, opens (or updates,
+   if one's already open) a pull request against `news-pending-review`
+   instead of committing straight to `main` — see "Manual review queue"
+   below for why.
 
 Official government sources (Dabas aizsardzības pārvalde, Valsts meža
 dienests) were investigated but not wired in: neither publishes an RSS feed,
@@ -410,20 +413,56 @@ window.
 Word-boundary matching avoids some proper-noun collisions for free — a
 Russian article about someone surnamed "Медведев" doesn't match, since that
 surname's case forms don't line up with the bare word "медведь"'s. Latvian
-"Lācis" isn't so lucky: it's also a common surname, and being derived from
-the same word, it declines through exactly the same case forms as the
-animal ("Lācis", "Lāča", "Lāci", ...), so no spelling-based rule can tell
-them apart — a sports article headlined "Treneris Lācis: Fināls ..." (an
-athletics coach) matched and got treated as a sighting. `fetch-news.js`'s
-`looksLikeLacisSurname()` catches the two shapes that cover most real
-surname mentions in LV news instead: a capitalized word right before the
-match (a first name or title — "Jānis Lācis", "Treneris Lācis") or a
-headline-style attribution right after it ("Lācis: ..."). A lowercase
-"lācis" mid-sentence is always the animal (surnames stay capitalized
-regardless of sentence position), so this can only ever suppress a match
-that was already capitalized — kept it from also hiding genuine
-capitalized-but-sentence-initial bear headlines like "Lācis iznācis pie
-...", which have neither a leading name/title nor a trailing colon.
+"Lācis" and Estonian "Karu" aren't so lucky: both are also common surnames
+(and "Lāči" is also a real bread/bakery brand, laci.lv), spelled/declined
+identically to the animal word, so no spelling-based rule alone can tell
+them apart. Three real cases found this way: a sports article headlined
+"Treneris Lācis: Fināls ..." (an athletics coach); an ERR.ee piece naming
+"kolonel Fredi Karu" (nothing to do with a bear); and an LSM.lv article
+about a hockey coach's arrest that only matched because it named his club,
+"Ogres novada Lāči" ("Ogre district Bears") — none of these were sightings.
+`fetch-news.js`'s `looksLikeProperNounCollision()` catches the general
+shape behind the first two (and would have caught the third too, since
+"Lāči" was capitalized there): Latvian/Estonian never capitalize an
+ordinary common noun mid-sentence, only at the very start of a
+sentence/headline, so *any* word directly before a capitalized bear-word
+form (a first name/title — "Jānis Lācis", "Fredi Karu" — or an
+organization name — "novada Lāči") means it's a proper noun, not the
+animal. A lowercase match mid-sentence is always the animal, and a
+capitalized match with *nothing* before it (true sentence/headline start,
+e.g. "Lācis iznācis pie ...") is left alone — that's what keeps this from
+swallowing genuine headlines. `looksLikeBreadBrand()` is a narrower,
+separate check for the one case that pattern can't reach: the bread brand
+leading its own sentence as subject ("Lāči prezentē ...", nothing
+preceding it at all) — checked via simple co-occurrence with "maiz-" rather
+than capitalization, since a genuine bear article essentially never
+discusses bread.
+
+A hard "must also contain word X" requirement (e.g. "mež-"/"novēro-"/
+"pēdas"/etc. somewhere nearby) was considered and tested against the 19
+already-verified-genuine items live in `data/news.json` at the time —
+it would have wrongly rejected 17 of them (attack/sighting headlines like
+"Lācis uzbrucis sēņotājam Tukuma novadā" don't happen to contain any of
+those specific stems). Not implemented for that reason: a false negative
+here is *silent* — with the manual-review queue below, a false positive
+just sits in a PR for a human to reject, but an item a keyword filter
+drops before that never gets a chance to be seen at all.
+
+### Manual review queue
+
+No keyword filter catches every false positive — three different classes
+of one shipped live before being caught and fixed (surname collisions in
+two languages, an organization-name collision), and the cost of one going
+public isn't always just cosmetic (one of the three was an article about a
+child-abuse arrest, which briefly showed up captioned as a bear-sighting
+news item). So nothing in `data/news.json`/`feed.xml` reaches the live
+site automatically anymore: `news-scan.yml` opens a pull request (reusing
+one `news-pending-review` branch across runs until it's merged, rather
+than piling up a new PR every 2 hours) instead of committing straight to
+`main`. A human reviews the diff and merges to publish, or closes to
+reject — same git workflow already used for every other change to this
+repo, no new tooling. Rejecting a specific article permanently still goes
+through `EXCLUDED_LINKS` in `fetch-news.js`, same as before.
 
 The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
 every 10 minutes while the tab is open, so new mentions appear on the map and
