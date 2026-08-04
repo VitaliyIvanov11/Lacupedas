@@ -110,13 +110,19 @@ function renderStatsAndChart() {
   // stats.html's fuller detail view.
   if (spEl.statTotal) spEl.statTotal.textContent = combined.length;
   const year = new Date().getFullYear();
-  spEl.statYear.textContent = combined.filter((s) => new Date(s.date).getFullYear() === year).length;
-  if (combined.length === 0) {
-    spEl.statLast.textContent = t("noneYet");
-  } else {
-    const latest = [...combined].sort((a, b) => (a.date < b.date ? 1 : -1))[0];
-    spEl.statLast.textContent = formatStatDate(latest.date);
-  }
+  const yearCount = combined.filter((s) => new Date(s.date).getFullYear() === year).length;
+  const lastText =
+    combined.length === 0
+      ? t("noneYet")
+      : formatStatDate([...combined].sort((a, b) => (a.date < b.date ? 1 : -1))[0].date);
+
+  spEl.statYear.textContent = yearCount;
+  spEl.statLast.textContent = lastText;
+  // Desktop-only compact echo in the map toolbar (see .toolbar-stats in
+  // css/style.css) — absent on stats.html/map.html, hence the guards.
+  if (spEl.toolbarStatYear) spEl.toolbarStatYear.textContent = yearCount;
+  if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
+
   renderMonthlyChart(spEl.chartContainer, combined);
 }
 
@@ -347,6 +353,8 @@ function initSightingsPanel() {
     statLabelLast: document.getElementById("stat-label-last"),
     chartContainer: document.getElementById("chart-container"),
     exportCsvBtn: document.getElementById("export-csv-btn"),
+    toolbarStatYear: document.getElementById("toolbar-stat-year"),
+    toolbarStatLast: document.getElementById("toolbar-stat-last"),
   };
   if (!spEl.list) return;
 

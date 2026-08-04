@@ -238,6 +238,29 @@ button {
   gap: 8px;
 }
 
+/* Desktop-only by construction, not a separate media query: nested inside
+   .map-pane, which .layout .map-pane { display: none } (900px query,
+   above) already hides on mobile — no extra rule needed to keep this off
+   the mobile home feed. */
+.toolbar-stats {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.toolbar-stats strong {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.toolbar-stats-sep {
+  color: var(--text-muted);
+}
+
 .map-hint {
   flex: 0 0 auto;
   margin: 0;

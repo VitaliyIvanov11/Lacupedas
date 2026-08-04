@@ -141,6 +141,11 @@
       <div class="map-toolbar">
         <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
         <a href="padomi.html" class="btn btn-secondary toolbar-guide-link" data-i18n="guideNavLink">Noderīga informācija</a>
+        <div class="toolbar-stats" id="toolbar-stats">
+          <span><span data-i18n="yearLabel">Šogad</span>: <strong id="toolbar-stat-year">0</strong></span>
+          <span class="toolbar-stats-sep" aria-hidden="true">·</span>
+          <span><span data-i18n="lastLabel">Pēdējais</span>: <strong id="toolbar-stat-last">—</strong></span>
+        </div>
       </div>
       <p class="map-hint" data-i18n="mapHint">Noklikšķiniet uz kartes, lai pievienotu novērojumu</p>
       <div id="picking-banner" class="picking-banner" hidden>
@@ -184,6 +189,38 @@
         </div>
       </section>
 
+      <!-- Desktop-only priority order: News right after Statistika, ahead
+           of the chart/full list — on mobile this has no visible effect
+           (chart-card/list-card are already display:none there, per the
+           900px query above), so news already read right after stats on
+           mobile regardless of source order; this just matches that same
+           priority on desktop instead of burying News after Chart + List. -->
+      <section class="card news-card">
+        <div class="news-card-header">
+          <h2 data-i18n="newsSectionTitle">Ziņu pieminējumi</h2>
+          <label class="news-toggle">
+            <input type="checkbox" id="news-toggle" checked />
+            <span data-i18n="newsToggleLabel">Rādīt kartē</span>
+          </label>
+        </div>
+        <div class="filter-group">
+          <select id="news-source-filter" class="filter-select">
+            <option value="all" data-i18n="filterAllSources">Visi avoti</option>
+          </select>
+          <select id="news-time-filter" class="filter-select">
+            <option value="all" data-i18n="filterAllTime">Viss laiks</option>
+            <option value="year" data-i18n="filterThisYear">Šogad</option>
+            <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
+          </select>
+        </div>
+        <ul id="news-list" class="sightings-list"></ul>
+        <p class="news-disclaimer" data-i18n="newsDisclaimer"></p>
+        <p id="news-updated-at" class="news-updated-at"></p>
+        <p class="news-rss-link">
+          <a href="feed.xml" data-i18n="newsRssLinkText">RSS plūsma</a>
+        </p>
+      </section>
+
       <section class="card chart-card">
         <h2 data-i18n="chartTitle">Novērojumi pa mēnešiem</h2>
         <div id="chart-container" class="chart-container"></div>
@@ -213,32 +250,6 @@
           </div>
         </div>
         <ul id="sightings-list" class="sightings-list"></ul>
-      </section>
-
-      <section class="card news-card">
-        <div class="news-card-header">
-          <h2 data-i18n="newsSectionTitle">Ziņu pieminējumi</h2>
-          <label class="news-toggle">
-            <input type="checkbox" id="news-toggle" checked />
-            <span data-i18n="newsToggleLabel">Rādīt kartē</span>
-          </label>
-        </div>
-        <div class="filter-group">
-          <select id="news-source-filter" class="filter-select">
-            <option value="all" data-i18n="filterAllSources">Visi avoti</option>
-          </select>
-          <select id="news-time-filter" class="filter-select">
-            <option value="all" data-i18n="filterAllTime">Viss laiks</option>
-            <option value="year" data-i18n="filterThisYear">Šogad</option>
-            <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
-          </select>
-        </div>
-        <ul id="news-list" class="sightings-list"></ul>
-        <p class="news-disclaimer" data-i18n="newsDisclaimer"></p>
-        <p id="news-updated-at" class="news-updated-at"></p>
-        <p class="news-rss-link">
-          <a href="feed.xml" data-i18n="newsRssLinkText">RSS plūsma</a>
-        </p>
       </section>
     </aside>
   </main>
