@@ -17,11 +17,11 @@ jobs:
   scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Fetch & filter news
         run: node scripts/fetch-news.js
@@ -35,7 +35,7 @@ jobs:
       # runs until it's merged (or closed to reject), instead of opening a
       # new one every 2 hours.
       - name: Open or update a review PR with new candidates
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "Update bear-related news data"
           branch: news-pending-review
