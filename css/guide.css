@@ -217,6 +217,28 @@ body.guide-body {
   color: var(--brand-accent);
 }
 
+/* Only ~2.5 cards fit on a phone screen at the desktop padding/type scale
+   above — tighten both so roughly 4 fit instead. Placed after the base
+   .hub-card* rules on purpose: these have equal selector specificity, so
+   whichever comes later in source order wins the tie, regardless of which
+   one is wrapped in a media query. */
+@media (max-width: 640px) {
+  .hub-card {
+    padding: 12px 14px;
+  }
+
+  .hub-card h3 {
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
+
+  .hub-card p {
+    margin-bottom: 6px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+}
+
 /* Stories */
 
 .story-card {

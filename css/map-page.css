@@ -14,6 +14,20 @@
   width: 100%;
 }
 
+/* Desktop: no toggle needed, filters just sit inline in the toolbar like
+   before this button/panel split existed. Mobile overrides both below
+   (900px query) — these have to come *before* that query in source order,
+   since both sides are single-class selectors of equal specificity and
+   the later one wins a tie regardless of which media query wraps it. */
+.map-filters-toggle {
+  display: none;
+}
+
+.map-filters-panel {
+  display: flex;
+  gap: 8px;
+}
+
 /* style.css's shared 900px query switches body to auto-height/scrolling —
    correct for index.html's mobile home feed, but this page has no other
    content to scroll to: keep it a fixed, full-height single-viewport map
@@ -41,6 +55,59 @@
     flex: 1 1 auto;
     height: auto;
     min-height: 0;
+  }
+
+  /* Trim the toolbar to what isn't already reachable another way: the
+     bottom nav already has "Sākums" and "Ziņot" (which auto-starts
+     picking via ?report=1), so the in-toolbar back-link and report
+     button are pure duplication here — each one is real screen space
+     the map isn't getting. Kept on desktop, where there's no bottom nav
+     covering the same ground. */
+  .map-toolbar .back-link,
+  .map-toolbar #report-btn {
+    display: none;
+  }
+
+  /* Leaflet's own +/- buttons are redundant on a touchscreen (pinch
+     already zooms) and cost more vertical toolbar space than they're
+     worth here. */
+  .leaflet-control-zoom {
+    display: none;
+  }
+
+  /* Static "click the map" hint duplicates the orange picking-banner's
+     own (more specific) instructions once picking starts, and — with
+     the in-toolbar report button gone above — there's no persistent way
+     left on this page to enter picking mode without it already being
+     active, so the hint no longer describes anything actionable when
+     it's not. */
+  .map-hint {
+    display: none;
+  }
+
+  .map-filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    background: var(--surface-1);
+    color: var(--text-primary);
+    padding: 7px 12px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  .map-filters-panel {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .map-filters-panel.open {
+    display: flex;
   }
 }
 

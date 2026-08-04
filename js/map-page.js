@@ -76,6 +76,20 @@
     });
   }
 
+  // Mobile-only (see the 900px query in css/map-page.css) — on desktop the
+  // toggle button is display:none and the panel is always visibly inline,
+  // so this class toggle has nothing to do there.
+  function wireFiltersToggle() {
+    const toggle = document.getElementById("map-filters-toggle");
+    const panel = document.getElementById("map-filters-panel");
+    if (!toggle || !panel) return;
+    toggle.addEventListener("click", () => {
+      const willOpen = !panel.classList.contains("open");
+      panel.classList.toggle("open", willOpen);
+      toggle.setAttribute("aria-expanded", String(willOpen));
+    });
+  }
+
   function render() {
     renderMarkers(getFilteredSightings());
     buildRecencyPanel();
@@ -98,6 +112,7 @@
     el.timeFilter.addEventListener("change", render);
 
     wireRecencyToggle();
+    wireFiltersToggle();
 
     await refreshMapView();
 

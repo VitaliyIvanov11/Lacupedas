@@ -61,19 +61,22 @@
       <div class="map-toolbar">
         <a href="/" class="back-link" data-i18n="backToHome">← Atpakaļ uz sākumu</a>
         <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
-        <select id="sightings-type-filter" class="filter-select">
-          <option value="all" data-i18n="filterAllTypes">Visi veidi</option>
-          <option value="sighting" data-i18n="typeSighting">Redzēts lācis</option>
-          <option value="tracks" data-i18n="typeTracks">Pēdas / pazīmes</option>
-          <option value="damage" data-i18n="typeDamage">Postījumi (mājlopi, bites u.c.)</option>
-          <option value="dead" data-i18n="typeDead">Atrasts bojāgājis dzīvnieks</option>
-          <option value="dna_sample" data-i18n="typeDnaSample">Savākts DNS paraugs</option>
-        </select>
-        <select id="sightings-time-filter" class="filter-select">
-          <option value="all" data-i18n="filterAllTime">Viss laiks</option>
-          <option value="year" data-i18n="filterThisYear">Šogad</option>
-          <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
-        </select>
+        <button type="button" id="map-filters-toggle" class="map-filters-toggle" aria-expanded="false" data-i18n="filtersToggle">🔍 Filtri</button>
+        <div id="map-filters-panel" class="map-filters-panel">
+          <select id="sightings-type-filter" class="filter-select">
+            <option value="all" data-i18n="filterAllTypes">Visi veidi</option>
+            <option value="sighting" data-i18n="typeSighting">Redzēts lācis</option>
+            <option value="tracks" data-i18n="typeTracks">Pēdas / pazīmes</option>
+            <option value="damage" data-i18n="typeDamage">Postījumi (mājlopi, bites u.c.)</option>
+            <option value="dead" data-i18n="typeDead">Atrasts bojāgājis dzīvnieks</option>
+            <option value="dna_sample" data-i18n="typeDnaSample">Savākts DNS paraugs</option>
+          </select>
+          <select id="sightings-time-filter" class="filter-select">
+            <option value="all" data-i18n="filterAllTime">Viss laiks</option>
+            <option value="year" data-i18n="filterThisYear">Šogad</option>
+            <option value="30d" data-i18n="filterLast30d">Pēdējās 30 dienas</option>
+          </select>
+        </div>
       </div>
       <p class="map-hint" data-i18n="mapHint">Noklikšķiniet uz kartes, lai pievienotu novērojumu</p>
       <div id="picking-banner" class="picking-banner" hidden>
