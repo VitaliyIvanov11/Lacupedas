@@ -179,15 +179,31 @@ button {
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
-  /* Roughly even split — the sidebar (stats/news/list) carries as much of
-     the app's actual content as the map does, so it gets an equal share
-     of the width instead of being squeezed to a narrow reading column. */
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 1fr);
+  /* ~62/38 favoring the map — for a visitor who just wants to see where
+     bears were, the map is the primary content; the sidebar (now a single
+     tabbed panel instead of four stacked cards, see .sidebar-tabbar below)
+     needs less width than it used to when it had to fit everything at once. */
+  grid-template-columns: minmax(0, 5fr) minmax(320px, 3fr);
   grid-template-rows: 1fr;
   gap: 16px;
   padding: 16px;
   width: 100%;
   overflow: hidden;
+  transition: grid-template-columns 0.2s ease;
+}
+
+/* Collapsed: sidebar hidden, map takes the full row. Desktop-only — on
+   mobile .layout is already single-column and #sidebar-toggle-btn itself
+   is hidden there (see the 900px query below), so this class is simply
+   never applied on mobile. */
+@media (min-width: 901px) {
+  .layout.sidebar-collapsed {
+    grid-template-columns: 1fr;
+  }
+
+  .layout.sidebar-collapsed .sidebar {
+    display: none;
+  }
 }
 
 /* Mobile-only home feed: quick actions to the standalone map.html (see
@@ -259,6 +275,29 @@ button {
 
 .toolbar-stats-sep {
   color: var(--text-muted);
+}
+
+/* Desktop-only by construction, same as .toolbar-stats above (nested
+   inside .map-pane). Toggles .layout.sidebar-collapsed via JS (app.js) —
+   for a visitor who just wants to see where bears were, letting the map
+   take the full row is the more useful default view. */
+.sidebar-toggle-btn {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  background: var(--page-plane);
+  color: var(--text-primary);
 }
 
 .map-hint {
@@ -442,6 +481,76 @@ button {
 @media (max-width: 900px) {
   .sidebar {
     overflow: visible;
+  }
+}
+
+/* Desktop tab system: Ziņas/Novērojumi/Statistika — one card visible at a
+   time instead of all four stacked (stats-card/news-card/chart-card/
+   list-card), which used to mean up to two independently-scrolling lists
+   plus the page competing for attention at once. Hidden entirely on
+   mobile (see the max-width:900px override below) — .sidebar-tab isn't
+   even clickable there, every panel just shows in its original stacked
+   order same as before this feature existed. */
+.sidebar-tabbar {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 6px;
+}
+
+.sidebar-tab {
+  flex: 1 1 0;
+  padding: 8px 10px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar-tab:hover {
+  border-color: var(--brand-accent);
+}
+
+.sidebar-tab.active {
+  color: #fff;
+  background: var(--brand-forest);
+  border-color: var(--brand-forest);
+}
+
+@media (max-width: 900px) {
+  .sidebar-tabbar {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  /* One panel at a time on desktop — mobile ignores [data-tab-panel]
+     entirely (no rule below max-width:900px touches it), so every panel
+     keeps showing in its normal stacked document order there. */
+  .sidebar > [data-tab-panel] {
+    display: none;
+  }
+
+  .sidebar[data-active-tab="news"] > .news-card[data-tab-panel="news"] {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .sidebar[data-active-tab="list"] > .list-card[data-tab-panel="list"] {
+    display: flex;
+    flex: 1 1 auto;
+  }
+
+  .sidebar[data-active-tab="stats"] > .stats-card[data-tab-panel="stats"] {
+    display: block;
+  }
+
+  .sidebar[data-active-tab="stats"] > .chart-card[data-tab-panel="stats"] {
+    display: flex;
   }
 }
 
@@ -673,6 +782,20 @@ button {
 
 .stat-recent {
   background: rgba(217, 123, 41, 0.055);
+}
+
+/* Both previously fell back to the base .stat rule's background
+   (rgba(255,255,255,0.18)) since neither had its own tint — harmless in
+   light mode but reads as a solid grey "pressed button" in dark mode
+   next to its barely-tinted siblings, making it look selected/clickable
+   when it isn't. Matches NEWS_MARKER_COLOR (js/map.js) and --series-1
+   respectively, so the tint also hints at what each number relates to. */
+.stat-news-mentions {
+  background: rgba(74, 58, 167, 0.06);
+}
+
+.stat-official {
+  background: rgba(42, 120, 214, 0.06);
 }
 
 .chart-container svg {
@@ -980,10 +1103,10 @@ button {
 /* News mentions */
 
 .news-card-header {
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   margin-bottom: 6px;
 }
@@ -993,6 +1116,7 @@ button {
 }
 
 .news-toggle {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1000,6 +1124,65 @@ button {
   color: var(--text-secondary);
   cursor: pointer;
   white-space: nowrap;
+}
+
+/* Desktop-only replacement for the always-visible .news-disclaimer
+   paragraph below (kept as-is for mobile, where it already reads fine
+   inline) — click to reveal the same text in a popover instead of it
+   permanently eating vertical space above the list. */
+.info-btn {
+  display: none;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--page-plane);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.info-btn:hover,
+.info-btn[aria-expanded="true"] {
+  border-color: var(--brand-accent);
+  color: var(--text-primary);
+}
+
+.info-popover {
+  display: none;
+  position: absolute;
+  z-index: 20;
+  top: 100%;
+  left: 0;
+  margin-top: 6px;
+  width: min(320px, 90vw);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+  padding: 10px 12px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.info-popover:not([hidden]) {
+  display: block;
+}
+
+@media (min-width: 901px) {
+  .info-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .news-disclaimer {
+    display: none;
+  }
 }
 
 /* Local (Latvia + EE/LT border) vs. Pasaulē (everything else — see

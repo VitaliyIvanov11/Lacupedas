@@ -5,6 +5,11 @@ const translations = {
     mapHint: "Noklikšķiniet uz kartes, lai pievienotu novērojumu",
     mapHintPicking: "Noklikšķiniet uz kartes vietā, kur redzējāt lāci",
     legendToggle: "🗺️ Apzīmējumi",
+    sidebarToggleBtn: "Rādīt/slēpt paneli",
+    sidebarTabNews: "Ziņas",
+    sidebarTabList: "Novērojumi",
+    sidebarTabStats: "Statistika",
+    newsInfoBtnLabel: "Par šiem datiem",
     locateMeBtn: "Mana atrašanās vieta",
     legendNews: "Ziņu pieminējums",
     legendNewsVerified: "Ziņa (pārbaudīta)",
@@ -338,6 +343,11 @@ const translations = {
     mapHint: "Click on the map to add a sighting",
     mapHintPicking: "Click on the map where you saw the bear",
     legendToggle: "🗺️ Legend",
+    sidebarToggleBtn: "Show/hide panel",
+    sidebarTabNews: "News",
+    sidebarTabList: "Sightings",
+    sidebarTabStats: "Stats",
+    newsInfoBtnLabel: "About this data",
     locateMeBtn: "My location",
     legendNews: "News mention",
     legendNewsVerified: "News (verified)",
@@ -671,6 +681,11 @@ const translations = {
     mapHint: "Нажмите на карту, чтобы добавить наблюдение",
     mapHintPicking: "Нажмите на карту в месте, где вы видели медведя",
     legendToggle: "🗺️ Легенда",
+    sidebarToggleBtn: "Показать/скрыть панель",
+    sidebarTabNews: "Новости",
+    sidebarTabList: "Наблюдения",
+    sidebarTabStats: "Статистика",
+    newsInfoBtnLabel: "Об этих данных",
     locateMeBtn: "Моё местоположение",
     legendNews: "Упоминание в новостях",
     legendNewsVerified: "Новость (проверена)",
@@ -1033,6 +1048,10 @@ function applyTranslations() {
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const key = el.getAttribute("data-i18n-placeholder");
     el.setAttribute("placeholder", t(key));
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+    el.setAttribute("title", t(key));
   });
   const select = document.getElementById("lang-select");
   if (select) select.value = lang;

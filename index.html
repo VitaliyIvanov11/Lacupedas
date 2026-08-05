@@ -148,6 +148,15 @@
           <span class="toolbar-stats-sep" aria-hidden="true">·</span>
           <span><span data-i18n="newsSectionTitle">Ziņu pieminējumi</span>: <strong id="toolbar-stat-news">0</strong></span>
         </div>
+        <button
+          type="button"
+          id="sidebar-toggle-btn"
+          class="sidebar-toggle-btn"
+          aria-expanded="true"
+          aria-controls="sidebar"
+          data-i18n-title="sidebarToggleBtn"
+          title="Rādīt/slēpt paneli"
+        >⟨⟩</button>
       </div>
       <p class="map-hint" data-i18n="mapHint">Noklikšķiniet uz kartes, lai pievienotu novērojumu</p>
       <div id="picking-banner" class="picking-banner" hidden>
@@ -163,8 +172,14 @@
       </div>
     </section>
 
-    <aside class="sidebar">
-      <section id="stats-section" class="card stats-card">
+    <aside class="sidebar" id="sidebar" data-active-tab="news">
+      <div class="sidebar-tabbar" role="tablist">
+        <button type="button" class="sidebar-tab active" data-tab="news" role="tab" aria-selected="true" data-i18n="sidebarTabNews">Ziņas</button>
+        <button type="button" class="sidebar-tab" data-tab="list" role="tab" aria-selected="false" data-i18n="sidebarTabList">Novērojumi</button>
+        <button type="button" class="sidebar-tab" data-tab="stats" role="tab" aria-selected="false" data-i18n="sidebarTabStats">Statistika</button>
+      </div>
+
+      <section id="stats-section" class="card stats-card" data-tab-panel="stats">
         <div class="stats-card-header">
           <h2 data-i18n="statsTitle">Statistika</h2>
           <a href="stats.html" class="stats-detail-link" data-i18n="statsDetailLink">Skatīt detalizēti <span aria-hidden="true">›</span></a>
@@ -210,14 +225,24 @@
            900px query above), so news already read right after stats on
            mobile regardless of source order; this just matches that same
            priority on desktop instead of burying News after Chart + List. -->
-      <section class="card news-card">
+      <section class="card news-card" data-tab-panel="news">
         <div class="news-card-header">
           <h2 data-i18n="newsSectionTitle">Ziņu pieminējumi</h2>
+          <button
+            type="button"
+            id="news-info-btn"
+            class="info-btn"
+            aria-expanded="false"
+            aria-controls="news-info-popover"
+            data-i18n-title="newsInfoBtnLabel"
+          >ⓘ</button>
           <label class="news-toggle">
             <input type="checkbox" id="news-toggle" checked />
             <span data-i18n="newsToggleLabel">Rādīt kartē</span>
           </label>
         </div>
+        <p id="news-info-popover" class="info-popover" hidden data-i18n="newsDisclaimer"></p>
+        <p class="news-disclaimer" data-i18n="newsDisclaimer"></p>
         <div class="news-tabs" role="tablist">
           <button type="button" id="news-tab-local" class="news-tab active" role="tab" aria-selected="true" data-i18n="newsTabLocal">Tuvumā</button>
           <button type="button" id="news-tab-world" class="news-tab" role="tab" aria-selected="false" data-i18n="newsTabWorld">Pasaulē</button>
@@ -233,20 +258,19 @@
           </select>
         </div>
         <ul id="news-list" class="sightings-list"></ul>
-        <p class="news-disclaimer" data-i18n="newsDisclaimer"></p>
         <p id="news-updated-at" class="news-updated-at"></p>
         <p class="news-rss-link">
           <a href="feed.xml" data-i18n="newsRssLinkText">RSS plūsma</a>
         </p>
       </section>
 
-      <section class="card chart-card">
+      <section class="card chart-card" data-tab-panel="stats">
         <h2 data-i18n="chartTitle">Aktivitāte pa mēnešiem</h2>
         <div id="chart-container" class="chart-container"></div>
         <p class="chart-combined-note" data-i18n="chartCombinedNote">Ietver gan kopienas novērojumus, gan ziņu pieminējumus.</p>
       </section>
 
-      <section class="card list-card">
+      <section class="card list-card" data-tab-panel="list">
         <div class="list-card-header">
           <h2 data-i18n="listTitle">Novērojumu saraksts</h2>
           <div class="filter-group">
