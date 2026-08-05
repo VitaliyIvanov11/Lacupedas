@@ -132,11 +132,6 @@
   </header>
 
   <main class="layout">
-    <div class="mobile-quick-actions">
-      <a href="map.html?report=1" class="btn btn-primary mobile-quick-btn" data-i18n="quickReportBtn">Ziņot</a>
-      <a href="map.html" class="btn btn-secondary mobile-quick-btn" data-i18n="openMapBtn">Atvērt karti</a>
-    </div>
-
     <section class="map-pane">
       <div class="map-toolbar">
         <button type="button" id="report-btn" class="btn btn-primary" data-i18n="reportBtn">Ziņot par novērojumu</button>
@@ -180,9 +175,28 @@
       </div>
 
       <section id="stats-section" class="card stats-card" data-tab-panel="stats">
+        <!-- Mobile-only compact line, replacing the desktop-only .stats-grid
+             below (see the max-width:900px / min-width:901px pair in
+             style.css) — same numbers (community total, news mentions),
+             just as one line instead of two big boxes plus a paragraph. -->
+        <div class="stats-compact-line">
+          <span><span data-i18n="statsCompactTotalLabel">Novērojumu</span>: <strong id="stat-total">0</strong></span>
+          <span class="stats-compact-sep" aria-hidden="true">·</span>
+          <span><span data-i18n="statsCompactNewsLabel">Ziņās</span>: <strong id="stat-news-compact">0</strong></span>
+          <button
+            type="button"
+            id="stats-info-btn"
+            class="info-btn"
+            aria-expanded="false"
+            aria-controls="stats-info-popover"
+            data-i18n-title="statsInfoBtnLabel"
+          >ⓘ</button>
+          <a href="stats.html" class="stats-detail-link" data-i18n="statsDetailLink">Skatīt detalizēti <span aria-hidden="true">›</span></a>
+        </div>
+        <p id="stats-info-popover" class="info-popover" hidden data-i18n="statsCompactNote"></p>
+
         <div class="stats-card-header">
           <h2 data-i18n="statsTitle">Statistika</h2>
-          <a href="stats.html" class="stats-detail-link" data-i18n="statsDetailLink">Skatīt detalizēti <span aria-hidden="true">›</span></a>
         </div>
         <div class="stats-grid">
           <div class="stat stat-year">
@@ -235,19 +249,26 @@
             aria-expanded="false"
             aria-controls="news-info-popover"
             data-i18n-title="newsInfoBtnLabel"
-          >ⓘ</button>
+          >ⓘ<span class="info-btn-label" data-i18n="newsInfoBtnLabel">Par šiem datiem</span></button>
           <label class="news-toggle">
             <input type="checkbox" id="news-toggle" checked />
             <span data-i18n="newsToggleLabel">Rādīt kartē</span>
           </label>
         </div>
         <p id="news-info-popover" class="info-popover" hidden data-i18n="newsDisclaimer"></p>
-        <p class="news-disclaimer" data-i18n="newsDisclaimer"></p>
         <div class="news-tabs" role="tablist">
           <button type="button" id="news-tab-local" class="news-tab active" role="tab" aria-selected="true" data-i18n="newsTabLocal">Tuvumā</button>
           <button type="button" id="news-tab-world" class="news-tab" role="tab" aria-selected="false" data-i18n="newsTabWorld">Pasaulē</button>
         </div>
-        <div class="filter-group">
+        <button
+          type="button"
+          id="news-filters-toggle"
+          class="news-filters-toggle"
+          aria-expanded="false"
+          aria-controls="news-filters-panel"
+          data-i18n="filtersToggle"
+        >🔍 Filtri</button>
+        <div id="news-filters-panel" class="filter-group news-filters-panel">
           <select id="news-source-filter" class="filter-select">
             <option value="all" data-i18n="filterAllSources">Visi avoti</option>
           </select>

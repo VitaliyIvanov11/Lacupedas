@@ -1,7 +1,7 @@
 // Translation dictionary and language-switching logic (Latvian + English).
 const translations = {
   lv: {
-    appTitle: "Lāču Novērojumi Latvijā",
+    appTitle: "Lāču novērojumi",
     mapHint: "Noklikšķiniet uz kartes, lai pievienotu novērojumu",
     mapHintPicking: "Noklikšķiniet uz kartes vietā, kur redzējāt lāci",
     legendToggle: "🗺️ Apzīmējumi",
@@ -10,6 +10,10 @@ const translations = {
     sidebarTabList: "Novērojumi",
     sidebarTabStats: "Statistika",
     newsInfoBtnLabel: "Par šiem datiem",
+    statsCompactTotalLabel: "Novērojumu",
+    statsCompactNewsLabel: "Ziņās",
+    statsInfoBtnLabel: "Par šiem skaitļiem",
+    statsCompactNote: "Novērojumu — kopienas ziņotie gadījumi. Ziņās — ziņu portālos pieminēti gadījumi. Skaitīti atsevišķi un neietekmē viens otru.",
     locateMeBtn: "Mana atrašanās vieta",
     legendNews: "Ziņu pieminējums",
     legendNewsVerified: "Ziņa (pārbaudīta)",
@@ -38,8 +42,6 @@ const translations = {
     showMoreBtn: "Rādīt vairāk",
     guideNavLink: "Noderīga informācija",
     reportBtn: "Ziņot par novērojumu",
-    quickReportBtn: "Ziņot",
-    openMapBtn: "Atvērt karti",
     cancelPicking: "Atcelt",
 
     navHome: "Sākums",
@@ -339,7 +341,7 @@ const translations = {
     privacyLastUpdated: "Pēdējo reizi atjaunināts: 2026. gada augustā.",
   },
   en: {
-    appTitle: "Bear Sightings in Latvia",
+    appTitle: "Bear Sightings",
     mapHint: "Click on the map to add a sighting",
     mapHintPicking: "Click on the map where you saw the bear",
     legendToggle: "🗺️ Legend",
@@ -348,6 +350,10 @@ const translations = {
     sidebarTabList: "Sightings",
     sidebarTabStats: "Stats",
     newsInfoBtnLabel: "About this data",
+    statsCompactTotalLabel: "Sightings",
+    statsCompactNewsLabel: "In the news",
+    statsInfoBtnLabel: "About these numbers",
+    statsCompactNote: "Sightings — community-reported cases. In the news — cases mentioned in news portals. Counted separately and don't affect each other.",
     locateMeBtn: "My location",
     legendNews: "News mention",
     legendNewsVerified: "News (verified)",
@@ -376,8 +382,6 @@ const translations = {
     showMoreBtn: "Show more",
     guideNavLink: "Useful Information",
     reportBtn: "Report a sighting",
-    quickReportBtn: "Report",
-    openMapBtn: "Open map",
     cancelPicking: "Cancel",
 
     navHome: "Home",
@@ -677,7 +681,7 @@ const translations = {
     privacyLastUpdated: "Last updated: August 2026.",
   },
   ru: {
-    appTitle: "Наблюдения медведей в Латвии",
+    appTitle: "Наблюдения медведей",
     mapHint: "Нажмите на карту, чтобы добавить наблюдение",
     mapHintPicking: "Нажмите на карту в месте, где вы видели медведя",
     legendToggle: "🗺️ Легенда",
@@ -686,6 +690,10 @@ const translations = {
     sidebarTabList: "Наблюдения",
     sidebarTabStats: "Статистика",
     newsInfoBtnLabel: "Об этих данных",
+    statsCompactTotalLabel: "Наблюдений",
+    statsCompactNewsLabel: "В новостях",
+    statsInfoBtnLabel: "Об этих цифрах",
+    statsCompactNote: "Наблюдений — случаи, о которых сообщило сообщество. В новостях — случаи, упомянутые в новостных порталах. Считаются отдельно и не влияют друг на друга.",
     locateMeBtn: "Моё местоположение",
     legendNews: "Упоминание в новостях",
     legendNewsVerified: "Новость (проверена)",
@@ -714,8 +722,6 @@ const translations = {
     showMoreBtn: "Показать больше",
     guideNavLink: "Полезная информация",
     reportBtn: "Сообщить о наблюдении",
-    quickReportBtn: "Сообщить",
-    openMapBtn: "Открыть карту",
     cancelPicking: "Отмена",
 
     navHome: "Главная",

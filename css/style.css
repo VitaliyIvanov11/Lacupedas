@@ -206,13 +206,6 @@ button {
   }
 }
 
-/* Mobile-only home feed: quick actions to the standalone map.html (see
-   .mobile-bottom-nav near the footer for the rest of the mobile nav), shown
-   in place of the embedded map — .map-pane is hidden below 900px. */
-.mobile-quick-actions {
-  display: none;
-}
-
 @media (max-width: 900px) {
   body {
     height: auto;
@@ -227,16 +220,6 @@ button {
     overflow: visible;
   }
 
-  .mobile-quick-actions {
-    display: flex;
-    gap: 8px;
-  }
-
-  .mobile-quick-btn {
-    flex: 1 1 0;
-    text-align: center;
-    text-decoration: none;
-  }
 }
 
 .map-pane {
@@ -625,6 +608,51 @@ button {
    in the sidebar, so it has no need for this link. */
 .stats-detail-link {
   display: none;
+}
+
+/* Mobile-only compact stats line (see the max-width:900px / min-width:901px
+   pair below) — same community-total/news-mentions numbers as .stats-grid,
+   read as one line with an info icon instead of two boxes plus a paragraph.
+   Desktop keeps the fuller .stats-grid inside its own "Statistika" tab
+   (see .sidebar-tab), so this never shows there at all. */
+.stats-compact-line {
+  display: none;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.stats-compact-line strong {
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-compact-sep {
+  color: var(--text-muted);
+}
+
+@media (max-width: 900px) {
+  .stats-compact-line {
+    display: flex;
+  }
+
+  /* Scoped to .layout (index.html) — stats.html reuses these same classes
+     for its own, always-visible full stats card and must keep showing them
+     regardless of viewport. */
+  .layout .stats-card-header,
+  .layout .stats-grid,
+  .layout .stats-grid-note {
+    display: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .stats-compact-line,
+  #stats-info-popover {
+    display: none;
+  }
 }
 
 .stats-grid {
@@ -1071,6 +1099,45 @@ button {
   margin-bottom: 6px;
 }
 
+/* Mobile-only collapse for the news card's source/time filters, mirroring
+   .map-filters-toggle/.map-filters-panel on map.html (distinct class names
+   since both stylesheets load together there — see css/map-page.css).
+   Desktop: toggle hidden, panel always inline (unchanged base .filter-group
+   behavior above). Base rules have to come before the max-width:900px
+   override in source order — equal-specificity tie, later one wins
+   regardless of which side is wrapped in a media query (bit us twice
+   already elsewhere in this file). */
+.news-filters-toggle {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .news-filters-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-btn);
+    background: var(--surface-1);
+    color: var(--text-primary);
+    padding: 7px 12px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    cursor: pointer;
+    margin-bottom: 6px;
+  }
+
+  .news-filters-panel {
+    display: none;
+    width: 100%;
+  }
+
+  .news-filters-panel.open {
+    display: flex;
+  }
+}
+
 .filter-checkbox {
   flex-shrink: 0;
   display: flex;
@@ -1126,12 +1193,29 @@ button {
   white-space: nowrap;
 }
 
-/* Desktop-only replacement for the always-visible .news-disclaimer
-   paragraph below (kept as-is for mobile, where it already reads fine
-   inline) — click to reveal the same text in a popover instead of it
-   permanently eating vertical space above the list. */
+@media (max-width: 900px) {
+  /* Both redundant on the mobile home feed specifically: the heading
+     repeats what the Tuvumā/Pasaulē tabs and the compact stats line's
+     "Ziņās: N" already say, and the toggle controls the embedded map's
+     news markers — .map-pane doesn't even render here (see the 900px
+     query near .layout above), so it had no effect either way. */
+  .news-card-header h2,
+  .news-toggle {
+    display: none;
+  }
+}
+
+/* Replacement for a paragraph of explanatory text (the news card's source/
+   methodology note, the compact stats line's "what do these numbers mean")
+   — click to reveal it in a popover instead of it permanently eating
+   space. Universal (mobile and desktop both) — #stats-info-btn is also
+   nested inside .stats-compact-line, which is itself desktop-hidden (see
+   the min-width:901px query below), so it disappears there without
+   needing its own rule. */
 .info-btn {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
   width: 20px;
   height: 20px;
@@ -1149,6 +1233,32 @@ button {
 .info-btn[aria-expanded="true"] {
   border-color: var(--brand-accent);
   color: var(--text-primary);
+}
+
+/* Icon-only everywhere by default (e.g. #stats-info-btn, which sits right
+   next to labeled numbers already) — #news-info-btn is the one exception
+   that opts into a visible label, via this child span, specifically on
+   mobile where hiding .news-card-header's h2 (see above) would otherwise
+   leave it an unexplained lone dot with nothing else in that row. */
+.info-btn-label {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .info-btn:has(.info-btn-label) {
+    width: auto;
+    height: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: var(--radius-btn);
+    padding: 5px 10px;
+    font-size: 0.72rem;
+  }
+
+  .info-btn-label {
+    display: inline;
+  }
 }
 
 .info-popover {
@@ -1171,18 +1281,6 @@ button {
 
 .info-popover:not([hidden]) {
   display: block;
-}
-
-@media (min-width: 901px) {
-  .info-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .news-disclaimer {
-    display: none;
-  }
 }
 
 /* Local (Latvia + EE/LT border) vs. Pasaulē (everything else — see
@@ -1458,8 +1556,7 @@ button {
 }
 
 /* Mobile bottom nav — fixed tab bar replacing the desktop map-pane's
-   toolbar as the way to reach the standalone map.html (see
-   .mobile-quick-actions near .layout for the other entry point). */
+   toolbar as the way to reach the standalone map.html and report flow. */
 .mobile-bottom-nav {
   display: none;
 }

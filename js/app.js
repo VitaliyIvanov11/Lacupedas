@@ -38,6 +38,21 @@
     });
   }
 
+  // Mobile-only (see the 900px query in style.css) — on desktop the toggle
+  // is display:none and the panel is always visibly inline, so this class
+  // toggle has nothing to do there. Mirrors wireFiltersToggle() in
+  // js/map-page.js exactly.
+  function wireNewsFiltersToggle() {
+    const toggle = document.getElementById("news-filters-toggle");
+    const panel = document.getElementById("news-filters-panel");
+    if (!toggle || !panel) return;
+    toggle.addEventListener("click", () => {
+      const willOpen = !panel.classList.contains("open");
+      panel.classList.toggle("open", willOpen);
+      toggle.setAttribute("aria-expanded", String(willOpen));
+    });
+  }
+
   const SIDEBAR_COLLAPSED_KEY = "lacupedas-sidebar-collapsed";
 
   function wireSidebarCollapse(leafletMap) {
@@ -65,24 +80,33 @@
     });
   }
 
-  // Desktop-only replacement for the always-visible news disclaimer text
-  // (see .info-btn/.info-popover in style.css) — mobile never renders
-  // #news-info-btn (display:none there), so this listener simply never
-  // fires on mobile.
-  function wireNewsInfoPopover() {
-    const btn = document.getElementById("news-info-btn");
-    const popover = document.getElementById("news-info-popover");
-    if (!btn || !popover) return;
-    btn.addEventListener("click", () => {
-      const open = popover.hidden;
-      popover.hidden = !open;
-      btn.setAttribute("aria-expanded", String(open));
+  // Generic ⓘ-button + popover wiring (see .info-btn/.info-popover in
+  // style.css) — used both for the news card's source/methodology note
+  // (every width) and the compact stats line's "what do these numbers
+  // mean" note (mobile only — desktop shows the fuller .stats-grid
+  // instead, see .stats-compact-line's own desktop-hide rule). Each
+  // button just needs a matching aria-controls target; nothing here is
+  // hard-coded to one specific pair, so a third one later is a markup-only
+  // addition.
+  function wireInfoPopovers() {
+    document.querySelectorAll(".info-btn").forEach((btn) => {
+      const popover = document.getElementById(btn.getAttribute("aria-controls"));
+      if (!popover) return;
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = popover.hidden;
+        popover.hidden = !open;
+        btn.setAttribute("aria-expanded", String(open));
+      });
     });
     document.addEventListener("click", (e) => {
-      if (!popover.hidden && !popover.contains(e.target) && e.target !== btn) {
-        popover.hidden = true;
-        btn.setAttribute("aria-expanded", "false");
-      }
+      document.querySelectorAll(".info-btn").forEach((btn) => {
+        const popover = document.getElementById(btn.getAttribute("aria-controls"));
+        if (popover && !popover.hidden && !popover.contains(e.target) && e.target !== btn) {
+          popover.hidden = true;
+          btn.setAttribute("aria-expanded", "false");
+        }
+      });
     });
   }
 
@@ -104,7 +128,8 @@
     initSightingsPanel();
     wireSidebarTabs();
     wireSidebarCollapse(leafletMap);
-    wireNewsInfoPopover();
+    wireInfoPopovers();
+    wireNewsFiltersToggle();
 
     initLangSwitcher(() => {
       if (typeof applyCompactStatLabels === "function") applyCompactStatLabels();

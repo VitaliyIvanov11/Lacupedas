@@ -217,6 +217,7 @@ function renderStatsAndChart() {
   if (spEl.toolbarStatYear) spEl.toolbarStatYear.textContent = yearCount;
   if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
   if (spEl.statNewsMentions) spEl.statNewsMentions.textContent = geotaggedNews().length;
+  if (spEl.statNewsCompact) spEl.statNewsCompact.textContent = geotaggedNews().length;
   if (spEl.toolbarStatNews) spEl.toolbarStatNews.textContent = geotaggedNews().length;
   // Rows in `sightings` itself with a non-community source (Task 5's hand-
   // imported Silava/DAP cases) — same reasoning as news mentions above:
@@ -510,6 +511,7 @@ function initSightingsPanel() {
     toolbarStatLast: document.getElementById("toolbar-stat-last"),
     toolbarStatNews: document.getElementById("toolbar-stat-news"),
     statNewsMentions: document.getElementById("stat-news-mentions"),
+    statNewsCompact: document.getElementById("stat-news-compact"),
     statNewsVerified: document.getElementById("stat-news-verified"),
     statOfficial: document.getElementById("stat-official"),
   };
