@@ -248,6 +248,10 @@ const EXCLUDED_LINKS = new Set([
   // above) — kept here too given how sensitive the actual subject matter
   // is, regardless of how the general heuristic evolves.
   "https://www.lsm.lv/raksts/zinas/latvija/04.08.2026-aiztur-hokeja-treneri-par-seksuala-rakstura-darbibam-pret-mazgadigo-aicina-atsaukties-iespejamos-cietusos.a657389/?utm_source=rss&utm_campaign=rss&utm_medium=links",
+  // LSM.lv: a Latvian Puppet Theatre season announcement — matched only
+  // because one of the listed children's shows is presumably bear-themed.
+  // Not a sighting; caught sitting in the pending review PR before merge.
+  "https://www.lsm.lv/raksts/kultura/teatris-un-deja/04.08.2026-iepazisti-latvijas-lellu-teatra-83-sezonu-izrades-pasiem-mazakajiem-ziemassvetkiem-un-jauniesiem.a657439/?utm_source=rss&utm_campaign=rss&utm_medium=links",
 ]);
 
 // Manually curated, mirroring EXCLUDED_LINKS's shape: a link goes here only
