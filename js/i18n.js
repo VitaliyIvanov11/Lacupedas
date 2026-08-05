@@ -85,7 +85,8 @@ const translations = {
     yearLabel: "Šogad",
     lastLabel: "Pēdējais",
     noneYet: "Vēl nav",
-    statsGridNote: "Šogad un Pēdējais attiecas tikai uz kopienas novērojumiem — ziņu pieminējumi skaitīti atsevišķi.",
+    statsGridNote: "Šogad un Pēdējais attiecas tikai uz kopienas novērojumiem — ziņu pieminējumi un oficiāli apstiprinātie novērojumi skaitīti atsevišķi.",
+    officialSightingsLabel: "Oficiāli apstiprināti novērojumi",
 
     chartTitle: "Aktivitāte pa mēnešiem",
     chartCombinedNote: "Ietver gan kopienas novērojumus, gan ziņu pieminējumus.",
@@ -417,7 +418,8 @@ const translations = {
     yearLabel: "This year",
     lastLabel: "Latest sighting",
     noneYet: "None yet",
-    statsGridNote: "This year and Latest sighting cover community sightings only — news mentions are counted separately.",
+    statsGridNote: "This year and Latest sighting cover community sightings only — news mentions and officially confirmed sightings are counted separately.",
+    officialSightingsLabel: "Officially confirmed sightings",
 
     chartTitle: "Activity by month",
     chartCombinedNote: "Includes both community sightings and news mentions.",
@@ -749,7 +751,8 @@ const translations = {
     yearLabel: "В этом году",
     lastLabel: "Последнее",
     noneYet: "Пока нет",
-    statsGridNote: "«В этом году» и «Последнее» — только по наблюдениям сообщества, упоминания в новостях считаются отдельно.",
+    statsGridNote: "«В этом году» и «Последнее» — только по наблюдениям сообщества, упоминания в новостях и официально подтверждённые наблюдения считаются отдельно.",
+    officialSightingsLabel: "Официально подтверждённые наблюдения",
 
     chartTitle: "Активность по месяцам",
     chartCombinedNote: "Включает и наблюдения сообщества, и упоминания в новостях.",

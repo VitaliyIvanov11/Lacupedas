@@ -212,6 +212,12 @@ function renderStatsAndChart() {
   if (spEl.toolbarStatLast) spEl.toolbarStatLast.textContent = lastText;
   if (spEl.statNewsMentions) spEl.statNewsMentions.textContent = geotaggedNews().length;
   if (spEl.toolbarStatNews) spEl.toolbarStatNews.textContent = geotaggedNews().length;
+  // Rows in `sightings` itself with a non-community source (Task 5's hand-
+  // imported Silava/DAP cases) — same reasoning as news mentions above:
+  // they show up as real pins on the map/list, so they need their own
+  // honest count instead of just vanishing from every stat now that
+  // communitySightings() correctly excludes them from "Kopienas novērojumi".
+  if (spEl.statOfficial) spEl.statOfficial.textContent = spSightings.length - community.length;
   if (spEl.statNewsVerified) {
     const verifiedCount = geotaggedNews().filter((n) => n.verified).length;
     spEl.statNewsVerified.textContent = verifiedCount > 0 ? t("newsVerifiedCount").replace("{n}", verifiedCount) : "";
@@ -499,6 +505,7 @@ function initSightingsPanel() {
     toolbarStatNews: document.getElementById("toolbar-stat-news"),
     statNewsMentions: document.getElementById("stat-news-mentions"),
     statNewsVerified: document.getElementById("stat-news-verified"),
+    statOfficial: document.getElementById("stat-official"),
   };
   if (!spEl.list) return;
 
