@@ -6,7 +6,10 @@ function renderMonthlyChart(container, sightings) {
   const year = new Date().getFullYear();
   const counts = new Array(12).fill(0);
   sightings.forEach((s) => {
-    const d = new Date(s.date);
+    // "T00:00:00" forces local-time parsing -- a bare "YYYY-MM-DD" parses
+    // as UTC midnight, which rolls back to the previous local calendar day
+    // (and occasionally month) for any visitor west of UTC.
+    const d = new Date(s.date + "T00:00:00");
     if (d.getFullYear() === year) counts[d.getMonth()] += 1;
   });
 

@@ -78,9 +78,14 @@ function sourceLabel(source) {
 
 function matchesTimeFilter(dateStr, filterValue) {
   if (filterValue === "all") return true;
-  const d = new Date(dateStr);
+  // "T00:00:00" forces local-time parsing for the year check below -- a
+  // bare "YYYY-MM-DD" parses as UTC midnight, which rolls back to the
+  // previous local calendar year for any visitor west of UTC on Jan 1.
+  // The "30d" branch below only ever diffs epoch ms, so it's unaffected
+  // either way and isn't worth the same treatment.
+  const d = new Date(dateStr + "T00:00:00");
   if (filterValue === "year") return d.getFullYear() === new Date().getFullYear();
-  if (filterValue === "30d") return Date.now() - d.getTime() <= 30 * 24 * 60 * 60 * 1000;
+  if (filterValue === "30d") return Date.now() - new Date(dateStr).getTime() <= 30 * 24 * 60 * 60 * 1000;
   return true;
 }
 
@@ -194,7 +199,8 @@ function renderStatsAndChart() {
   // same honesty problem this comment already describes for news.
   const community = communitySightings();
   const year = new Date().getFullYear();
-  const yearCount = community.filter((s) => new Date(s.date).getFullYear() === year).length;
+  // "T00:00:00" -- see matchesTimeFilter()'s comment on the same pitfall.
+  const yearCount = community.filter((s) => new Date(s.date + "T00:00:00").getFullYear() === year).length;
   const lastText =
     community.length === 0
       ? t("noneYet")

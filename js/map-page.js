@@ -14,9 +14,11 @@
 
   function matchesTimeFilter(dateStr, filterValue) {
     if (filterValue === "all") return true;
-    const d = new Date(dateStr);
-    if (filterValue === "year") return d.getFullYear() === new Date().getFullYear();
-    if (filterValue === "30d") return Date.now() - d.getTime() <= 30 * 24 * 60 * 60 * 1000;
+    // "T00:00:00" forces local-time parsing for the year check -- a bare
+    // "YYYY-MM-DD" parses as UTC midnight, which rolls back to the
+    // previous local calendar year for any visitor west of UTC on Jan 1.
+    if (filterValue === "year") return new Date(dateStr + "T00:00:00").getFullYear() === new Date().getFullYear();
+    if (filterValue === "30d") return Date.now() - new Date(dateStr).getTime() <= 30 * 24 * 60 * 60 * 1000;
     return true;
   }
 
