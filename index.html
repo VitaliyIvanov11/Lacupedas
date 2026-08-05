@@ -190,10 +190,10 @@
             aria-expanded="false"
             aria-controls="stats-info-popover"
             data-i18n-title="statsInfoBtnLabel"
-          >ⓘ</button>
+          >ⓘ<span class="info-btn-label" data-i18n="statsInfoBtnLabel">Par šiem skaitļiem</span></button>
           <a href="stats.html" class="stats-detail-link" data-i18n="statsDetailLink">Skatīt detalizēti <span aria-hidden="true">›</span></a>
+          <p id="stats-info-popover" class="info-popover" hidden data-i18n="statsCompactNote"></p>
         </div>
-        <p id="stats-info-popover" class="info-popover" hidden data-i18n="statsCompactNote"></p>
 
         <div class="stats-card-header">
           <h2 data-i18n="statsTitle">Statistika</h2>
@@ -254,8 +254,8 @@
             <input type="checkbox" id="news-toggle" checked />
             <span data-i18n="newsToggleLabel">Rādīt kartē</span>
           </label>
+          <p id="news-info-popover" class="info-popover" hidden data-i18n="newsDisclaimer"></p>
         </div>
-        <p id="news-info-popover" class="info-popover" hidden data-i18n="newsDisclaimer"></p>
         <div class="news-tabs" role="tablist">
           <button type="button" id="news-tab-local" class="news-tab active" role="tab" aria-selected="true" data-i18n="newsTabLocal">Tuvumā</button>
           <button type="button" id="news-tab-world" class="news-tab" role="tab" aria-selected="false" data-i18n="newsTabWorld">Pasaulē</button>

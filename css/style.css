@@ -540,11 +540,13 @@ button {
 .card {
   flex: 0 0 auto;
   min-width: 0;
-  /* Containing block for .info-popover (position: absolute), which sits
-     as this card's direct child alongside its trigger .info-btn — not
-     inside a shared wrapper, so the card itself has to be the positioned
-     ancestor or the popover escapes to the viewport's initial containing
-     block and renders off-screen. */
+  /* Fallback containing block for any .info-popover (position: absolute)
+     that isn't nested inside its own closer positioned row — without
+     this, a popover with no positioned ancestor at all escapes to the
+     viewport's initial containing block and renders off-screen. The
+     current popovers each nest inside a short header/line element
+     instead (see .news-card-header, .stats-compact-line) so top:100%
+     means "right below that row", not "right below this whole card". */
   position: relative;
   background: var(--surface-1);
   border: 1px solid var(--border);
@@ -623,6 +625,10 @@ button {
    (see .sidebar-tab), so this never shows there at all. */
 .stats-compact-line {
   display: none;
+  /* Containing block for #stats-info-popover, which is now a direct
+     child (see index.html) so top:100% means "right below this short
+     row" instead of "right below the whole (possibly very tall) .card". */
+  position: relative;
   align-items: center;
   flex-wrap: wrap;
   gap: 6px;
