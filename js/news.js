@@ -111,9 +111,9 @@ function newsIcon(verified, borderCountry) {
   return L.divIcon({
     className: "news-marker",
     html: `<span class="${cls}"></span>`,
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
-    popupAnchor: [0, -8],
+    iconSize: [11, 11],
+    iconAnchor: [5, 5],
+    popupAnchor: [0, -5],
   });
 }
 

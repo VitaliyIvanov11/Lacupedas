@@ -436,8 +436,8 @@ button {
 
 .bear-marker-dot {
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
@@ -540,6 +540,12 @@ button {
 .card {
   flex: 0 0 auto;
   min-width: 0;
+  /* Containing block for .info-popover (position: absolute), which sits
+     as this card's direct child alongside its trigger .info-btn — not
+     inside a shared wrapper, so the card itself has to be the positioned
+     ancestor or the popover escapes to the viewport's initial containing
+     block and renders off-screen. */
+  position: relative;
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
@@ -1367,13 +1373,13 @@ button {
 
 .news-marker-diamond {
   display: block;
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   transform: rotate(45deg);
   background: #4a3aa7;
   border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-  margin: 2px;
+  margin: 1px;
   transition: transform 0.15s ease;
 }
 

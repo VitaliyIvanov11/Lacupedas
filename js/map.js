@@ -142,9 +142,9 @@ function pawIcon(type) {
   return L.divIcon({
     className: "bear-marker",
     html: `<span class="bear-marker-dot" style="background:${color}"></span>`,
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
-    popupAnchor: [0, -9],
+    iconSize: [13, 13],
+    iconAnchor: [6, 6],
+    popupAnchor: [0, -6],
   });
 }
 
