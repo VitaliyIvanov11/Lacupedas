@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T09:07:44.278Z",
+  "generatedAt": "2026-08-05T06:21:22.629Z",
   "items": [
     {
       "id": "48d36b95b59b46b1",
@@ -13,7 +13,13 @@
       "pubDate": "2026-08-03T08:35:00.000Z",
       "placeName": null,
       "lat": null,
-      "lng": null
+      "lng": null,
+      "eventCountry": "SE",
+      "eventCountryName": {
+        "lv": "Zviedrija",
+        "en": "Sweden",
+        "ru": "Швеция"
+      }
     },
     {
       "id": "09f6f13b54b4a83a",
@@ -27,7 +33,9 @@
       "pubDate": "2026-08-03T07:46:33.000Z",
       "placeName": null,
       "lat": null,
-      "lng": null
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "59050c4a167362db",
@@ -41,7 +49,9 @@
       "pubDate": "2026-08-03T05:18:00.000Z",
       "placeName": null,
       "lat": null,
-      "lng": null
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "caab2290013f06d4",
@@ -55,7 +65,9 @@
       "pubDate": "2026-08-03T05:14:18.000Z",
       "placeName": null,
       "lat": null,
-      "lng": null
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "9d9d8b681e4b5653",
@@ -69,7 +81,9 @@
       "pubDate": "2026-08-02T16:06:00.000Z",
       "placeName": null,
       "lat": null,
-      "lng": null
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "326caa5e28c10cea",
@@ -83,7 +97,9 @@
       "pubDate": "2026-07-31T08:30:00.000Z",
       "placeName": "Imanta (Rīga)",
       "lat": 56.9575,
-      "lng": 24.0171
+      "lng": 24.0171,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "4bba503a78863c8a",
@@ -97,7 +113,10 @@
       "pubDate": "2026-07-29T13:27:00.000Z",
       "placeName": "Ropaži",
       "lat": 56.9718,
-      "lng": 24.6318
+      "lng": 24.6318,
+      "verified": true,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "f4861bd22de6488b",
@@ -111,7 +130,9 @@
       "pubDate": "2026-07-25T17:56:00.000Z",
       "placeName": "Imanta (Rīga)",
       "lat": 56.9575,
-      "lng": 24.0171
+      "lng": 24.0171,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "12217f586d9181b2",
@@ -125,7 +146,9 @@
       "pubDate": "2026-07-23T13:40:00.000Z",
       "placeName": "Cēsis",
       "lat": 57.3119,
-      "lng": 25.2748
+      "lng": 25.2748,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "7849ae2b81b0d204",
@@ -139,7 +162,9 @@
       "pubDate": "2026-06-30T02:00:00.000Z",
       "placeName": "Tukums",
       "lat": 56.9678,
-      "lng": 23.1544
+      "lng": 23.1544,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "1dec7d380a08e2cb",
@@ -153,7 +178,9 @@
       "pubDate": "2026-06-27T05:55:37.000Z",
       "placeName": "Zvejniekciems",
       "lat": 57.319,
-      "lng": 24.417
+      "lng": 24.417,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "c04d5eab430d23e5",
@@ -167,7 +194,9 @@
       "pubDate": "2026-06-12T13:30:00.000Z",
       "placeName": "Silene (daba parks)",
       "lat": 55.7229,
-      "lng": 26.8015
+      "lng": 26.8015,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "9d61a73cd7bcc2c9",
@@ -181,7 +210,9 @@
       "pubDate": "2026-06-01T07:13:00.000Z",
       "placeName": "Jēkabpils",
       "lat": 56.4996,
-      "lng": 25.8535
+      "lng": 25.8535,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "450fd6df2fa76221",
@@ -195,7 +226,8 @@
       "pubDate": "2026-05-28T06:10:00.000Z",
       "placeName": "Turmantas (Lietuva)",
       "lat": 55.6944,
-      "lng": 26.4611
+      "lng": 26.4611,
+      "eventCountry": "LT"
     },
     {
       "id": "0ee102e7e3337333",
@@ -209,7 +241,9 @@
       "pubDate": "2026-05-15T02:00:00.000Z",
       "placeName": "Ļaudona (Madonas novads)",
       "lat": 56.7,
-      "lng": 26.1942
+      "lng": 26.1942,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "5fd4cda71fb70d01",
@@ -223,7 +257,10 @@
       "pubDate": "2026-04-23T11:50:00.000Z",
       "placeName": "Kaplava (Krāslavas novads)",
       "lat": 55.8428,
-      "lng": 27.1694
+      "lng": 27.1694,
+      "verified": true,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "e039660060415cc2",
@@ -237,7 +274,9 @@
       "pubDate": "2025-11-03T10:00:00.000Z",
       "placeName": "Ogre",
       "lat": 56.8175,
-      "lng": 24.6091
+      "lng": 24.6091,
+      "eventCountry": "LV",
+      "eventCountryName": null
     },
     {
       "id": "a57ca88f6e5caee4",
@@ -251,7 +290,8 @@
       "pubDate": "2025-07-03T02:00:00.000Z",
       "placeName": "Zarasai (Lietuva)",
       "lat": 55.7292,
-      "lng": 26.2453
+      "lng": 26.2453,
+      "eventCountry": "LT"
     },
     {
       "id": "fb62a41f9aecfdcc",
@@ -265,7 +305,10 @@
       "pubDate": "2025-05-26T14:00:00.000Z",
       "placeName": "Beļava (Gulbenes novads)",
       "lat": 57.2542,
-      "lng": 26.7705
+      "lng": 26.7705,
+      "verified": true,
+      "eventCountry": "LV",
+      "eventCountryName": null
     }
   ]
 }
