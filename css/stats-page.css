@@ -159,3 +159,39 @@
 .region-level-high {
   background: rgba(47, 93, 63, 0.06);
 }
+
+/* Not a geographic map (see the region-card comment above for the same
+   reasoning) — grouped by rough compass description straight from each
+   territory's own municipality/parish names in the source report, listed
+   top-to-bottom rather than positioned on any kind of grid, since the
+   groups vary a lot in how many named territories they contain. */
+.monitoring-card {
+  border-left: 3px solid var(--series-1);
+}
+
+.monitoring-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+
+.monitoring-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(42, 120, 214, 0.06);
+}
+
+.monitoring-zone-name {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.monitoring-zone-list {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
