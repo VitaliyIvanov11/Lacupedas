@@ -650,6 +650,19 @@ button {
   margin-bottom: 0;
 }
 
+/* Also defined in css/stats-page.css (identical values) -- kept here too
+   so the same disclaimer can appear on index.html's compact 3-box card,
+   which doesn't load that page-specific stylesheet. Clarifies why
+   Šogad/Pēdējais can read "0"/"Vēl nav" right next to a nonzero "Ziņu
+   pieminējumi" count -- without this, that reads as a contradiction
+   instead of two honestly-separate categories. */
+.stats-grid-note {
+  margin: 8px 0 0;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 .stat-total {
   background: rgba(137, 135, 129, 0.045);
 }
