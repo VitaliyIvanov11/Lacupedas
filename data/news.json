@@ -1,6 +1,54 @@
 {
-  "generatedAt": "2026-08-05T10:45:29.319Z",
+  "generatedAt": "2026-08-06T06:43:25.813Z",
   "items": [
+    {
+      "id": "ba4b02e1191aabeb",
+      "title": {
+        "lv": "DAP: Lāču monitorings ir investīcija iedzīvotāju drošībā un konfliktsituāciju risināšanā",
+        "en": "DAP: Bear monitoring is an investment in the safety of citizens and solving conflict situations",
+        "ru": "ДАП: Мониторинг медведей – это инвестиция в безопасность граждан и решение конфликтных ситуаций"
+      },
+      "link": "https://diena.lv/raksts/latvija/zinas-71/dap-lacu-monitorings-ir-investicija-iedzivotaju-drosiba-un-konfliktsituaciju-risinasana?utm_source=rss&utm_campaign=rss&utm_medium=links",
+      "source": "Diena.lv",
+      "pubDate": "2026-08-06T04:41:00.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
+    {
+      "id": "c40f80d8fa5373cb",
+      "title": {
+        "lv": "Dabas aizsardzības pārvalde skaidro, kādēļ nepieciešams soctīklos plaši apspriestais lāču monitorings",
+        "en": "The Nature Protection Board explains why bear monitoring, which is widely discussed in social networks, is necessary",
+        "ru": "В Департаменте охраны природы объясняют, зачем нужен мониторинг медведей, который широко обсуждается в соцсетях"
+      },
+      "link": "https://www.1188.lv/zinas/dabas-aizsardzibas-parvalde-skaidro-kadel-nepieciesams-soctiklos-plasi-apspriestais-lacu-monitorings/71004?utm_source=rss&utm_campaign=rss&utm_medium=links",
+      "source": "1188.lv",
+      "pubDate": "2026-08-06T04:30:00.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
+    {
+      "id": "f1d6bb73f8303088",
+      "title": {
+        "lv": "DAP: Lāču monitorings ir investīcija iedzīvotāju drošībā",
+        "en": "DAP: Bear monitoring is an investment in the safety of citizens",
+        "ru": "DAP: Мониторинг медведей — это инвестиция в безопасность граждан"
+      },
+      "link": "https://pmo.ee/8522186",
+      "source": "Apollo.lv",
+      "pubDate": "2026-08-06T04:23:13.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
     {
       "id": "48d36b95b59b46b1",
       "title": {
