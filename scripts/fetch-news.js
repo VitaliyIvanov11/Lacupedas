@@ -9,6 +9,17 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 
+// Same public anon key js/storage.js uses client-side — safe to embed here
+// too, since Supabase's security model is RLS, not key secrecy (see
+// docs/rls-audit.md). This script only ever SELECTs from verified_news;
+// there's no insert/update/delete policy for anon, so this key can't write
+// to it even if it wanted to — marking a link verified is a deliberate
+// human action taken directly in the Supabase SQL Editor/Table Editor, not
+// something this automated script can do to itself.
+const SUPABASE_URL = "https://rhmtifjbnqpikzdwgrre.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJobXRpZmpibnFwaWt6ZHdncnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0MTE1MDUsImV4cCI6MjEwMDk4NzUwNX0._vnbEOYNu_9q9djS8iqxED-QMAIu1QKCvzWY3GGqCsI";
+
 // `lang` pins each feed to the single keyword-form list that should be
 // tested against it (see BEAR_KEYWORD_RES_BY_LANG below). This matters
 // because the word lists collide across languages: Latvian "karu" (accusative
@@ -277,31 +288,38 @@ const EXCLUDED_LINKS = new Set([
   "https://www.lsm.lv/raksts/kultura/teatris-un-deja/04.08.2026-iepazisti-latvijas-lellu-teatra-83-sezonu-izrades-pasiem-mazakajiem-ziemassvetkiem-un-jauniesiem.a657439/?utm_source=rss&utm_campaign=rss&utm_medium=links",
 ]);
 
-// Manually curated, mirroring EXCLUDED_LINKS's shape: a link goes here only
-// after a human has actually opened the article and personally confirmed
-// the auto-matched place name and date genuinely appear in the text — not
-// just "this is a real bear story" (which the PR review process already
-// checks for every item before it ever reaches main) but "this specific
-// claim checks out." Same bar already used for hand-backfilled historical
-// entries (see README's "verify the specific claim" note). Applied to the
-// full merged set below, not just this run's freshly-matched items, so
-// marking an older already-published article works too, not only new ones.
-const VERIFIED_LINKS = new Set([
-  // Ropaži/Garkalne, 29.07.2026 — kodols.lv article confirms the sighting
-  // was reported by Ropažu novada pašvaldība, specifically in Garkalnes
-  // pagasts (a parish inside Ropažu novads) — the RSS title/description
-  // only names the broader district ("Ropažu novadā"), which is what the
-  // scanner matched on; the more specific parish name only appears in the
-  // article body. District-level claim confirmed, pin stays at the
-  // district-level gazetteer entry, not narrowed to the parish.
-  "https://kodols.lv/pieriga/ropazi/video-ropazu-novada-manits-lacis-ko-darit-ja-sastopies-ar-to-aci-pret-aci-203464",
-  // Kaplava, ~23.04.2026 — gorod.lv article names the exact border-guard
-  // post ("Kaplavas robežsargu punkts") that filmed the bear.
-  "https://gorod.lv/novosti/365549-pogranichniki-kaplavskogo-otdeleniya-zasnyali-medvedya-pytavshegosya-oboiti-ograzhdenie-video",
-  // Beļava, Gulbenes novads, ~May 2025 — gorod.lv article names the exact
-  // parish ("Belavas pagasts, Gulbenes novads").
-  "https://gorod.lv/novosti/357769-v-latvii-vpervye-zafiksirovali-napadenie-burogo-medvedya-na-loshad",
-]);
+// A link counts as verified only after a human has actually opened the
+// article and personally confirmed the auto-matched place name and date
+// genuinely appear in the text — not just "this is a real bear story"
+// (which the PR review process already checks for every item before it
+// ever reaches main) but "this specific claim checks out." Same bar
+// already used for hand-backfilled historical entries (see README's
+// "verify the specific claim" note).
+//
+// Lives in Supabase (public.verified_news, link text primary key) instead
+// of a hardcoded list here, so marking a link verified is a quick SQL
+// Editor/Table Editor insert rather than a commit+PR — see docs/rls-audit.md
+// for the table's RLS setup. Applied to the full merged set below, not just
+// this run's freshly-matched items, so verifying an older already-published
+// article works too, not only new ones; removing a row un-verifies it on
+// the next run.
+async function loadVerifiedLinks() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/verified_news?select=link`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) {
+      console.error(`[verified_news] HTTP ${res.status}`);
+      return new Set();
+    }
+    const rows = await res.json();
+    return new Set(rows.map((r) => r.link));
+  } catch (err) {
+    console.error(`[verified_news] fetch failed: ${err.message}`);
+    return new Set();
+  }
+}
 
 const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
 const MAX_ITEMS = 150;
@@ -642,11 +660,9 @@ async function main() {
     .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
     .slice(0, MAX_ITEMS);
 
-  // Applied to the full merged set (not just freshly-matched items) so
-  // adding a link to VERIFIED_LINKS works for any already-published item,
-  // old or new — and removing one un-verifies it on the next run too.
+  const verifiedLinks = await loadVerifiedLinks();
   for (const entry of merged) {
-    if (VERIFIED_LINKS.has(entry.link)) {
+    if (verifiedLinks.has(entry.link)) {
       entry.verified = true;
     } else {
       delete entry.verified;

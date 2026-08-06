@@ -35,6 +35,7 @@ jobs:
       # runs until it's merged (or closed to reject), instead of opening a
       # new one every 2 hours.
       - name: Open or update a review PR with new candidates
+        id: pr
         uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "Update bear-related news data"
@@ -62,3 +63,29 @@ jobs:
             data/news.json
             feed.xml
           labels: news-review
+
+      # Only fires when this run actually changed the PR (new candidates
+      # found) — most 2-hourly runs find nothing new, and 'none' would
+      # otherwise mean an email every 2 hours regardless of content.
+      - name: Email a review reminder via Resend
+        if: steps.pr.outputs.pull-request-operation == 'created' || steps.pr.outputs.pull-request-operation == 'updated'
+        run: |
+          curl -sf -X POST "https://api.resend.com/emails" \
+            -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d "$(node -e '
+              const pr = process.env.PR_URL;
+              const op = process.env.PR_OP;
+              const payload = {
+                from: process.env.RESEND_FROM,
+                to: process.env.NEWS_REVIEW_EMAIL,
+                subject: `Lacupedas: news review PR ${op}`,
+                text: `The news-scan workflow ${op} the pending-review PR with new bear-mention candidates.\n\n${pr}`,
+              };
+              console.log(JSON.stringify(payload));
+            ')"
+        env:
+          PR_URL: ${{ steps.pr.outputs.pull-request-url }}
+          PR_OP: ${{ steps.pr.outputs.pull-request-operation }}
+          RESEND_FROM: ${{ secrets.RESEND_FROM_EMAIL }}
+          NEWS_REVIEW_EMAIL: ${{ secrets.NEWS_REVIEW_EMAIL }}

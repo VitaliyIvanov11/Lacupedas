@@ -311,7 +311,44 @@ revoke update (source, status) on public.sightings from anon, authenticated;
 -- above. Confirm after running: SELECT still returns source/status,
 -- and a normal report-form submission (a plain INSERT with only the
 -- 8 form columns) still succeeds unchanged.
+
+-- R6: verified_news -- moves the "human confirmed this news item's claim"
+-- flag (formerly a hardcoded VERIFIED_LINKS array in scripts/fetch-news.js,
+-- edited via commit) into a table the site owner edits directly in the
+-- SQL Editor/Table Editor, no git required. scripts/fetch-news.js reads it
+-- with the same public anon key js/storage.js already uses -- a brand-new
+-- table starts with zero privileges for anon/authenticated until granted,
+-- so only the explicit SELECT grant below is needed; there's no INSERT/
+-- UPDATE/DELETE grant or policy for either role, matching R1's reports
+-- table above -- marking a link verified only ever happens as the table
+-- owner (dashboard/SQL Editor connection bypasses RLS), never through the
+-- public key.
+create table public.verified_news (
+  link text primary key,
+  verified_at timestamptz not null default now()
+);
+alter table public.verified_news enable row level security;
+
+grant select on public.verified_news to anon, authenticated;
+create policy "Public can read verified news" on public.verified_news
+  for select using (true);
+
+-- Seed with the 3 links that were verified under the old hardcoded list,
+-- so nothing already-confirmed silently un-verifies on the first run
+-- after this migration.
+insert into public.verified_news (link) values
+  ('https://kodols.lv/pieriga/ropazi/video-ropazu-novada-manits-lacis-ko-darit-ja-sastopies-ar-to-aci-pret-aci-203464'),
+  ('https://gorod.lv/novosti/365549-pogranichniki-kaplavskogo-otdeleniya-zasnyali-medvedya-pytavshegosya-oboiti-ograzhdenie-video'),
+  ('https://gorod.lv/novosti/357769-v-latvii-vpervye-zafiksirovali-napadenie-burogo-medvedya-na-loshad');
 ```
+
+To mark a new link verified going forward, run:
+
+```sql
+insert into public.verified_news (link) values ('https://...') on conflict do nothing;
+```
+
+To un-verify one, `delete from public.verified_news where link = 'https://...';`
 
 ## 6. What this audit did *not* do
 
