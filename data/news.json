@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-06T09:48:34.045Z",
+  "generatedAt": "2026-08-06T10:03:57.841Z",
   "items": [
     {
       "id": "ba4b02e1191aabeb",
@@ -46,6 +46,22 @@
       "placeName": null,
       "lat": null,
       "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
+    {
+      "id": "bfc9e720641eff78",
+      "title": {
+        "lv": "Uzmanību sēņotājiem un atpūtniekiem! Smiltenes pusē manīta lāču mamma ar lācēniem",
+        "en": "Attention mushroom pickers and forest visitors! A mother bear with cubs spotted near Smiltene",
+        "ru": "Внимание, грибники и отдыхающие! Возле Смилтене замечена медведица с медвежатами"
+      },
+      "link": "https://nra.lv/latvija/527015-bilskas-pagasta-redzeta-lacu-mamma-ar-diviem-laceniem.htm",
+      "source": "NRA.lv",
+      "pubDate": "2026-08-04T10:00:00.000Z",
+      "placeName": "Bilska",
+      "lat": 57.49083,
+      "lng": 25.99361,
       "eventCountry": "LV",
       "eventCountryName": null
     },
