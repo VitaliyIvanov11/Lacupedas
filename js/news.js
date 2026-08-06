@@ -1,8 +1,22 @@
 // Bear-related news mentions, auto-collected from public LV news RSS feeds
-// by a scheduled GitHub Action (see scripts/fetch-news.js) into
-// data/news.json. This module fetches that file, renders it on the map and
-// in a read-only list, and polls periodically so new mentions appear while
-// the page stays open — no manual reload needed.
+// by a scheduled GitHub Action (see scripts/fetch-news.js) into Supabase's
+// public.news table (status='approved' only — see docs/rls-audit.md's R7).
+// This module fetches those rows, renders them on the map and in a
+// read-only list, and polls periodically so new mentions appear while the
+// page stays open — no manual reload needed.
+
+// Same public anon key js/storage.js already uses — read-only here (see
+// R7): every column this module reads is covered by the table's public
+// SELECT grant, and the status=eq.approved filter below is what keeps a
+// still-pending candidate off the live site, not RLS itself (same
+// client-side-filter shape js/storage.js already uses for sightings).
+const NEWS_SUPABASE_URL = "https://rhmtifjbnqpikzdwgrre.supabase.co";
+const NEWS_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJobXRpZmpibnFwaWt6ZHdncnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0MTE1MDUsImV4cCI6MjEwMDk4NzUwNX0._vnbEOYNu_9q9djS8iqxED-QMAIu1QKCvzWY3GGqCsI";
+const NEWS_SUPABASE_HEADERS = {
+  apikey: NEWS_SUPABASE_ANON_KEY,
+  Authorization: `Bearer ${NEWS_SUPABASE_ANON_KEY}`,
+};
 
 const NEWS_POLL_MS = 10 * 60 * 1000; // 10 minutes
 const NEWS_PAGE_SIZE = 6;
@@ -98,10 +112,11 @@ function newsEscapeHtml(str) {
   return div.innerHTML;
 }
 
-// verified (see VERIFIED_LINKS in scripts/fetch-news.js) gets a small
-// white ring — a human has personally confirmed this specific item's
-// place/date match the article, not just that every merged item already
-// passed the "is this really a bear story" bar via the PR review.
+// verified (public.news' own verified column, set only via the Supabase
+// dashboard — see docs/rls-audit.md's R7) gets a small white ring — a
+// human has personally confirmed this specific item's place/date match
+// the article, not just that it passed the "is this really a bear story"
+// bar to get approved in the first place.
 // borderCountry (eventCountry EE/LT) gets a distinct fill color — bears
 // don't know borders, so a sighting just across it is still shown on the
 // map, but visually marked as not-Latvia (see .news-marker-diamond.border
@@ -133,25 +148,40 @@ function newsClusterIcon(cluster) {
   });
 }
 
+// select= uses PostgREST's column-aliasing (alias:column) to rename the
+// table's snake_case columns to the camelCase shape every other function
+// in this file already expects (n.pubDate, n.placeName, ...) — matches
+// what data/news.json used to hand over directly, so nothing else here
+// had to change.
+const NEWS_SELECT =
+  "id,title,link,source,pubDate:pub_date,placeName:place_name,lat,lng,eventCountry:event_country,eventCountryName:event_country_name,verified";
+
 async function fetchNewsData() {
   try {
-    const res = await fetch(`data/news.json?t=${Date.now()}`, { cache: "no-store" });
-    if (!res.ok) return null;
-    const data = await res.json();
+    const [itemsRes, metaRes] = await Promise.all([
+      fetch(
+        `${NEWS_SUPABASE_URL}/rest/v1/news?select=${NEWS_SELECT}&status=eq.approved&order=pub_date.desc`,
+        { headers: NEWS_SUPABASE_HEADERS }
+      ),
+      fetch(`${NEWS_SUPABASE_URL}/rest/v1/news_meta?select=last_scan_at`, { headers: NEWS_SUPABASE_HEADERS }),
+    ]);
+    if (!itemsRes.ok) return null;
+    const items = await itemsRes.json();
+    const meta = metaRes.ok ? await metaRes.json() : [];
     return {
-      items: Array.isArray(data.items) ? data.items : [],
-      generatedAt: data.generatedAt || null,
+      items: Array.isArray(items) ? items : [],
+      generatedAt: meta[0] ? meta[0].last_scan_at : null,
     };
   } catch {
     return null;
   }
 }
 
-// Surfaces data/news.json's own generatedAt timestamp — the news scanner
-// runs on a schedule (see .github/workflows/news-scan.yml) and could go
-// silently stale if that Action ever broke, so this is a visible freshness
-// signal rather than a silent assumption that "no error" means "up to
-// date". No-ops if #news-updated-at isn't on the current page.
+// Surfaces news_meta.last_scan_at — the news scanner runs on a schedule
+// (see .github/workflows/news-scan.yml) and could go silently stale if
+// that Action ever broke, so this is a visible freshness signal rather
+// than a silent assumption that "no error" means "up to date". No-ops if
+// #news-updated-at isn't on the current page.
 function renderNewsUpdatedAt(generatedAt) {
   const el = document.getElementById("news-updated-at");
   if (!el) return;
@@ -275,10 +305,10 @@ function renderNewsList() {
     sourceSpan.textContent = n.source + locationBit;
     top.appendChild(dateSpan);
     top.appendChild(sourceSpan);
-    // Manually curated (VERIFIED_LINKS in scripts/fetch-news.js) — a human
-    // has personally confirmed the place/date genuinely match the article,
-    // not just that it's a real bear story (every merged item already
-    // passed that bar via the PR review). Most items won't have this.
+    // public.news' own verified column (see docs/rls-audit.md's R7) — a
+    // human has personally confirmed the place/date genuinely match the
+    // article, not just that it's a real bear story (every approved item
+    // already passed that bar). Most items won't have this.
     if (n.verified) {
       const verifiedBadge = document.createElement("span");
       verifiedBadge.className = "news-verified-badge";

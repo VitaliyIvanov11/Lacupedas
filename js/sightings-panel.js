@@ -107,8 +107,9 @@ function getFilteredSightings() {
   );
 }
 
-// Verified media entries (VERIFIED_LINKS in scripts/fetch-news.js) reshaped
-// to fit the same list-row rendering as a real sighting — see
+// Verified media entries (public.news' own verified column — see
+// docs/rls-audit.md's R7) reshaped to fit the same list-row rendering as a
+// real sighting — see
 // renderList()'s "news_verified" branch. Kept out of getFilteredSightings()
 // itself (see the comment there) since that function also feeds the map's
 // sightings layer, not just the list.

@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 // Fetches a handful of Latvian news RSS feeds, keeps only items that mention
 // bears ("lācis"/"lāči" and declensions), best-effort-matches a place name
-// mentioned in the text against a small gazetteer, and merges the result
-// into data/news.json. Runs on a schedule via .github/workflows/news-scan.yml
-// — no dependencies beyond Node's built-in fetch/crypto/fs.
+// mentioned in the text against a small gazetteer, and upserts the result
+// into Supabase's public.news table as status='pending' (see docs/
+// rls-audit.md's R7) — a human approves/rejects from there via the
+// Supabase dashboard, no PR/commit involved. Also regenerates feed.xml
+// (the public RSS export) from whatever's currently approved. Runs on a
+// schedule via .github/workflows/news-scan.yml — no dependencies beyond
+// Node's built-in fetch/crypto/fs.
 
 const fs = require("fs");
 const path = require("path");
@@ -11,11 +15,11 @@ const crypto = require("crypto");
 
 // Same public anon key js/storage.js uses client-side — safe to embed here
 // too, since Supabase's security model is RLS, not key secrecy (see
-// docs/rls-audit.md). This script only ever SELECTs from verified_news;
-// there's no insert/update/delete policy for anon, so this key can't write
-// to it even if it wanted to — marking a link verified is a deliberate
-// human action taken directly in the Supabase SQL Editor/Table Editor, not
-// something this automated script can do to itself.
+// docs/rls-audit.md's R7). This script can read every news row and write
+// a candidate's content, but status/verified aren't in its insert/update
+// grant at all — approving or verifying an item is a deliberate human
+// action taken directly in the Supabase dashboard, not something this
+// automated script can do to itself.
 const SUPABASE_URL = "https://rhmtifjbnqpikzdwgrre.supabase.co";
 const SUPABASE_ANON_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJobXRpZmpibnFwaWt6ZHdncnJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0MTE1MDUsImV4cCI6MjEwMDk4NzUwNX0._vnbEOYNu_9q9djS8iqxED-QMAIu1QKCvzWY3GGqCsI";
@@ -288,44 +292,10 @@ const EXCLUDED_LINKS = new Set([
   "https://www.lsm.lv/raksts/kultura/teatris-un-deja/04.08.2026-iepazisti-latvijas-lellu-teatra-83-sezonu-izrades-pasiem-mazakajiem-ziemassvetkiem-un-jauniesiem.a657439/?utm_source=rss&utm_campaign=rss&utm_medium=links",
 ]);
 
-// A link counts as verified only after a human has actually opened the
-// article and personally confirmed the auto-matched place name and date
-// genuinely appear in the text — not just "this is a real bear story"
-// (which the PR review process already checks for every item before it
-// ever reaches main) but "this specific claim checks out." Same bar
-// already used for hand-backfilled historical entries (see README's
-// "verify the specific claim" note).
-//
-// Lives in Supabase (public.verified_news, link text primary key) instead
-// of a hardcoded list here, so marking a link verified is a quick SQL
-// Editor/Table Editor insert rather than a commit+PR — see docs/rls-audit.md
-// for the table's RLS setup. Applied to the full merged set below, not just
-// this run's freshly-matched items, so verifying an older already-published
-// article works too, not only new ones; removing a row un-verifies it on
-// the next run.
-async function loadVerifiedLinks() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/verified_news?select=link`, {
-      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
-      signal: AbortSignal.timeout(10000),
-    });
-    if (!res.ok) {
-      console.error(`[verified_news] HTTP ${res.status}`);
-      return new Set();
-    }
-    const rows = await res.json();
-    return new Set(rows.map((r) => r.link));
-  } catch (err) {
-    console.error(`[verified_news] fetch failed: ${err.message}`);
-    return new Set();
-  }
-}
-
-const MAX_AGE_DAYS = 730; // 2 years — this is a record of confirmed sightings, not just breaking news
-const MAX_ITEMS = 150;
-const OUTPUT_PATH = path.join(__dirname, "..", "data", "news.json");
 const FEED_PATH = path.join(__dirname, "..", "feed.xml");
 const FEED_ITEM_LIMIT = 50;
+const NEWS_TABLE = `${SUPABASE_URL}/rest/v1/news`;
+const NEWS_META_TABLE = `${SUPABASE_URL}/rest/v1/news_meta`;
 
 // Best-effort place gazetteer: name -> [matchable stem(s), lat, lng].
 // Coordinates are approximate town-centre points, not survey-grade — this
@@ -471,7 +441,7 @@ function findPlace(text) {
 // of these countries is a much stronger location signal than a short stem
 // coincidence. Not an exhaustive list of every country bears live in —
 // covers the ones that actually turn up in Baltic bear-news coverage today;
-// extend as new cases are found, same spirit as EXCLUDED_LINKS/VERIFIED_LINKS.
+// extend as new cases are found, same spirit as EXCLUDED_LINKS above.
 const FOREIGN_COUNTRIES = [
   {
     code: "SE",
@@ -615,13 +585,105 @@ ${itemsXml}
 `;
 }
 
-function loadExisting() {
+// Reads every existing row regardless of status (see docs/rls-audit.md's
+// R7 — the anon key can SELECT any row, only writing status/verified is
+// restricted) so a still-in-window RSS item that's already pending or
+// already approved from an earlier run doesn't get machine-translated
+// again on every re-scan, and so the email step below can tell "genuinely
+// new this run" apart from "still sitting there, unchanged."
+async function loadExistingNews() {
   try {
-    const raw = fs.readFileSync(OUTPUT_PATH, "utf8");
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed.items) ? parsed.items : [];
-  } catch {
+    const res = await fetch(`${NEWS_TABLE}?select=id,title`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) {
+      console.error(`[news] load existing HTTP ${res.status}`);
+      return new Map();
+    }
+    const rows = await res.json();
+    return new Map(rows.map((r) => [r.id, r]));
+  } catch (err) {
+    console.error(`[news] load existing failed: ${err.message}`);
+    return new Map();
+  }
+}
+
+// Column-scoped by the R7 grant to exactly what a scan run can legitimately
+// produce — status/verified are never in this payload, so ON CONFLICT DO
+// UPDATE can't touch them even by accident; they stay whatever a human
+// last set them to via the dashboard.
+async function upsertNews(rows) {
+  if (rows.length === 0) return true;
+  try {
+    const res = await fetch(`${NEWS_TABLE}?on_conflict=id`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "resolution=merge-duplicates",
+      },
+      body: JSON.stringify(rows),
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      console.error(`[news] upsert HTTP ${res.status}: ${await res.text()}`);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error(`[news] upsert failed: ${err.message}`);
+    return false;
+  }
+}
+
+// feed.xml (the public RSS export) is rebuilt from only the approved rows
+// every run, so it only ever reflects what a human has actually published
+// — same guarantee the old PR-merge gate gave data/news.json.
+async function loadApprovedNews() {
+  try {
+    const res = await fetch(`${NEWS_TABLE}?select=*&status=eq.approved&order=pub_date.desc`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) {
+      console.error(`[news] load approved HTTP ${res.status}`);
+      return [];
+    }
+    const rows = await res.json();
+    return rows.map((row) => ({
+      id: row.id,
+      title: row.title,
+      link: row.link,
+      source: row.source,
+      pubDate: row.pub_date,
+    }));
+  } catch (err) {
+    console.error(`[news] load approved failed: ${err.message}`);
     return [];
+  }
+}
+
+// Single-row table (id is always literal `true`) — this is the freshness
+// signal js/news.js's #news-updated-at reads, replacing data/news.json's
+// old generatedAt field now that there's no longer a file with a mtime.
+async function touchScanFreshness() {
+  try {
+    const res = await fetch(`${NEWS_META_TABLE}?on_conflict=id`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "resolution=merge-duplicates",
+      },
+      body: JSON.stringify({ id: true, last_scan_at: new Date().toISOString() }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) console.error(`[news_meta] update HTTP ${res.status}`);
+  } catch (err) {
+    console.error(`[news_meta] update failed: ${err.message}`);
   }
 }
 
@@ -650,55 +712,16 @@ async function main() {
       };
     });
 
-  const existing = loadExisting();
-  const byId = new Map(existing.map((i) => [i.id, i]));
-  for (const item of matched) byId.set(item.id, item);
+  const existing = await loadExistingNews();
+  const newCount = matched.filter((item) => !existing.has(item.id)).length;
 
-  const cutoff = Date.now() - MAX_AGE_DAYS * 24 * 60 * 60 * 1000;
-  const merged = [...byId.values()]
-    .filter((i) => new Date(i.pubDate).getTime() >= cutoff)
-    .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate))
-    .slice(0, MAX_ITEMS);
-
-  const verifiedLinks = await loadVerifiedLinks();
-  for (const entry of merged) {
-    if (verifiedLinks.has(entry.link)) {
-      entry.verified = true;
-    } else {
-      delete entry.verified;
-    }
-  }
-
-  // Backfill for items saved before eventCountry existed. Only reachable
-  // here for OLD items — freshly matched items above already got a proper
-  // per-source-language classification. By this point an old item's title
-  // is already a {lv,en,ru} object (translated on a prior run), so the
-  // original source language is gone; fall back to scanning the Latvian
-  // translation with the lv-language markers, which is a reasonable
-  // approximation since machine translation preserves country names.
-  for (const entry of merged) {
-    if (entry.eventCountry) continue;
-    if (entry.placeName && entry.placeName.endsWith("(Igaunija)")) {
-      entry.eventCountry = "EE";
-    } else if (entry.placeName && entry.placeName.endsWith("(Lietuva)")) {
-      entry.eventCountry = "LT";
-    } else {
-      const titleLv =
-        typeof entry.title === "string" ? entry.title : entry.title.lv || entry.title.en || entry.title.ru || "";
-      const foreign = findForeignCountry(titleLv, "lv");
-      entry.eventCountry = foreign ? foreign.code : "LV";
-      entry.eventCountryName = foreign ? foreign.name : null;
-    }
-  }
-
-  // Translate once per item, the run it first appears (or, for items saved
-  // before this field existed, the next run after this deploy) — title is
-  // still a plain string at this point for both cases; already-translated
-  // items (title is already a {lv,en,ru} object) are skipped.
   let translatedCount = 0;
-  for (const entry of merged) {
-    if (typeof entry.title === "string") {
-      entry.title = await buildTitleTranslations(entry.title);
+  for (const item of matched) {
+    const already = existing.get(item.id);
+    if (already) {
+      item.title = already.title;
+    } else {
+      item.title = await buildTitleTranslations(item.title);
       translatedCount++;
     }
   }
@@ -706,16 +729,31 @@ async function main() {
     console.log(`Translated ${translatedCount} item title(s) into lv/en/ru.`);
   }
 
-  fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
-  fs.writeFileSync(
-    OUTPUT_PATH,
-    JSON.stringify({ generatedAt: new Date().toISOString(), items: merged }, null, 2) + "\n"
-  );
-  fs.writeFileSync(FEED_PATH, buildRssFeed(merged));
+  const rows = matched.map((item) => ({
+    id: item.id,
+    title: item.title,
+    link: item.link,
+    source: item.source,
+    pub_date: item.pubDate,
+    place_name: item.placeName,
+    lat: item.lat,
+    lng: item.lng,
+    event_country: item.eventCountry,
+    event_country_name: item.eventCountryName,
+  }));
+  const upserted = await upsertNews(rows);
+  await touchScanFreshness();
+
+  const approved = await loadApprovedNews();
+  fs.writeFileSync(FEED_PATH, buildRssFeed(approved));
+
+  if (process.env.GITHUB_OUTPUT) {
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, `new_count=${newCount}\n`);
+  }
 
   console.log(`Fetched ${allItems.length} articles across ${FEEDS.length} feeds.`);
-  console.log(`${matched.length} matched the bear keyword this run.`);
-  console.log(`${merged.length} total items kept (max ${MAX_ITEMS}, ${MAX_AGE_DAYS}-day window).`);
+  console.log(`${matched.length} matched the bear keyword this run (upsert ${upserted ? "ok" : "FAILED"}).`);
+  console.log(`${newCount} new candidate(s) this run; ${approved.length} approved item(s) total.`);
 }
 
 main().catch((err) => {

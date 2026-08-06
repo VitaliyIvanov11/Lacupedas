@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: news-scan
@@ -23,69 +22,46 @@ jobs:
         with:
           node-version: "22"
 
+      # Upserts candidates straight into Supabase's public.news table as
+      # status='pending' (see docs/rls-audit.md's R7) — no PR/commit gate
+      # for that part anymore, review happens in the Supabase dashboard.
+      # Also rewrites feed.xml (the public RSS export) from whatever's
+      # currently approved there, and reports how many candidates were
+      # genuinely new this run via $GITHUB_OUTPUT.
       - name: Fetch & filter news
+        id: scan
         run: node scripts/fetch-news.js
 
-      # No keyword filter catches everything (proper-noun collisions, brand
-      # names, unrelated stories that happen to name-drop a bear — all
-      # already seen in practice) and the cost of a wrong one going public
-      # can be real, not just cosmetic. Nothing here reaches data/news.json
-      # on main — and so nothing reaches the live site — without a human
-      # reviewing and merging this PR first. Reuses one branch/PR across
-      # runs until it's merged (or closed to reject), instead of opening a
-      # new one every 2 hours.
-      - name: Open or update a review PR with new candidates
-        id: pr
-        uses: peter-evans/create-pull-request@v8
-        with:
-          commit-message: "Update bear-related news data"
-          branch: news-pending-review
-          title: "News scan: new bear-mention candidates for review"
-          body: |
-            Automated keyword scan found new candidate item(s) below.
-            **Nothing here is public until this PR is merged.**
+      - name: Commit feed.xml if it changed
+        run: |
+          if ! git diff --quiet -- feed.xml; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add feed.xml
+            git commit -m "Update feed.xml from approved news"
+            git push
+          fi
 
-            Before merging, check each new entry in the diff for:
-            - A proper-noun collision (a person's surname, a sports team
-              or brand name, etc. that happens to match the keyword —
-              see `looksLikeProperNounCollision()`/`looksLikeBreadBrand()`
-              in `scripts/fetch-news.js` for what's already auto-filtered).
-            - Whether it's actually about a bear encounter/sighting, not
-              just a passing mention (funding announcements, unrelated
-              foreign-news stories, etc.).
-            - Whether the auto-matched place/coordinates look right.
-
-            To reject a specific item permanently: copy its `link` value
-            into `EXCLUDED_LINKS` in `scripts/fetch-news.js` in a followup
-            commit, then close this PR without merging (or remove just
-            that item from the diff before merging the rest).
-          add-paths: |
-            data/news.json
-            feed.xml
-          labels: news-review
-
-      # Only fires when this run actually changed the PR (new candidates
-      # found) — most 2-hourly runs find nothing new, and 'none' would
-      # otherwise mean an email every 2 hours regardless of content.
+      # Only fires when this run actually found new candidates — most
+      # 2-hourly runs find nothing, and firing on every run regardless
+      # would mean an email every 2 hours no matter what.
       - name: Email a review reminder via Resend
-        if: steps.pr.outputs.pull-request-operation == 'created' || steps.pr.outputs.pull-request-operation == 'updated'
+        if: steps.scan.outputs.new_count > 0
         run: |
           curl -sf -X POST "https://api.resend.com/emails" \
             -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d "$(node -e '
-              const pr = process.env.PR_URL;
-              const op = process.env.PR_OP;
+              const n = process.env.NEW_COUNT;
               const payload = {
                 from: process.env.RESEND_FROM,
                 to: process.env.NEWS_REVIEW_EMAIL,
-                subject: `Lacupedas: news review PR ${op}`,
-                text: `The news-scan workflow ${op} the pending-review PR with new bear-mention candidates.\n\n${pr}`,
+                subject: `Lacupedas: ${n} new bear-mention candidate(s) pending review`,
+                text: `The news-scan workflow found ${n} new candidate(s) awaiting review.\n\nReview and approve/reject them in the Supabase Table Editor (public.news, status column) — see docs/rls-audit.md.`,
               };
               console.log(JSON.stringify(payload));
             ')"
         env:
-          PR_URL: ${{ steps.pr.outputs.pull-request-url }}
-          PR_OP: ${{ steps.pr.outputs.pull-request-operation }}
+          NEW_COUNT: ${{ steps.scan.outputs.new_count }}
           RESEND_FROM: ${{ secrets.RESEND_FROM_EMAIL }}
           NEWS_REVIEW_EMAIL: ${{ secrets.NEWS_REVIEW_EMAIL }}

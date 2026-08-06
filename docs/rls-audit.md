@@ -350,6 +350,103 @@ insert into public.verified_news (link) values ('https://...') on conflict do no
 
 To un-verify one, `delete from public.verified_news where link = 'https://...';`
 
+**Superseded by R7 below** — once news itself lives in Supabase with its
+own `verified` column, keeping a second, separate verified-links table
+alongside it would mean two places tracking overlapping state. R7 drops
+this table and folds `verified` into `news` directly.
+
+```sql
+-- R7: move news out of git (data/news.json, PR-reviewed) into Supabase,
+-- the same "public reads a status='approved' row, only the table owner's
+-- own dashboard/SQL Editor session can approve it" shape sightings
+-- already use (see R5 above). scripts/fetch-news.js keeps doing its own
+-- keyword-match/translate/geotag work exactly as before -- the only
+-- change is where the result lands: an upsert into this table with
+-- status='pending', instead of a PR diff waiting for a human to click
+-- Merge. Approving is now a Table Editor edit, not a commit.
+create table public.news (
+  id text primary key,
+  title jsonb not null,               -- {lv, en, ru}
+  link text not null,
+  source text not null,
+  pub_date timestamptz not null,
+  place_name text,
+  lat double precision,
+  lng double precision,
+  event_country text,
+  event_country_name jsonb,           -- {lv, en, ru} or null
+  verified boolean not null default false,
+  status text not null default 'pending',
+  created_at timestamptz not null default now()
+);
+alter table public.news enable row level security;
+
+-- Same posture as sightings (§1b): RLS blocks writes, not reads -- every
+-- row is SELECT-able through the anon key regardless of status, and
+-- js/news.js filters to status=eq.approved itself, same shape as
+-- js/storage.js's client-side status filter on sightings. The
+-- alternative (a status='approved'-only policy) would also block the
+-- scan script's own anon-key connection from seeing its own pending
+-- rows, which it needs to avoid re-translating a title every run and to
+-- know how many are genuinely new for the email step.
+grant select on public.news to anon, authenticated;
+create policy "Public can read news" on public.news
+  for select using (true);
+
+-- The scan script writes through the same public anon key everything
+-- else in this project uses (see js/storage.js) -- column-scoped so it
+-- can create/refresh a candidate's content but never touch status or
+-- verified itself, the same shape as R5's revoke on sightings.
+grant insert (id, title, link, source, pub_date, place_name, lat, lng, event_country, event_country_name)
+  on public.news to anon;
+grant update (title, link, source, pub_date, place_name, lat, lng, event_country, event_country_name)
+  on public.news to anon;
+create policy "Scanner can upsert candidate news" on public.news
+  for insert with check (true);
+create policy "Scanner can refresh candidate news" on public.news
+  for update using (true) with check (true);
+-- No grant/policy at all for status or verified from anon/authenticated --
+-- approving or verifying an item only ever happens as the table owner.
+
+-- Tracks the scanner's last successful run, for the same "is this data
+-- actually fresh" signal data/news.json's generatedAt used to give
+-- (js/news.js's #news-updated-at) -- a single row, upserted every run.
+create table public.news_meta (
+  id boolean primary key default true check (id),
+  last_scan_at timestamptz not null default now()
+);
+alter table public.news_meta enable row level security;
+grant select on public.news_meta to anon, authenticated;
+create policy "Public can read scan freshness" on public.news_meta
+  for select using (true);
+grant insert (last_scan_at), update (last_scan_at) on public.news_meta to anon;
+create policy "Scanner can upsert freshness" on public.news_meta
+  for insert with check (true);
+create policy "Scanner can update freshness" on public.news_meta
+  for update using (true) with check (true);
+
+drop table public.verified_news;
+```
+
+One-time backfill of the 27 items already live in `data/news.json` (all
+already human-reviewed via the old PR process, so approved on arrival):
+run after `scripts/fetch-news.js` has been updated to write to this table
+and has run at least once (inserts them as `pending`), then:
+
+```sql
+update public.news set status = 'approved' where status = 'pending';
+update public.news set verified = true where link in (
+  'https://kodols.lv/pieriga/ropazi/video-ropazu-novada-manits-lacis-ko-darit-ja-sastopies-ar-to-aci-pret-aci-203464',
+  'https://gorod.lv/novosti/365549-pogranichniki-kaplavskogo-otdeleniya-zasnyali-medvedya-pytavshegosya-oboiti-ograzhdenie-video',
+  'https://gorod.lv/novosti/357769-v-latvii-vpervye-zafiksirovali-napadenie-burogo-medvedya-na-loshad'
+);
+```
+
+To approve a new pending item going forward: open the row in Table Editor
+and change `status` to `approved` (or `update public.news set status =
+'approved' where id = '...';`). To verify one: same idea with the
+`verified` column.
+
 ## 6. What this audit did *not* do
 
 - Did not attempt any `INSERT`/`UPDATE`/`DELETE` against live tables,

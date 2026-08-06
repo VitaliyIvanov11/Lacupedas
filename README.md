@@ -26,9 +26,10 @@ interactive map.
   isn't realistic.
 - Both lists have compact type/source + time filters that affect the list
   **and** the map markers together — the news source dropdown is populated
-  dynamically from whatever sources are actually present in `data/news.json`
-  rather than a hardcoded list. Filters are purely client-side (re-filter
-  already-loaded data, no re-fetch) and don't affect the stats panel/chart,
+  dynamically from whatever sources are actually present in the loaded
+  `public.news` rows rather than a hardcoded list. Filters are purely
+  client-side (re-filter already-loaded data, no re-fetch) and don't
+  affect the stats panel/chart,
   which stay totals-over-everything.
 - Sighting and news markers cluster on the map (`leaflet.markercluster`) as
   independent groups per layer (brand green for sightings, indigo for news)
@@ -364,27 +365,28 @@ create policy "Public can insert reports"
    Ukraine-war coverage) is spelled identically to Estonian "karu" (bear).
    Testing every feed against every language turned every Latvian war
    article into a false bear match the moment general-news LV portals were
-   added; this was caught before it ever reached `data/news.json`.
+   added; this was caught before it ever reached `public.news`.
 3. Best-effort matches a town/region name mentioned in the text against a
    small built-in gazetteer (`GAZETTEER` in the script — all of Latvia, plus
    only the Estonian/Lithuanian towns within roughly 50-70km of the Latvian
    border) to place an approximate map pin — exact coordinates can't be
    extracted from article text, so this is a "nearest known town/region"
    pin, not the precise location.
-4. Merges the result into `data/news.json` (dedup by article link, 2-year
-   window, capped at 150 items). If that changed anything, opens (or updates,
-   if one's already open) a pull request against `news-pending-review`
-   instead of committing straight to `main` — see "Manual review queue"
-   below for why.
+4. Upserts the result into Supabase's `public.news` table as
+   `status='pending'` (dedup by article link, via its id hash) — nothing
+   commits to git for this part anymore, review happens in the Supabase
+   dashboard, see "Manual review queue" below for why.
 
 Official government sources (Dabas aizsardzības pārvalde, Valsts meža
 dienests) were investigated but not wired in: neither publishes an RSS feed,
 and both are unreachable (TLS connections time out) from the environment
 this was built in, so their HTML structure couldn't be verified well enough
 to write a scraper with any confidence it'd keep working. Confirmed real
-sightings from the initial research were instead backfilled by hand into
-`data/news.json` once each, using the same id-hashing scheme the script
-uses so future runs dedupe against them correctly.
+sightings from the initial research were instead backfilled by hand once
+each — directly into `public.news` (status set to `approved` right away,
+since these were already individually confirmed) — using the same
+id-hashing scheme the script uses so future runs dedupe against them
+correctly.
 
 When backfilling by hand, verify the specific claim (place name especially)
 actually appears in the linked article body, not just that the link resolves
@@ -407,7 +409,7 @@ automatically without real NLP, so `EXCLUDED_LINKS` in `fetch-news.js` is a
 manually-maintained denylist of specific article links found to be false
 positives this way — keyed by link (not id) so it's readable/auditable, and
 checked before the keyword test so excluded articles never re-enter
-`data/news.json` on a later run even while they're still in a feed's rolling
+`public.news` on a later run even while they're still in a feed's rolling
 window.
 
 Word-boundary matching avoids some proper-noun collisions for free — a
@@ -440,13 +442,13 @@ discusses bread.
 
 A hard "must also contain word X" requirement (e.g. "mež-"/"novēro-"/
 "pēdas"/etc. somewhere nearby) was considered and tested against the 19
-already-verified-genuine items live in `data/news.json` at the time —
-it would have wrongly rejected 17 of them (attack/sighting headlines like
-"Lācis uzbrucis sēņotājam Tukuma novadā" don't happen to contain any of
-those specific stems). Not implemented for that reason: a false negative
-here is *silent* — with the manual-review queue below, a false positive
-just sits in a PR for a human to reject, but an item a keyword filter
-drops before that never gets a chance to be seen at all.
+already-verified-genuine items live at the time — it would have wrongly
+rejected 17 of them (attack/sighting headlines like "Lācis uzbrucis
+sēņotājam Tukuma novadā" don't happen to contain any of those specific
+stems). Not implemented for that reason: a false negative here is
+*silent* — with the manual-review queue below, a false positive just sits
+as `pending` for a human to reject, but an item a keyword filter drops
+before that never gets a chance to be seen at all.
 
 ### Manual review queue
 
@@ -455,31 +457,35 @@ of one shipped live before being caught and fixed (surname collisions in
 two languages, an organization-name collision), and the cost of one going
 public isn't always just cosmetic (one of the three was an article about a
 child-abuse arrest, which briefly showed up captioned as a bear-sighting
-news item). So nothing in `data/news.json`/`feed.xml` reaches the live
-site automatically anymore: `news-scan.yml` opens a pull request (reusing
-one `news-pending-review` branch across runs until it's merged, rather
-than piling up a new PR every 2 hours) instead of committing straight to
-`main`. A human reviews the diff and merges to publish, or closes to
-reject — same git workflow already used for every other change to this
-repo, no new tooling. Rejecting a specific article permanently still goes
+news item). So nothing reaches the live site automatically: `fetch-news.js`
+upserts every match into Supabase's `public.news` table as
+`status='pending'`, and `js/news.js` only ever reads rows where
+`status='approved'` (see `docs/rls-audit.md`'s R7 for the exact table/RLS
+shape — same "public reads, only the table owner's own dashboard session
+approves" pattern `sightings` already uses). A human reviews new pending
+rows in the Supabase Table Editor and flips `status` to `approved` to
+publish or `rejected` to reject — no PR, no commit. `news-scan.yml` emails
+a reminder (via Resend) whenever a run finds genuinely new candidates, so
+checking Supabase isn't something that has to happen on a timer. Rejecting
+a specific article *permanently* (so it stops reappearing as a fresh
+`pending` row every time it's still in a feed's rolling window) still goes
 through `EXCLUDED_LINKS` in `fetch-news.js`, same as before.
 
 ### Manual verification (separate from the review queue)
 
-Merging the PR above only confirms "this is genuinely a bear story, not a
+Approving a row above only confirms "this is genuinely a bear story, not a
 false positive" — it doesn't confirm the auto-matched place name and date
 actually appear in the article text rather than being a plausible-looking
 coincidence (see the "verify the specific claim" note above, the same bar
-already used for hand-backfilled historical entries). `VERIFIED_LINKS` in
-`fetch-news.js` mirrors `EXCLUDED_LINKS`'s shape for this stronger,
-separate check: add a link there only after actually opening the article
-and confirming the specific claim, and the next scan run stamps
-`verified: true` onto that item (works for any already-published item, not
-just new ones — removing a link un-verifies it again too). Verified items
-get a green ring on their map marker (vs. the plain indigo diamond every
-other news mention gets), a "✓ Pārbaudīts" badge in the news list, and a
-count on stats.html's "Ziņu pieminējumi" box. Empty by default — nothing
-is verified until a human actually does the work.
+already used for hand-backfilled historical entries). `public.news` has its
+own `verified` boolean column for this stronger, separate check — the scan
+script never writes to it (see R7's column-scoped grants), so it only ever
+changes when a human opens the article, confirms the specific claim, and
+flips it in the Table Editor. Verified items get a green ring on their map
+marker (vs. the plain indigo diamond every other news mention gets), a "✓
+Pārbaudīts" badge in the news list, and a count on stats.html's "Ziņu
+pieminējumi" box. Empty (`false`) by default — nothing is verified until a
+human actually does the work.
 
 Verified items also appear in the "Novērojumu saraksts" (sightings list)
 itself, not just the separate news list —
@@ -513,10 +519,7 @@ those countries is named, that wins over any gazetteer stem match: no
 match would have been. Every matched item gets an `eventCountry` field this
 way: `"LV"` (default), `"EE"`/`"LT"` (derived from which `GAZETTEER` entry
 matched — those entries' names already end in "(Igaunija)"/"(Lietuva)"), or
-a specific country code (`"SE"`, `"NO"`, ...) for anything else. Items saved
-before this field existed get a one-time best-effort backfill from their
-already-translated Latvian title (the original source-language text isn't
-kept past the run it was matched in) — see the backfill loop in `main()`.
+a specific country code (`"SE"`, `"NO"`, ...) for anything else.
 
 The front end treats `"LV"`/`"EE"`/`"LT"` as "local": shown on the map same
 as before, with EE/LT getting a distinct marker color
@@ -537,11 +540,13 @@ to a named country in passing (rather than being set there) would be
 misclassified as foreign; extend `FOREIGN_COUNTRIES` the same incremental
 way as everything else in this file when a new case turns up.
 
-The front end (`js/news.js`) fetches `data/news.json` on load and re-polls it
-every 10 minutes while the tab is open, so new mentions appear on the map and
-in the "News mentions" list without a page reload. Only the headline, source,
-date, and a link back to the original article are shown — never the full
-article text — since copyright stays with the original publisher.
+The front end (`js/news.js`) reads `public.news` (via the same public anon
+key `js/storage.js` already uses, filtered to `status=eq.approved`) on load
+and re-polls it every 10 minutes while the tab is open, so new mentions
+appear on the map and in the "News mentions" list without a page reload.
+Only the headline, source, date, and a link back to the original article
+are shown — never the full article text — since copyright stays with the
+original publisher.
 
 An earlier version also showed a small preview thumbnail, pulled from
 whatever `<enclosure>`/`<media:thumbnail>`/first-`<img>` a feed happened to
@@ -555,10 +560,12 @@ a stronger one (re-publishing their photo file rather than linking to it).
 Text-only is the version worth keeping.
 
 To test the scanner locally: `node scripts/fetch-news.js` (writes/updates
-`data/news.json`; no API keys or dependencies required, Node 18+).
+`public.news` in Supabase directly — same public anon key as everything
+else in this project, no separate API keys/dependencies required, Node
+18+).
 
-Each run also writes `feed.xml` — a standard RSS 2.0 feed of the same
-merged items (LV titles only; the feed itself has no per-visitor language
+Each run also writes `feed.xml` — a standard RSS 2.0 feed of the currently
+`approved` items (LV titles only; the feed itself has no per-visitor language
 selection), linked from `index.html`'s `<head>` via `<link rel="alternate"
 type="application/rss+xml">` and from the news list directly. This is the
 "email digest" option from the audit checklist without building actual
@@ -597,10 +604,9 @@ js/app.js                           Wires index.html together; desktop map vs. m
 js/map-page.js                   Wires map.html together (standalone)
 js/stats-page.js                 Wires stats.html together (standalone)
 js/guide-page.js                     Language switching for the standalone content pages
-scripts/fetch-news.js         RSS scanner run by the GitHub Action (below); also writes feed.xml
+scripts/fetch-news.js         RSS scanner run by the GitHub Action (below); upserts to Supabase, also writes feed.xml
 .github/workflows/news-scan.yml   Scheduled job that runs the scanner
-data/news.json                 Output of the scanner, served to the front end
-feed.xml                       RSS 2.0 feed of the same scanner output
+feed.xml                       RSS 2.0 feed of the currently-approved public.news rows
 favicon.ico                    Hand-built multi-frame (16/32px) icon — see note below
 icons/                          Paw-print favicon/app icon set (PNG, 16px–512px) + apple-touch-icon + og-banner.png
 site.webmanifest               PWA manifest (name, theme color, 192/512px icons)
@@ -671,8 +677,7 @@ as-is). Sketch of how it would work, without committing to it yet:
    three versions, and an `hreflang="x-default"` pointing at the LV root.
 4. Wire the build script into the GitHub Pages deploy workflow so `/en/`
    and `/ru/` are generated fresh on every deploy — build output, not
-   something committed to git (unlike `data/news.json`, which is committed
-   because client JS also reads it at runtime).
+   something committed to git.
 5. `sitemap.xml` gains entries for the new URLs.
 
 What this does **not** fix: the live, Supabase-backed content (map
