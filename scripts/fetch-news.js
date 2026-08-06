@@ -46,6 +46,29 @@ const FEEDS = [
   // and advice.html's "Medniekiem" section), and LATMA's own site
   // periodically covers bear population/encounter stories directly.
   { name: "LATMA", url: "https://www.latma.lv/feed/", lang: "lv" },
+  // Official municipality (novads/valstspilsēta) news feeds — hyperlocal
+  // safety notices like "bear with cubs seen near X" often only get
+  // published by the municipality itself (its site, or Facebook — but
+  // Facebook has no public RSS and scraping it violates its ToS, so it's
+  // not a source we can add) and never reach the national portals above.
+  // Checked all 42 current municipalities (35 novadi + 7 valstspilsētas)
+  // for a working RSS feed on their official site; these 9 are the only
+  // ones that had one (most municipal sites simply don't publish RSS at
+  // all, a few block automated requests, and a few have broken/expired
+  // TLS certificates on their own server — not something a feed URL can
+  // work around). Worth periodically re-checking the rest as their sites
+  // get redesigned.
+  { name: "Ādažu novads", url: "https://www.adazunovads.lv/lv/rss/articles", lang: "lv" },
+  { name: "Jelgavas novads", url: "http://www.jelgavasnovads.lv/lv/rss/articles", lang: "lv" },
+  { name: "Jūrmala", url: "http://www.jurmala.lv/lv/rss/articles", lang: "lv" },
+  { name: "Limbažu novads", url: "http://www.limbazunovads.lv/lv/rss/articles", lang: "lv" },
+  { name: "Preiļu novads", url: "http://www.preili.lv/lv/rss/articles", lang: "lv" },
+  { name: "Ropažu novads", url: "https://ropazi.lv/lv/rss/articles", lang: "lv" },
+  { name: "Rīga", url: "http://www.riga.lv/lv/rss/articles", lang: "lv" },
+  // Smiltenes novads — the municipality from the Bilskas pagasts bear
+  // warning that prompted adding this whole category.
+  { name: "Smiltenes novads", url: "https://www.smiltenesnovads.lv/lv/rss/articles", lang: "lv" },
+  { name: "Tukuma novads", url: "http://www.tukums.lv/lv/rss/articles", lang: "lv" },
 ];
 
 // The site's 3 UI languages — every news title gets a version in each, so
