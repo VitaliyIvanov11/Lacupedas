@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-06T06:43:25.813Z",
+  "generatedAt": "2026-08-06T09:48:34.045Z",
   "items": [
     {
       "id": "ba4b02e1191aabeb",
@@ -211,6 +211,22 @@
       "placeName": "Tukums",
       "lat": 56.9678,
       "lng": 23.1544,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
+    {
+      "id": "7ed4456bf0a596e9",
+      "title": {
+        "lv": "Smiltenē pirmdien manīts lācis; iedzīvotāji aicināti uzmanīties un ziņot",
+        "en": "A bear was spotted in Smiltene on Monday; residents urged to be careful and report sightings",
+        "ru": "В Смилтене в понедельник заметили медведя; жителей просят быть осторожными и сообщать о случаях"
+      },
+      "link": "https://www.1188.lv/zinas/smiltene-pirmdien-manits-lacis-iedzivotaji-aicinati-uzmanities-un-zinot/69056",
+      "source": "1188.lv",
+      "pubDate": "2026-06-29T10:00:00.000Z",
+      "placeName": "Smiltene",
+      "lat": 57.4239,
+      "lng": 25.9017,
       "eventCountry": "LV",
       "eventCountryName": null
     },
