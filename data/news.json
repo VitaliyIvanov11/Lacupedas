@@ -1,6 +1,22 @@
 {
-  "generatedAt": "2026-08-06T10:48:41.012Z",
+  "generatedAt": "2026-08-06T14:32:51.312Z",
   "items": [
+    {
+      "id": "ed9d4a78cbbcdea5",
+      "title": {
+        "lv": "Lāču monitorings Latvijā izmaksās 180 tūkstošus eiro: kāpēc tas vajadzīgs?",
+        "en": "Monitoring bears in Latvia will cost 180 thousand euros: why is it necessary?",
+        "ru": "Мониторинг медведей в Латвии обойдётся в 180 тысяч евро: зачем это нужно"
+      },
+      "link": "https://www.gorod.lv/novosti/368208-monitoring-medvedei-v-latvii-oboidyotsya-v-180-tysyach-evro-zachem-eto-nuzhno",
+      "source": "gorod.lv",
+      "pubDate": "2026-08-06T12:30:00.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
     {
       "id": "ea1b03498775a6c2",
       "title": {
