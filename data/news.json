@@ -1,6 +1,38 @@
 {
-  "generatedAt": "2026-08-06T09:48:34.045Z",
+  "generatedAt": "2026-08-06T10:48:41.012Z",
   "items": [
+    {
+      "id": "ea1b03498775a6c2",
+      "title": {
+        "lv": "Mednieki: lielo plēsēju uzraudzība ir jāatjaunina",
+        "en": "Hunters: Big carnivore monitoring needs an update",
+        "ru": "Охотники: мониторинг крупных хищников нуждается в обновлении"
+      },
+      "link": "https://www.err.ee/1610103958/jahimehed-suurkiskjate-seire-vajab-uuendust",
+      "source": "ERR.ee",
+      "pubDate": "2026-08-06T09:53:00.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
+    {
+      "id": "a2b9b142a94f8e02",
+      "title": {
+        "lv": "AIZSARDZĪBA IR PAR DAUDZ? Mednieks: Šogad netiks nomedīti pat desmit lāči!",
+        "en": "DEFENSE GOING TOO MUCH? Hunter: Not even ten bears will be hunted this year!",
+        "ru": "ЗАЩИТА ИДЕТ СЛИШКОМ МНОГО? Охотник: В этом году не будут охотиться даже на десять медведей!"
+      },
+      "link": "https://www.ohtuleht.ee/1163955/kaitse-laheb-liiale-jahimees-tanavu-ei-kutita-isegi-kummet-karu",
+      "source": "Õhtuleht.ee",
+      "pubDate": "2026-08-06T09:41:03.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
     {
       "id": "ba4b02e1191aabeb",
       "title": {
@@ -22,7 +54,7 @@
       "title": {
         "lv": "Dabas aizsardzības pārvalde skaidro, kādēļ nepieciešams soctīklos plaši apspriestais lāču monitorings",
         "en": "The Nature Protection Board explains why bear monitoring, which is widely discussed in social networks, is necessary",
-        "ru": "В Департаменте охраны природы объясняют, зачем нужен мониторинг медведей, который широко обсуждается в соцсетях"
+        "ru": "В Департаменте охраны природы объяснили, зачем нужен мониторинг медведей, который широко обсуждается в соцсетях"
       },
       "link": "https://www.1188.lv/zinas/dabas-aizsardzibas-parvalde-skaidro-kadel-nepieciesams-soctiklos-plasi-apspriestais-lacu-monitorings/71004?utm_source=rss&utm_campaign=rss&utm_medium=links",
       "source": "1188.lv",
@@ -146,6 +178,22 @@
       "placeName": "Imanta (Rīga)",
       "lat": 56.9575,
       "lng": 24.0171,
+      "eventCountry": "LV",
+      "eventCountryName": null
+    },
+    {
+      "id": "f0e06a9667e4dac7",
+      "title": {
+        "lv": "Dabas aizsardzības pārvalde aicina pašvaldības izvērtēt gatavību situācijām, kas saistītas ar brūno lāču parādīšanos",
+        "en": "The Nature Protection Board calls on municipalities to evaluate their preparedness for situations related to the appearance of brown bears",
+        "ru": "Департамент охраны природы призывает муниципалитеты оценить свою готовность к ситуациям, связанным с появлением бурых медведей"
+      },
+      "link": "https://www.adazunovads.lv/lv/jaunums/dabas-aizsardzibas-parvalde-aicina-pasvaldibas-izvertet-gatavibu-situacijam-kas-saistitas-ar-bruno-lacu-paradisanos",
+      "source": "Ādažu novads",
+      "pubDate": "2026-07-30T17:53:23.000Z",
+      "placeName": null,
+      "lat": null,
+      "lng": null,
       "eventCountry": "LV",
       "eventCountryName": null
     },
