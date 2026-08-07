@@ -48,19 +48,34 @@ jobs:
       - name: Email a review reminder via Resend
         if: steps.scan.outputs.new_count > 0
         run: |
-          curl -sf -X POST "https://api.resend.com/emails" \
+          body="$(node -e '
+            const n = process.env.NEW_COUNT;
+            const payload = {
+              from: process.env.RESEND_FROM,
+              to: process.env.NEWS_REVIEW_EMAIL,
+              subject: `Lacupedas: ${n} new bear-mention candidate(s) pending review`,
+              text: `The news-scan workflow found ${n} new candidate(s) awaiting review.\n\nReview and approve/reject them in the Supabase Table Editor (public.news, status column) — see docs/rls-audit.md.`,
+            };
+            console.log(JSON.stringify(payload));
+          ')"
+          # No -f here on purpose: -f discards the response body on an
+          # HTTP error, which is exactly the text needed to diagnose a
+          # failure (bad key, unverified sender, etc.) -- GitHub already
+          # masks any secret value that shows up in step output, so
+          # printing the body is safe. Status parsed from a trailing
+          # marker instead of -w's own newline handling, which is
+          # inconsistent across curl versions.
+          response="$(curl -s -X POST "https://api.resend.com/emails" \
             -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d "$(node -e '
-              const n = process.env.NEW_COUNT;
-              const payload = {
-                from: process.env.RESEND_FROM,
-                to: process.env.NEWS_REVIEW_EMAIL,
-                subject: `Lacupedas: ${n} new bear-mention candidate(s) pending review`,
-                text: `The news-scan workflow found ${n} new candidate(s) awaiting review.\n\nReview and approve/reject them in the Supabase Table Editor (public.news, status column) — see docs/rls-audit.md.`,
-              };
-              console.log(JSON.stringify(payload));
-            ')"
+            -d "$body" \
+            -w $'\nHTTP_STATUS:%{http_code}')"
+          status="$(echo "$response" | grep -o 'HTTP_STATUS:[0-9]*' | cut -d: -f2)"
+          echo "$response" | sed '/HTTP_STATUS:/d'
+          if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+            echo "Resend request failed with HTTP $status"
+            exit 1
+          fi
         env:
           NEW_COUNT: ${{ steps.scan.outputs.new_count }}
           RESEND_FROM: ${{ secrets.RESEND_FROM_EMAIL }}
