@@ -175,34 +175,79 @@ button {
 
 /* Nearby-sighting alert bar — opt-in, in-tab only (see js/nearby-alert.js).
    Sits between the header and .layout, same width on mobile and desktop
-   both, so it doesn't need its own responsive variant. */
+   both, so it doesn't need its own responsive variant. Styled as a small
+   floating card (same radius/shadow language as .card) rather than a
+   flush system-notification-style strip, with the toggle itself reading
+   as a pill chip that fills brand-green when active — same "off = outline,
+   on = filled" language as .news-tab.active/.sidebar-tab.active. */
 .nearby-alert-bar {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  padding: 6px 20px;
+  gap: 10px;
+  margin: 10px 20px 0;
+  padding: 8px 10px 8px 14px;
   background: var(--surface-1);
-  border-bottom: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   font-size: 0.78rem;
 }
 
 .nearby-alert-toggle {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+  padding: 5px 10px 5px 6px;
+  border-radius: var(--radius-btn);
   cursor: pointer;
   color: var(--text-secondary);
+  font-weight: 600;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.nearby-alert-toggle:hover {
+  background: rgba(47, 93, 63, 0.08);
+}
+
+.nearby-alert-toggle input {
+  accent-color: var(--brand-forest);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* :has() flips the whole chip to the same filled-green "active" look
+   .news-tab.active/.sidebar-tab.active already use, so "this is on" reads
+   at a glance instead of relying on a small native checkbox alone. */
+.nearby-alert-toggle:has(input:checked) {
+  background: var(--brand-forest);
+  color: #fff;
 }
 
 .nearby-alert-radius {
+  flex: 0 0 auto;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-btn);
   background: var(--page-plane);
   color: var(--text-primary);
+  font-weight: 600;
   font-size: 0.76rem;
-  padding: 2px 4px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 520px) {
+  .nearby-alert-bar {
+    margin: 8px 14px 0;
+    padding: 6px 8px 6px 10px;
+    font-size: 0.74rem;
+  }
+
+  .nearby-alert-toggle {
+    padding: 4px 8px 4px 4px;
+  }
 }
 
 /* Layout */
