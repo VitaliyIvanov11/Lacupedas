@@ -303,6 +303,8 @@ const translations = {
     newsUpdatedAt: "Dati atjaunināti: {date}",
     newsRssLinkText: "RSS plūsma",
     newsNewCount: "Jauni pieminējumi: {n}",
+    nearbyAlertLabel: "🔔 Ziņot, ja lācis manīts tuvumā",
+    nearbyAlertToast: "Jauns novērojums {km} km attālumā no jums!",
 
     aboutTitle: "Par projektu",
     aboutWhoTitle: "Kas veido šo lapu?",
@@ -650,6 +652,8 @@ const translations = {
     newsUpdatedAt: "Data updated: {date}",
     newsRssLinkText: "RSS feed",
     newsNewCount: "New mentions: {n}",
+    nearbyAlertLabel: "🔔 Alert me if a bear is spotted nearby",
+    nearbyAlertToast: "New sighting {km} km from you!",
 
     aboutTitle: "About this project",
     aboutWhoTitle: "Who makes this?",
@@ -997,6 +1001,8 @@ const translations = {
     newsUpdatedAt: "Данные обновлены: {date}",
     newsRssLinkText: "RSS-лента",
     newsNewCount: "Новых упоминаний: {n}",
+    nearbyAlertLabel: "🔔 Сообщить, если медведя видели рядом",
+    nearbyAlertToast: "Новое наблюдение в {km} км от вас!",
 
     aboutTitle: "О проекте",
     aboutWhoTitle: "Кто делает эту страницу?",

@@ -13,8 +13,9 @@
   };
 
   async function refreshAll() {
-    await refreshSightingsPanel();
+    const sightings = await refreshSightingsPanel();
     renderMarkers(getFilteredSightings(), (s) => openDetailsFromMarker(s));
+    if (typeof checkNearby === "function") checkNearby(sightings);
   }
 
   // Desktop-only tab system (Ziņas/Novērojumi/Statistika) for the sidebar —
@@ -130,6 +131,7 @@
     wireSidebarCollapse(leafletMap);
     wireInfoPopovers();
     wireNewsFiltersToggle();
+    if (typeof wireNearbyAlert === "function") wireNearbyAlert();
 
     initLangSwitcher(() => {
       if (typeof applyCompactStatLabels === "function") applyCompactStatLabels();

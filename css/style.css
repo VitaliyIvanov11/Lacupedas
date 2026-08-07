@@ -173,6 +173,38 @@ button {
   }
 }
 
+/* Nearby-sighting alert bar — opt-in, in-tab only (see js/nearby-alert.js).
+   Sits between the header and .layout, same width on mobile and desktop
+   both, so it doesn't need its own responsive variant. */
+.nearby-alert-bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 20px;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+}
+
+.nearby-alert-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.nearby-alert-radius {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--page-plane);
+  color: var(--text-primary);
+  font-size: 0.76rem;
+  padding: 2px 4px;
+}
+
 /* Layout */
 
 .layout {

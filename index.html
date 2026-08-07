@@ -69,6 +69,7 @@
       "name": "Latvija"
     },
     "variableMeasured": ["atrašanās vieta", "datums", "novērojuma veids", "skaits"],
+    "license": "https://creativecommons.org/licenses/by/4.0/",
     "creator": {
       "@type": "Organization",
       "name": "Lacupedas",
@@ -130,6 +131,19 @@
       <option value="ru">RU</option>
     </select>
   </header>
+
+  <div class="nearby-alert-bar">
+    <label class="nearby-alert-toggle">
+      <input type="checkbox" id="nearby-alert-checkbox" />
+      <span data-i18n="nearbyAlertLabel">🔔 Ziņot, ja lācis manīts tuvumā</span>
+    </label>
+    <select id="nearby-alert-radius" class="nearby-alert-radius" aria-label="Radius">
+      <option value="10">10 km</option>
+      <option value="25" selected>25 km</option>
+      <option value="50">50 km</option>
+    </select>
+  </div>
+  <div id="nearby-toast" class="toast" hidden></div>
 
   <main class="layout">
     <section class="map-pane">
@@ -478,6 +492,7 @@
   <script src="js/map.js"></script>
   <script src="js/report-form.js"></script>
   <script src="js/report-issue.js"></script>
+  <script src="js/nearby-alert.js"></script>
   <script src="js/news.js"></script>
   <script src="js/sightings-panel.js"></script>
   <script src="js/app.js"></script>
