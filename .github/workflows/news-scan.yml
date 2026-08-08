@@ -73,7 +73,7 @@ jobs:
           # marker instead of -w's own newline handling, which is
           # inconsistent across curl versions.
           response="$(curl -s -X POST "https://api.resend.com/emails" \
-            -H "Authorization: Bearer ${{ secrets.SECRET_LACUPEDAS_NEWS }}" \
+            -H "Authorization: Bearer ${{ secrets.RESEND_API_KEY }}" \
             -H "Content-Type: application/json" \
             -d "$body" \
             -w $'\nHTTP_STATUS:%{http_code}')"
@@ -85,5 +85,5 @@ jobs:
           fi
         env:
           NEW_COUNT: ${{ steps.scan.outputs.new_count }}
-          RESEND_FROM: ${{ secrets.RESEND_FROM }}
-          NEWS_REVIEW_EMAIL: ${{ secrets.RESEND_TO_REVIEW }}
+          RESEND_FROM: ${{ secrets.RESEND_FROM_EMAIL }}
+          NEWS_REVIEW_EMAIL: ${{ secrets.NEWS_REVIEW_EMAIL }}
