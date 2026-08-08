@@ -502,24 +502,62 @@ function findForeignCountry(text, lang) {
   return null;
 }
 
-// Single entry point tying findForeignCountry() and findPlace() together:
-// eventCountry is the country the SIGHTING happened in, not the country the
-// portal publishes from — "LV" is the default (matches today's implicit
-// assumption for untagged text), "EE"/"LT" come from GAZETTEER's border
-// entries (their names already end in "(Igaunija)"/"(Lietuva)"), and a
-// FOREIGN_COUNTRIES match short-circuits both placeName and lat/lng to null
-// so a coincidental stem match can never plant a pin on the Latvia map for a
-// story that isn't about Latvia at all.
+// Same shape/purpose as FOREIGN_COUNTRIES, but for Estonia/Lithuania
+// specifically — GAZETTEER only recognizes named border TOWNS (Valga,
+// Võru, ...), not the country names themselves, so a story that says
+// "Igaunija"/"Eesti" without happening to also name one of those specific
+// towns fell through to the "LV" default (e.g. "Igaunija atļauj nomedīt
+// divus lāčus ..." on a Latvian portal, about a bear in Estonia with no
+// town named at all). Checked as a fallback after findPlace() below, not
+// instead of it — a specific town match is more precise than "somewhere
+// in Estonia" and should still win when both are present.
+const BORDER_COUNTRIES = [
+  { code: "EE", name: null, markers: { lv: ["igaunij"], et: ["eesti"], lt: ["estij"], ru: ["эстони"] } },
+  { code: "LT", name: null, markers: { lv: ["lietuv"], et: ["leedu"], lt: [], ru: ["литв"] } },
+];
+
+function findBorderCountry(text, lang) {
+  const lower = text.toLowerCase();
+  for (const country of BORDER_COUNTRIES) {
+    const stems = country.markers[lang];
+    if (!stems) continue;
+    for (const stem of stems) {
+      if (lower.includes(stem.toLowerCase())) return country;
+    }
+  }
+  return null;
+}
+
+// Single entry point tying findForeignCountry(), findPlace() and
+// findBorderCountry() together: eventCountry is the country the SIGHTING
+// happened in, not the country the portal publishes from — "LV" is the
+// default (matches today's implicit assumption for untagged text), "EE"/
+// "LT" come either from GAZETTEER's border-town entries (their names
+// already end in "(Igaunija)"/"(Lietuva)") or, failing that, from the
+// country's own name appearing in the text (BORDER_COUNTRIES above). A
+// FOREIGN_COUNTRIES match short-circuits both placeName and lat/lng to
+// null so a coincidental stem match can never plant a pin on the Latvia
+// map for a story that isn't about Latvia at all — the same null-pin
+// treatment applies to a BORDER_COUNTRIES-only match, since "somewhere in
+// Estonia" isn't a real coordinate either; it still counts as "local" for
+// the front end (see isForeignNews() in js/news.js), just without a pin.
 function classifyLocation(text, lang) {
   const foreign = findForeignCountry(text, lang);
   if (foreign) {
     return { placeName: null, lat: null, lng: null, eventCountry: foreign.code, eventCountryName: foreign.name };
   }
   const place = findPlace(text);
-  let eventCountry = "LV";
-  if (place.placeName && place.placeName.endsWith("(Igaunija)")) eventCountry = "EE";
-  else if (place.placeName && place.placeName.endsWith("(Lietuva)")) eventCountry = "LT";
-  return { ...place, eventCountry, eventCountryName: null };
+  if (place.placeName && place.placeName.endsWith("(Igaunija)")) {
+    return { ...place, eventCountry: "EE", eventCountryName: null };
+  }
+  if (place.placeName && place.placeName.endsWith("(Lietuva)")) {
+    return { ...place, eventCountry: "LT", eventCountryName: null };
+  }
+  const border = findBorderCountry(text, lang);
+  if (border) {
+    return { placeName: null, lat: null, lng: null, eventCountry: border.code, eventCountryName: null };
+  }
+  return { ...place, eventCountry: "LV", eventCountryName: null };
 }
 
 function makeId(link) {
