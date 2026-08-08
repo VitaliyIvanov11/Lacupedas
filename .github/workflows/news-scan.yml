@@ -3,7 +3,12 @@ name: Scan news for bear sightings
 on:
   schedule:
     - cron: "15 */2 * * *" # every 2 hours
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_email:
+        description: "Send the Resend email even if no new candidates were found (for testing)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -44,12 +49,14 @@ jobs:
 
       # Only fires when this run actually found new candidates — most
       # 2-hourly runs find nothing, and firing on every run regardless
-      # would mean an email every 2 hours no matter what.
+      # would mean an email every 2 hours no matter what. force_email
+      # (manual dispatch only) bypasses that for a one-off connectivity
+      # test without needing to edit this condition and revert it after.
       - name: Email a review reminder via Resend
-        if: steps.scan.outputs.new_count > 0
+        if: steps.scan.outputs.new_count > 0 || inputs.force_email == true
         run: |
           body="$(node -e '
-            const n = process.env.NEW_COUNT;
+            const n = process.env.NEW_COUNT || "0";
             const payload = {
               from: process.env.RESEND_FROM,
               to: process.env.NEWS_REVIEW_EMAIL,
