@@ -689,10 +689,36 @@ button {
 }
 
 /* Points at stats.html, the mobile detail page the chart/list moved to
-   (see .layout .chart-card/.list-card above) — desktop keeps them inline
-   in the sidebar, so it has no need for this link. */
+   (see .layout .chart-card/.list-card above). */
 .stats-detail-link {
   display: none;
+}
+
+/* Desktop's own equivalent of .stats-detail-link, inside .stats-card-header
+   instead of the mobile-only compact line — the desktop "Statistika" tab
+   only ever had the compact stats-grid + chart inline, never the region
+   breakdown/monitoring-territories/full filterable list stats.html also
+   has, so without this link desktop had no way to reach that content at
+   all (mobile always could, via .stats-detail-link below). */
+.stats-detail-link-desktop {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--brand-accent);
+  text-decoration: none;
+}
+
+.stats-detail-link-desktop:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .stats-detail-link-desktop {
+    display: none;
+  }
 }
 
 /* Mobile-only compact stats line (see the max-width:900px / min-width:901px
