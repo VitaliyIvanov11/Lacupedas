@@ -31,6 +31,12 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <!-- research-card/region-card/monitoring-card (guide.css's .guide-note,
+       stats-page.css's own card rules) so the desktop Statistika tab can
+       show the same official-research/region/monitoring content stats.html
+       does, not just the compact stats-grid + chart. -->
+  <link rel="stylesheet" href="css/guide.css" />
+  <link rel="stylesheet" href="css/stats-page.css" />
 
   <script type="application/ld+json">
   {
@@ -245,6 +251,97 @@
         <p class="stats-grid-note" data-i18n="statsGridNote">
           Šogad un Pēdējais attiecas tikai uz kopienas novērojumiem — ziņu pieminējumi un oficiāli apstiprinātie
           novērojumi skaitīti atsevišķi.
+        </p>
+      </section>
+
+      <!-- Same research-card/region-card/monitoring-card content stats.html
+           has — desktop's Statistika tab used to only show the compact
+           stats-grid + chart above/below this, with no way to see this at
+           all short of clicking through to stats.html (see .stats-detail-link-desktop). -->
+      <section class="card research-card" data-tab-panel="stats">
+        <h2 data-i18n="researchTitle">📊 Oficiālie pētījumu dati</h2>
+        <div class="research-figure">
+          <span class="stat-value research-number">190</span>
+          <span class="stat-label" data-i18n="researchPopLabel">brūno lāču Latvijā (2025. g. aplēse)</span>
+        </div>
+        <div class="research-figure">
+          <span class="stat-value research-number">827</span>
+          <span class="stat-label" data-i18n="researchObsLabel">novērojumu, pēdu un citu pazīmju reģistrēts 2025. gadā</span>
+        </div>
+        <p class="research-desc" data-i18n="researchNote">
+          Šie skaitļi ir zinātniski dati, nevis šajā lapā redzamo novērojumu summa — tie balstās uz LVMI Silava
+          monitoringu (pēdu nospiedumi, kameru attēli, ekspertu aplēses, mednieku ziņojumi) visā Latvijā.
+        </p>
+        <p class="guide-note">
+          <span data-i18n="biologySourcesLabel">Avoti:</span>
+          <a href="https://www.silava.lv/petnieciba/petijumi/lacu-monitorings-2023-2025" target="_blank" rel="noopener">LVMI Silava</a> ·
+          <a href="https://daba.gov.lv/lv/media/26126/download?attachment=" target="_blank" rel="noopener">DAP: Lāču monitorings 2023.–2025. Pārskats par 2025. gadu</a> ·
+          <a href="https://www.latma.lv/latvija-lacu-klust-vairak-ko-rada-jaunakie-monitoringa-dati/" target="_blank" rel="noopener">LATMA</a>
+        </p>
+      </section>
+
+      <section class="card region-card" data-tab-panel="stats">
+        <h2 data-i18n="regionTitle">📍 Izplatība pa reģioniem</h2>
+        <div class="region-grid">
+          <div class="region-block region-level-high" style="grid-area: kurzeme;">
+            <span class="region-name">Kurzeme</span>
+            <span class="region-level" data-i18n="regionLevelGrowing">pieaugoša klātbūtne</span>
+          </div>
+          <div class="region-block region-level-highest" style="grid-area: vidzeme;">
+            <span class="region-name">Vidzeme</span>
+            <span class="region-level" data-i18n="regionLevelMost">visvairāk novērojumu</span>
+          </div>
+          <div class="region-block region-level-high" style="grid-area: zemgale;">
+            <span class="region-name">Zemgale</span>
+            <span class="region-level" data-i18n="regionLevelGrowing">pieaugoša klātbūtne</span>
+          </div>
+          <div class="region-block region-level-highest" style="grid-area: latgale;">
+            <span class="region-name">Latgale</span>
+            <span class="region-level" data-i18n="regionLevelMost">visvairāk novērojumu</span>
+          </div>
+        </div>
+        <p class="research-desc" data-i18n="regionNote">
+          Shematisks attēlojums pēc LVMI Silava un LATMA publicētā apraksta — reģionu robežas un līmeņi šeit ir
+          vienkāršoti, nevis precīzi blīvuma dati.
+        </p>
+        <p class="guide-note">
+          <span data-i18n="biologySourcesLabel">Avoti:</span>
+          <a href="https://www.silava.lv/petnieciba/petijumi/lacu-monitorings-2023-2025" target="_blank" rel="noopener">LVMI Silava</a> ·
+          <a href="https://www.latma.lv/latvija-lacu-klust-vairak-ko-rada-jaunakie-monitoringa-dati/" target="_blank" rel="noopener">LATMA</a>
+        </p>
+      </section>
+
+      <section class="card monitoring-card" data-tab-panel="stats">
+        <h2 data-i18n="monitoringTitle">🔬 Silava monitoringa teritorijas</h2>
+        <p class="research-desc" data-i18n="monitoringIntro">
+          Vietas, kur LVMI Silava mērķtiecīgi meklē lāču klātbūtnes pierādījumus (pēdas, DNS paraugus,
+          slēpņu kameru datus) — izvēlētas tāpēc, ka tur lāči tiek regulāri konstatēti, nevis nejauši.
+        </p>
+        <div class="monitoring-grid">
+          <div class="monitoring-zone">
+            <span class="monitoring-zone-name" data-i18n="monitoringZoneNorth">Ziemeļvidzeme</span>
+            <span class="monitoring-zone-list">Ziemeļu purvi · Omuļu apkārtne · Viļķenes apkārtne</span>
+          </div>
+          <div class="monitoring-zone">
+            <span class="monitoring-zone-name" data-i18n="monitoringZoneNortheast">Ziemeļaustrumi (Balvu novads)</span>
+            <span class="monitoring-zone-list">Stompaku purvi · Vecumu meži · Žīguru apkārtne</span>
+          </div>
+          <div class="monitoring-zone">
+            <span class="monitoring-zone-name" data-i18n="monitoringZoneCentral">Vidzemes—Latgales robeža</span>
+            <span class="monitoring-zone-list">Lielais Pelečāres purvs · Lubāna mitrājs · Teiču dabas rezervāts · Kuja</span>
+          </div>
+          <div class="monitoring-zone">
+            <span class="monitoring-zone-name" data-i18n="monitoringZoneSelia">Sēlija</span>
+            <span class="monitoring-zone-list">Ābeļu, Salas, Dignājas, Viesītes, Dunavas un Dvietes pagasts</span>
+          </div>
+          <div class="monitoring-zone">
+            <span class="monitoring-zone-name" data-i18n="monitoringZoneSoutheast">Dienvidaustrumu pierobeža</span>
+            <span class="monitoring-zone-list">Demenes, Skrudalienas, Salienas un Kaplavas pagasts</span>
+          </div>
+        </div>
+        <p class="guide-note">
+          <span data-i18n="biologySourcesLabel">Avoti:</span>
+          <a href="https://daba.gov.lv/lv/media/26126/download?attachment=" target="_blank" rel="noopener">LVMI Silava: Lāču monitorings 2023.–2025. Pārskats par 2025. gadu</a>
         </p>
       </section>
 

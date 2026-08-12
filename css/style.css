@@ -605,12 +605,25 @@ button {
     flex: 1 1 auto;
   }
 
-  .sidebar[data-active-tab="stats"] > .stats-card[data-tab-panel="stats"] {
+  .sidebar[data-active-tab="stats"] > .stats-card[data-tab-panel="stats"],
+  .sidebar[data-active-tab="stats"] > .research-card[data-tab-panel="stats"],
+  .sidebar[data-active-tab="stats"] > .region-card[data-tab-panel="stats"],
+  .sidebar[data-active-tab="stats"] > .monitoring-card[data-tab-panel="stats"] {
     display: block;
+    flex: 0 0 auto;
   }
 
   .sidebar[data-active-tab="stats"] > .chart-card[data-tab-panel="stats"] {
     display: flex;
+    flex: 0 0 auto;
+  }
+
+  /* research/region/monitoring cards make the "Statistika" tab taller than
+     the sidebar's fixed height allows (unlike the other tabs, which either
+     fit or scroll their own single inner list) — the sidebar itself scrolls
+     instead, only actually kicking in when a tab's content overflows it. */
+  .sidebar {
+    overflow-y: auto;
   }
 }
 
@@ -657,14 +670,17 @@ button {
     flex: none;
   }
 
-  /* On index.html's mobile home feed, the full chart + filterable list
-     move to the standalone stats.html (reached via .stats-detail-link on
-     the compact stats-grid below) — news stays here and now reads right
-     after the compact stats card. Scoped to .layout: stats.html reuses
-     these same .chart-card/.list-card classes and must keep showing them
-     at every width. */
+  /* On index.html's mobile home feed, the full chart + filterable list +
+     research/region/monitoring cards all move to the standalone stats.html
+     (reached via .stats-detail-link on the compact stats-grid below) —
+     news stays here and now reads right after the compact stats card.
+     Scoped to .layout: stats.html reuses these same classes and must keep
+     showing them at every width. */
   .layout .chart-card,
-  .layout .list-card {
+  .layout .list-card,
+  .layout .research-card,
+  .layout .region-card,
+  .layout .monitoring-card {
     display: none;
   }
 }
