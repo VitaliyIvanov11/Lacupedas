@@ -2,16 +2,36 @@
    #map shell from style.css (no sidebar), reachable directly or via
    index.html's mobile home feed. */
 
+/* style.css's app shell pins <body> to one viewport with no page scroll.
+   That was fine while this page was only the map, but the .map-about
+   article below it — what the map shows, how to read it, where else to
+   report — is the only thing on this page a search visitor (or anyone
+   arriving without context) can actually read, and a fixed viewport hid
+   all of it. Let the page scroll; the map still owns the first screen. */
+body:has(.map-page-main) {
+  height: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
 .map-page-main {
-  flex: 1 1 auto;
-  min-height: 0;
-  display: flex;
+  /* <main> now holds the map *and* the .map-about article, so it is a
+     plain block that grows with its content — the fixed height belongs
+     to .map-pane below. */
+  flex: 0 0 auto;
+  display: block;
   padding: 16px;
 }
 
 .map-page-main .map-pane {
-  flex: 1 1 auto;
+  /* Explicit height, not flex:1 — with <main> no longer a fixed-height
+     flex container there is nothing left for the map to stretch against.
+     Short of a full viewport on purpose, so the article below peeks in
+     and reads as scrollable rather than as the end of the page. */
   width: 100%;
+  height: 80vh;
+  height: 80dvh;
+  min-height: 400px;
 }
 
 /* Desktop: no toggle needed, filters just sit inline in the toolbar like
@@ -28,23 +48,18 @@
   gap: 8px;
 }
 
-/* style.css's shared 900px query switches body to auto-height/scrolling —
-   correct for index.html's mobile home feed, but this page has no other
-   content to scroll to: keep it a fixed, full-height single-viewport map
-   at every width, same as desktop. */
+/* This page used to pin itself to one fixed viewport at every width —
+   it had nothing to scroll to. It does now (.map-about), so it follows
+   style.css's shared mobile scrolling behaviour again; only the map's
+   own height is set here. */
 @media (max-width: 900px) {
-  body:has(.map-page-main) {
-    height: 100vh;
-    height: 100dvh;
-    overflow: hidden;
-    /* style.css's shared mobile query gives every other page's <body> a
-       64px padding-bottom to clear the fixed .mobile-bottom-nav — this
-       override replaces that rule (fixed height/hidden overflow instead
-       of scrolling) without carrying the padding over, so the map (and
-       Leaflet's own bottom-right attribution control, plus our
-       .map-legend/.map-recency buttons) extended under the nav bar
-       instead of stopping above it. Reserve the same 64px here too. */
-    padding-bottom: 64px;
+  .map-page-main .map-pane {
+    /* Less than desktop's 80dvh: the toolbar wraps to two rows at this
+       width, and an 80dvh map left too little of the article showing to
+       read as scrollable. */
+    height: 72vh;
+    height: 72dvh;
+    min-height: 340px;
   }
 
   .map-page-main .map-wrap {
@@ -116,6 +131,11 @@
   font-size: 0.85rem;
   text-decoration: none;
   margin-right: 4px;
+  /* guide.css (pulled in for .map-about below) gives every .back-link a
+     20px bottom margin — right for the content pages, where it sits above
+     a heading, but in this flex/align-items:center toolbar that margin is
+     counted in the item's box and shunts the link off-centre. */
+  margin-bottom: 0;
 }
 
 .map-toolbar .back-link:hover {
@@ -172,4 +192,34 @@
   .map-recency {
     bottom: 36px;
   }
+}
+
+/* Prose below the map. Reuses guide.css's .guide-card/.guide-note/
+   .guide-report-list (all unscoped) so it matches guide.html, tracks.html
+   and the rest of the written pages instead of inventing a second style
+   for the same kind of content. */
+.map-about {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 4px 32px;
+}
+
+.map-about > h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+}
+
+.map-about .guide-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+}
+
+.map-about .guide-card p:not(.guide-note) {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.map-about .guide-card p:not(.guide-note):last-child {
+  margin-bottom: 0;
 }

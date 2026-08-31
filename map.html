@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/guide.css" />
   <link rel="stylesheet" href="css/map-page.css" />
 
   <script type="application/ld+json">
@@ -39,6 +40,8 @@
     "@type": "WebPage",
     "name": "Lāču karte",
     "url": "https://lacupedas.lv/map.html",
+    "description": "Interaktīva lāču karte Latvijā: kopienas ziņotie brūnā lāča novērojumi, pēdas un pazīmes, postījumi un ziņu portālos pieminētie gadījumi, filtrējami pēc veida un laika.",
+    "primaryImageOfPage": "https://lacupedas.lv/icons/og-banner.png",
     "isPartOf": { "@type": "WebSite", "name": "Lacupedas", "url": "https://lacupedas.lv/" },
     "inLanguage": ["lv", "en", "ru"]
   }
@@ -96,6 +99,83 @@
         </div>
       </div>
     </section>
+
+    <article class="map-about">
+    <h2 data-i18n="mapAboutTitle">Par šo lāču karti</h2>
+    <p class="guide-lead" data-i18n="mapAboutLead">
+      Šī ir kopienas veidota lāču karte — interaktīvs Latvijas skats, kurā apkopoti iedzīvotāju ziņotie
+      brūnā lāča novērojumi un ziņu portālos pieminētie gadījumi. Katrs marķieris ir viens ziņojums ar
+      datumu, atrašanās vietu un novērojuma veidu.
+    </p>
+
+    <section class="guide-card">
+      <h3 data-i18n="mapAboutTypesTitle">Ko karte rāda</h3>
+      <ul class="guide-report-list">
+        <li data-i18n="mapAboutType1">Redzēts lācis — cilvēks pats novērojis dzīvnieku mežā, uz ceļa vai apdzīvotas vietas tuvumā.</li>
+        <li data-i18n="mapAboutType2">Pēdas un pazīmes — ķepu nospiedumi, nagu skrāpējumi uz koku mizas, apgāzti akmeņi un satrunējuši stumbri, izpostīti bišu stropi.</li>
+        <li data-i18n="mapAboutType3">Postījumi — nodarītie zaudējumi bišu dravām, mājlopiem vai lauksaimniecības kultūrām.</li>
+        <li data-i18n="mapAboutType4">Bojāgājis dzīvnieks — atrasts kritis lācis, tostarp sadursmēs ar transportu.</li>
+        <li data-i18n="mapAboutType5">DNS paraugs — savākti spalvu vai ekskrementu paraugi ģenētiskai analīzei.</li>
+      </ul>
+      <p class="guide-note" data-i18n="mapAboutTypesNote">
+        Atsevišķā slānī redzami arī ziņu pieminējumi — gadījumi, par kuriem rakstījuši ziņu portāli. Tie
+        tiek skaitīti atsevišķi no kopienas ziņojumiem un viens otra skaitu neietekmē.
+      </p>
+    </section>
+
+    <section class="guide-card">
+      <h3 data-i18n="mapAboutReadTitle">Kā lasīt karti</h3>
+      <ul class="guide-report-list">
+        <li data-i18n="mapAboutRead1">Tālinot karti, tuvu esošie novērojumi apvienojas grupās — aplītī redzamais skaitlis rāda, cik ziņojumu tajā apvidū ir kopā. Tuvinot grupa atkal sadalās atsevišķos marķieros.</li>
+        <li data-i18n="mapAboutRead2">Filtri ļauj atlasīt vienu novērojumu veidu vai tikai šī gada un pēdējo 30 dienu ziņojumus — noderīgi, ja interesē tikai pašreizējā situācija.</li>
+        <li data-i18n="mapAboutRead3">Sadaļa “Apzīmējumi” paskaidro marķieru krāsas, bet “Pēdējā laikā” rāda jaunākos ziņojumus hronoloģiskā secībā.</li>
+        <li data-i18n="mapAboutRead4">Ziņu pieminējumu atrašanās vieta bieži ir aptuvena — tā noteikta pēc rakstā minētā vietvārda, nevis precīzām koordinātēm.</li>
+      </ul>
+    </section>
+
+    <section class="guide-card">
+      <h3 data-i18n="mapAboutRegionsTitle">Kur Latvijā lāči sastopami biežāk</h3>
+      <p data-i18n="mapAboutRegionsBody">
+        Pēc LVMI Silava 2025. gada aplēses Latvijā dzīvo vismaz 190 brūno lāču, un to skaits pēdējos gados
+        stabili pieaug. Visvairāk novērojumu tiek reģistrēts Vidzemē un Latgalē, īpaši ziemeļu daļā pie
+        Igaunijas robežas, taču pieaugoša klātbūtne fiksēta arī Kurzemē un Zemgalē. Kopumā 2025. gadā valstī
+        reģistrēti 827 novērojumi, pēdas un citas klātbūtnes pazīmes.
+      </p>
+      <p class="guide-note">
+        <span data-i18n="biologySourcesLabel">Avoti:</span>
+        <a href="https://www.silava.lv/petnieciba/petijumi/lacu-monitorings-2023-2025" target="_blank" rel="noopener">LVMI Silava</a> ·
+        <a href="https://daba.gov.lv/lv/media/26126/download?attachment=" target="_blank" rel="noopener">DAP: Lāču monitorings 2023.–2025. Pārskats par 2025. gadu</a> ·
+        <a href="https://www.latma.lv/latvija-lacu-klust-vairak-ko-rada-jaunakie-monitoringa-dati/" target="_blank" rel="noopener">LATMA</a>
+      </p>
+    </section>
+
+    <section class="guide-card">
+      <h3 data-i18n="mapAboutReportTitle">Kā pievienot savu novērojumu</h3>
+      <ul class="guide-report-list">
+        <li data-i18n="mapAboutReport1">Nospied “Ziņot par novērojumu” un pēc tam noklikšķini uz kartes tieši tur, kur redzēji lāci vai tā pēdas.</li>
+        <li data-i18n="mapAboutReport2">Norādi datumu, novērojuma veidu un dzīvnieku skaitu. Apraksts un fotoattēls nav obligāti, bet citiem palīdz visvairāk.</li>
+        <li data-i18n="mapAboutReport3">Vārda norādīšana nav obligāta. Ņem vērā, ka iesniegtie dati, tostarp foto, ir publiski redzami visiem apmeklētājiem.</li>
+      </ul>
+      <p class="guide-note">
+        <span data-i18n="mapAboutReportMore">Kā atpazīt lāča pēdas un citas klātbūtnes pazīmes —</span>
+        <a href="tracks.html" data-i18n="mapAboutReportMoreLink">skaties pēdu atpazīšanas lapā</a>.
+      </p>
+    </section>
+
+    <section class="guide-card">
+      <h3 data-i18n="mapAboutOfficialTitle">Šī nav oficiāls reģistrs</h3>
+      <p data-i18n="mapAboutOfficialBody">
+        Karti uztur sabiedrība, un tā neaizstāj valsts monitoringu. Ja apdraudēta dzīvība vai veselība —
+        nekavējoties zvani 112. Par novērojumiem ziņo arī Dabas aizsardzības pārvaldei, portālā dabasdati.lv
+        vai lietotnē Mednis: tieši šie ziņojumi nonāk oficiālajā lāču monitoringā.
+      </p>
+      <p class="guide-note">
+        <a href="https://www.daba.gov.lv/" target="_blank" rel="noopener">daba.gov.lv</a> ·
+        <a href="https://dabasdati.lv/" target="_blank" rel="noopener">dabasdati.lv</a> ·
+        <a href="https://www.vmd.gov.lv/lv/mobila-lietotne-mednis" target="_blank" rel="noopener">Mednis</a>
+      </p>
+    </section>
+    </article>
   </main>
 
   <div id="news-toast" class="toast" hidden></div>
