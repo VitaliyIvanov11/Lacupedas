@@ -1686,6 +1686,15 @@ button {
   color: inherit;
 }
 
+.footer-ad {
+  margin: 10px auto 0;
+  max-width: 728px;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
 /* Mobile bottom nav — fixed tab bar replacing the desktop map-pane's
    toolbar as the way to reach the standalone map.html and report flow. */
 .mobile-bottom-nav {
