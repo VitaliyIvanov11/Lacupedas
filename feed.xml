@@ -5,7 +5,14 @@
   <link>https://lacupedas.lv/</link>
   <description>Automātiski savākti ziņu portālu raksti, kuros pieminēti lāču novērojumi Latvijā un pierobežā.</description>
   <language>lv</language>
-  <lastBuildDate>Mon, 19 Oct 2026 04:33:56 GMT</lastBuildDate>
+  <lastBuildDate>Mon, 19 Oct 2026 13:03:52 GMT</lastBuildDate>
+  <item>
+    <title>Dabas aizsardzības pārvalde izsniegusi speciālo atļauju lāča likvidēšanai Rencēnos</title>
+    <link>https://www.lsm.lv/raksts/zinas/latvija/19.10.2026-dabas-aizsardzibas-parvalde-izsniegusi-specialo-atlauju-laca-likvidesanai-rencenos.a668039/?utm_source=rss&amp;utm_campaign=rss&amp;utm_medium=links</link>
+    <guid isPermaLink="false">4f734b41c22b6127</guid>
+    <pubDate>Mon, 19 Oct 2026 03:26:00 GMT</pubDate>
+    <source>LSM.lv</source>
+  </item>
   <item>
     <title>Eksperti brīdina – pirms ziemas miega pieaug lāču aktivitāte</title>
     <link>https://www.lsm.lv/raksts/zinas/latvija/12.10.2026-eksperti-bridina-pirms-ziemas-miega-pieaug-lacu-aktivitate.a667203/?utm_source=rss&amp;utm_campaign=rss&amp;utm_medium=links</link>
@@ -49,16 +56,16 @@
     <source>Ropažu novads</source>
   </item>
   <item>
-    <title>Ropažu novadā manīts lācis; aicinām iepazīties piesardzības pasākumiem</title>
-    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-piesardzibas-pasakumiem</link>
-    <guid isPermaLink="false">142eb447b4319319</guid>
+    <title>Ropažu novadā manīts lācis; aicinām iepazīties ar piesardzības pasākumiem</title>
+    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-ar-piesardzibas-pasakumiem</link>
+    <guid isPermaLink="false">9af3be1fd22309ef</guid>
     <pubDate>Mon, 07 Sep 2026 12:12:59 GMT</pubDate>
     <source>Ropažu novads</source>
   </item>
   <item>
-    <title>Ropažu novadā manīts lācis; aicinām iepazīties ar piesardzības pasākumiem</title>
-    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-ar-piesardzibas-pasakumiem</link>
-    <guid isPermaLink="false">9af3be1fd22309ef</guid>
+    <title>Ropažu novadā manīts lācis; aicinām iepazīties piesardzības pasākumiem</title>
+    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-piesardzibas-pasakumiem</link>
+    <guid isPermaLink="false">142eb447b4319319</guid>
     <pubDate>Mon, 07 Sep 2026 12:12:59 GMT</pubDate>
     <source>Ropažu novads</source>
   </item>
@@ -348,13 +355,6 @@
     <guid isPermaLink="false">9d61a73cd7bcc2c9</guid>
     <pubDate>Mon, 01 Jun 2026 07:13:00 GMT</pubDate>
     <source>LSM.lv</source>
-  </item>
-  <item>
-    <title>Lācis skrējis pa Lietuvas pilsētiņas Turmantas ielām, nokļuvis video</title>
-    <link>https://gorod.lv/novosti/366429-medved-probezhal-po-ulitsam-litovskogo-turmantasa-i-popal-na-video</link>
-    <guid isPermaLink="false">450fd6df2fa76221</guid>
-    <pubDate>Thu, 28 May 2026 06:10:00 GMT</pubDate>
-    <source>gorod.lv</source>
   </item>
 </channel>
 </rss>
