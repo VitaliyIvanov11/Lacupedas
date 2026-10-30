@@ -56,6 +56,8 @@ const FEEDS = [
   { name: "gorod.lv", url: "https://www.gorod.lv/rss", lang: "ru" },
   // Riga-region portal — caught the Garkalne/Ropaži sighting.
   { name: "kodols.lv", url: "https://kodols.lv/rss.xml", lang: "lv" },
+  // Kurzeme regional portal — carried the Dunika bear-tracks story.
+  { name: "rietumi.lv", url: "https://rietumi.lv/feed/", lang: "lv" },
   // Latvijas Mednieku asociācija — hunters are one of the named data
   // sources behind the official population monitoring (see biology.html
   // and advice.html's "Medniekiem" section), and LATMA's own site
