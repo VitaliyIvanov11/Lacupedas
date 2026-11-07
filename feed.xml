@@ -5,7 +5,14 @@
   <link>https://lacupedas.lv/</link>
   <description>Automātiski savākti ziņu portālu raksti, kuros pieminēti lāču novērojumi Latvijā un pierobežā.</description>
   <language>lv</language>
-  <lastBuildDate>Sat, 07 Nov 2026 08:42:31 GMT</lastBuildDate>
+  <lastBuildDate>Sat, 07 Nov 2026 16:23:42 GMT</lastBuildDate>
+  <item>
+    <title>Ieraugot lāci, vispirms sastingsti</title>
+    <link>https://diena.lv/raksts/sestdiena/sestdienas-salons/ieraugot-laci-vispirms-sastingsti?utm_source=rss&amp;utm_campaign=rss&amp;utm_medium=links</link>
+    <guid isPermaLink="false">9475cf7d2318aef2</guid>
+    <pubDate>Sat, 07 Nov 2026 06:45:00 GMT</pubDate>
+    <source>Diena.lv</source>
+  </item>
   <item>
     <title>VIDEO. Pilnīgi neticami! Tūristi kalnu takā sastop lāču ģimeni un iemūžina tikšanās brīdi un reakciju</title>
     <link>https://www.la.lv/video-pilnigi-neticami-turisti-kalnu-taka-sastop-lacu-gimeni-un-to-iemuzina</link>
@@ -84,16 +91,16 @@
     <source>Ropažu novads</source>
   </item>
   <item>
-    <title>Ropažu novadā manīts lācis; aicinām iepazīties piesardzības pasākumiem</title>
-    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-piesardzibas-pasakumiem</link>
-    <guid isPermaLink="false">142eb447b4319319</guid>
+    <title>Ropažu novadā manīts lācis; aicinām iepazīties ar piesardzības pasākumiem</title>
+    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-ar-piesardzibas-pasakumiem</link>
+    <guid isPermaLink="false">9af3be1fd22309ef</guid>
     <pubDate>Mon, 07 Sep 2026 12:12:59 GMT</pubDate>
     <source>Ropažu novads</source>
   </item>
   <item>
-    <title>Ropažu novadā manīts lācis; aicinām iepazīties ar piesardzības pasākumiem</title>
-    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-ar-piesardzibas-pasakumiem</link>
-    <guid isPermaLink="false">9af3be1fd22309ef</guid>
+    <title>Ropažu novadā manīts lācis; aicinām iepazīties piesardzības pasākumiem</title>
+    <link>https://www.ropazi.lv/lv/jaunums/ropazu-novada-manits-lacis-aicinam-iepazities-piesardzibas-pasakumiem</link>
+    <guid isPermaLink="false">142eb447b4319319</guid>
     <pubDate>Mon, 07 Sep 2026 12:12:59 GMT</pubDate>
     <source>Ropažu novads</source>
   </item>
@@ -347,13 +354,6 @@
     <link>https://gorod.lv/novosti/367872-medved-vyshel-k-zhilomu-domu-v-okrestnostyah-tsesisa-video</link>
     <guid isPermaLink="false">12217f586d9181b2</guid>
     <pubDate>Thu, 23 Jul 2026 13:40:00 GMT</pubDate>
-    <source>gorod.lv</source>
-  </item>
-  <item>
-    <title>Lācis uzbrucis sēņotājam Tukuma novadā</title>
-    <link>https://gorod.lv/novosti/367217-medved-napal-na-gribnika-v-tukumskom-krae</link>
-    <guid isPermaLink="false">7849ae2b81b0d204</guid>
-    <pubDate>Tue, 30 Jun 2026 02:00:00 GMT</pubDate>
     <source>gorod.lv</source>
   </item>
 </channel>
