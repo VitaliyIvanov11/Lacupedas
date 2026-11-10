@@ -5,13 +5,20 @@
   <link>https://lacupedas.lv/</link>
   <description>Automātiski savākti ziņu portālu raksti, kuros pieminēti lāču novērojumi Latvijā un pierobežā.</description>
   <language>lv</language>
-  <lastBuildDate>Mon, 09 Nov 2026 20:40:55 GMT</lastBuildDate>
+  <lastBuildDate>Tue, 10 Nov 2026 04:05:15 GMT</lastBuildDate>
   <item>
     <title>Ieraugot lāci, vispirms sastingsti</title>
     <link>https://diena.lv/raksts/sestdiena/sestdienas-salons/ieraugot-laci-vispirms-sastingsti?utm_source=rss&amp;utm_campaign=rss&amp;utm_medium=links</link>
     <guid isPermaLink="false">9475cf7d2318aef2</guid>
     <pubDate>Sat, 07 Nov 2026 06:45:00 GMT</pubDate>
     <source>Diena.lv</source>
+  </item>
+  <item>
+    <title>Tiesa: četros no pieciem reģioniem atļauja medīt lāčus nebija atļauta</title>
+    <link>https://www.err.ee/1610188753/kohus-viiest-piirkonnast-neljas-oli-karude-kuttimise-luba-lubamatu</link>
+    <guid isPermaLink="false">6197cff1fa9e0751</guid>
+    <pubDate>Fri, 06 Nov 2026 14:48:00 GMT</pubDate>
+    <source>ERR.ee</source>
   </item>
   <item>
     <title>VIDEO. Pilnīgi neticami! Tūristi kalnu takā sastop lāču ģimeni un iemūžina tikšanās brīdi un reakciju</title>
@@ -348,13 +355,6 @@
     <guid isPermaLink="false">f4861bd22de6488b</guid>
     <pubDate>Sat, 25 Jul 2026 17:56:00 GMT</pubDate>
     <source>LSM.lv</source>
-  </item>
-  <item>
-    <title>Lācis iznācis pie dzīvojamās mājas Cēsu apkārtnē</title>
-    <link>https://gorod.lv/novosti/367872-medved-vyshel-k-zhilomu-domu-v-okrestnostyah-tsesisa-video</link>
-    <guid isPermaLink="false">12217f586d9181b2</guid>
-    <pubDate>Thu, 23 Jul 2026 13:40:00 GMT</pubDate>
-    <source>gorod.lv</source>
   </item>
 </channel>
 </rss>
